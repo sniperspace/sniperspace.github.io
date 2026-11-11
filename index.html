@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f0e9">
-  <meta name="description" content="Play free browser games at SniperSpace Games. Start with a modern, fast Tetris experience.">
+  <meta name="description" content="SniperSpace Games is a calm, premium collection of thoughtful browser games, including Tetris and Velvet Vector.">
   <title>SniperSpace Games | Play free browser games</title>
   <style>
     :root {
@@ -247,6 +247,17 @@
     .side-panel p { margin-bottom: 13px; color: var(--muted); font-size: .86rem; }
     .feature-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: .84rem; }
     .feature-list li::before { content: "✓"; margin-right: 8px; color: var(--blue-dark); font-weight: 900; }
+    .vector-section { margin-top: 26px; }
+    .vector-canvas-wrap { position: relative; overflow: hidden; border-radius: 12px; background: #e8e4d8; box-shadow: inset 0 0 0 1px #d5d0c2; }
+    #vector-canvas { display: block; width: min(640px, 100%); height: auto; aspect-ratio: 16 / 10.5; cursor: crosshair; }
+    .vector-overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; background: rgba(232,228,216,.72); backdrop-filter: blur(5px); }
+    .vector-overlay[hidden] { display: none; }
+    .vector-overlay-card { max-width: 300px; }
+    .vector-overlay-card h3 { margin-bottom: 7px; font-family: Georgia, serif; font-size: 1.8rem; font-weight: 500; }
+    .vector-overlay-card p { margin-bottom: 16px; color: var(--muted); font-size: .88rem; }
+    .vector-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .vector-stats .stat strong { font-family: Georgia, serif; font-weight: 500; }
+    .vector-tip { margin: 15px 0 0; color: var(--muted); font-size: .78rem; }
 
     footer { margin-top: 35px; border-top: 1px solid var(--line); background: var(--surface); }
     .footer-inner { width: min(1180px, calc(100% - 40px)); margin: auto; padding: 28px 0; display: flex; justify-content: space-between; color: var(--muted); font-size: .85rem; }
@@ -353,9 +364,9 @@
           <div class="game-thumb green"><span class="game-badge">Puzzle</span><strong class="thumb-title">Color Match</strong></div>
           <div class="card-body"><h3>Color Match</h3><p>A fast and relaxing matching challenge.</p><div class="card-meta"><span>Coming soon</span><span>Stay tuned</span></div></div>
         </article>
-        <article class="game-card coming-soon" data-title="sky dash arcade casual">
-          <div class="game-thumb orange"><span class="game-badge">Arcade</span><strong class="thumb-title">Sky Dash</strong></div>
-          <div class="card-body"><h3>Sky Dash</h3><p>Dodge obstacles and chase a new distance record.</p><div class="card-meta"><span>Coming soon</span><span>Stay tuned</span></div></div>
+        <article class="game-card" data-title="velvet vector arcade precision">
+          <div class="game-thumb orange"><span class="game-badge">Precision</span><strong class="thumb-title">Velvet Vector</strong></div>
+          <div class="card-body"><h3>Velvet Vector</h3><p>Guide a luminous line through a quiet geometric world.</p><div class="card-meta"><span>New game</span><a class="play-link" href="#vector">Play game →</a></div></div>
         </article>
       </div>
     </section>
@@ -392,6 +403,43 @@
             <li>Increasing speed each level</li>
             <li>Local high score ready</li>
             <li>Works on mobile and desktop</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section vector-section" id="vector">
+      <div class="section-heading">
+        <div><h2>Velvet Vector</h2><p>A study in movement, timing, and space.</p></div>
+      </div>
+      <div class="game-section">
+        <div>
+          <h2>Find the clean line</h2>
+          <p>Guide the vector through each gold checkpoint. Stay clear of the quiet shapes and keep your streak alive.</p>
+          <div class="vector-canvas-wrap">
+            <canvas id="vector-canvas" width="640" height="420" aria-label="Velvet Vector game"></canvas>
+            <div class="vector-overlay" id="vector-overlay">
+              <div class="vector-overlay-card">
+                <h3>Velvet Vector</h3>
+                <p>Move with your mouse, touch, or arrow keys. Pass through the checkpoints and find your rhythm.</p>
+                <button class="button" id="vector-start" type="button">Begin quietly</button>
+              </div>
+            </div>
+          </div>
+          <div class="vector-stats">
+            <div class="stat"><span>Score</span><strong id="vector-score">0</strong></div>
+            <div class="stat"><span>Streak</span><strong id="vector-streak">0</strong></div>
+            <div class="stat"><span>Best</span><strong id="vector-best">0</strong></div>
+          </div>
+          <p class="vector-tip">Keyboard: ↑ ↓ or W S · Mouse and touch also work · Esc pauses</p>
+        </div>
+        <aside class="side-panel">
+          <h3>A slower kind of arcade</h3>
+          <p>Velvet Vector rewards a light touch. The longer you stay precise, the more the world opens up.</p>
+          <ul class="feature-list">
+            <li>Soft, continuous movement</li>
+            <li>Gold checkpoint streaks</li>
+            <li>One-minute score chase</li>
           </ul>
         </aside>
       </div>
@@ -581,6 +629,198 @@
         document.querySelector(".category.active").classList.remove("active");
         button.classList.add("active");
       }));
+    })();
+
+    (() => {
+      const canvas = document.getElementById("vector-canvas");
+      const ctx = canvas.getContext("2d");
+      const overlay = document.getElementById("vector-overlay");
+      const startButton = document.getElementById("vector-start");
+      const scoreEl = document.getElementById("vector-score");
+      const streakEl = document.getElementById("vector-streak");
+      const bestEl = document.getElementById("vector-best");
+      const width = canvas.width;
+      const height = canvas.height;
+      const bestKey = "sniperspace-velvet-vector-best";
+      let player;
+      let checkpoint;
+      let obstacles;
+      let score = 0;
+      let streak = 0;
+      let best = Number(localStorage.getItem(bestKey) || 0);
+      let running = false;
+      let paused = false;
+      let gameOver = false;
+      let lastTime = 0;
+      let animation;
+      let targetY = height / 2;
+      let direction = 0;
+
+      bestEl.textContent = best.toLocaleString();
+
+      function reset() {
+        player = { x: 90, y: height / 2, radius: 7, trail: [] };
+        checkpoint = { x: width - 95, y: height / 2, radius: 18 };
+        obstacles = [];
+        score = 0;
+        streak = 0;
+        paused = false;
+        gameOver = false;
+        targetY = height / 2;
+        direction = 0;
+        updateStats();
+      }
+
+      function updateStats() {
+        scoreEl.textContent = score.toLocaleString();
+        streakEl.textContent = streak;
+        bestEl.textContent = best.toLocaleString();
+      }
+
+      function spawnObstacle() {
+        const gap = 128 - Math.min(streak * 2, 34);
+        const topHeight = 42 + Math.random() * (height - gap - 84);
+        obstacles.push({
+          x: width + 30,
+          width: 18 + Math.random() * 18,
+          top: topHeight,
+          bottom: topHeight + gap
+        });
+      }
+
+      function drawBackground() {
+        ctx.fillStyle = "#e8e4d8";
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "rgba(91, 94, 82, .09)";
+        ctx.lineWidth = 1;
+        for (let x = 0; x < width; x += 32) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < height; y += 32) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+      }
+
+      function draw() {
+        drawBackground();
+        obstacles.forEach(obstacle => {
+          ctx.fillStyle = "#8b9183";
+          ctx.fillRect(obstacle.x, 0, obstacle.width, obstacle.top);
+          ctx.fillRect(obstacle.x, obstacle.bottom, obstacle.width, height - obstacle.bottom);
+          ctx.fillStyle = "rgba(255,255,255,.25)";
+          ctx.fillRect(obstacle.x + 3, 0, 3, obstacle.top);
+          ctx.fillRect(obstacle.x + 3, obstacle.bottom, 3, height - obstacle.bottom);
+        });
+        ctx.beginPath();
+        ctx.arc(checkpoint.x, checkpoint.y, checkpoint.radius + 5, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(182,154,103,.22)";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(checkpoint.x, checkpoint.y, checkpoint.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = "#b69a67";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        player.trail.forEach((point, index) => {
+          if (index === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        });
+        ctx.strokeStyle = "rgba(68, 80, 68, .25)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius + 4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(101,117,106,.18)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#3e4b42";
+        ctx.fill();
+      }
+
+      function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+      function hitObstacle(obstacle) {
+        const inX = player.x + player.radius > obstacle.x && player.x - player.radius < obstacle.x + obstacle.width;
+        const inGap = player.y - player.radius > obstacle.top && player.y + player.radius < obstacle.bottom;
+        return inX && !inGap;
+      }
+
+      function finish(message) {
+        running = false;
+        gameOver = true;
+        if (score > best) {
+          best = score;
+          localStorage.setItem(bestKey, String(best));
+        }
+        updateStats();
+        overlay.querySelector("h3").textContent = message;
+        overlay.querySelector("p").textContent = "Your line has ended. Take a breath and try for a cleaner run.";
+        startButton.textContent = "Try again";
+        overlay.hidden = false;
+      }
+
+      function start() {
+        reset();
+        running = true;
+        overlay.hidden = true;
+        lastTime = performance.now();
+        cancelAnimationFrame(animation);
+        animation = requestAnimationFrame(loop);
+      }
+
+      function loop(time) {
+        const delta = Math.min((time - lastTime) / 1000, .04);
+        lastTime = time;
+        if (running && !paused) {
+          player.y += ((targetY - player.y) * 4 + direction * 180) * delta;
+          player.y = Math.max(16, Math.min(height - 16, player.y));
+          player.trail.push({ x: player.x, y: player.y });
+          if (player.trail.length > 35) player.trail.shift();
+          obstacles.forEach(obstacle => { obstacle.x -= (120 + streak * 3) * delta; });
+          if (!obstacles.length || obstacles[obstacles.length - 1].x < width - 210) spawnObstacle();
+          if (obstacles[0] && obstacles[0].x + obstacles[0].width < 0) obstacles.shift();
+          checkpoint.x -= (120 + streak * 3) * delta;
+          if (checkpoint.x < -30) {
+            checkpoint = { x: width + 50, y: 48 + Math.random() * (height - 96), radius: 18 };
+          }
+          obstacles.forEach(obstacle => { if (hitObstacle(obstacle)) finish("A quiet collision"); });
+          if (distance(player, checkpoint) < player.radius + checkpoint.radius) {
+            score += 100 + streak * 25;
+            streak++;
+            checkpoint = { x: width + 50, y: 48 + Math.random() * (height - 96), radius: 18 };
+            updateStats();
+          }
+        }
+        draw();
+        if (running) animation = requestAnimationFrame(loop);
+      }
+
+      function setTarget(event) {
+        const rect = canvas.getBoundingClientRect();
+        targetY = (event.clientY - rect.top) * height / rect.height;
+      }
+
+      canvas.addEventListener("pointermove", setTarget);
+      canvas.addEventListener("pointerdown", event => { canvas.setPointerCapture(event.pointerId); setTarget(event); });
+      startButton.addEventListener("click", start);
+      document.addEventListener("keydown", event => {
+        if (!running && event.key === "Enter") start();
+        if (event.key === "ArrowUp" || event.key.toLowerCase() === "w") { direction = -1; event.preventDefault(); }
+        if (event.key === "ArrowDown" || event.key.toLowerCase() === "s") { direction = 1; event.preventDefault(); }
+        if (event.key === "Escape" && running) paused = !paused;
+      });
+      document.addEventListener("keyup", event => {
+        if (["ArrowUp", "ArrowDown", "w", "s"].includes(event.key)) direction = 0;
+      });
+      reset();
+      draw();
     })();
   </script>
 </body>
