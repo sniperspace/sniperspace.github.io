@@ -2,25 +2,89 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- 1. CHANGE BROWSER TAB TITLE HERE -->
-  <title>Tetheris will be back</title>
-  
-  <!-- Retro Pixel Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#070510" />
+  <meta name="description" content="TETHERIS // Interactive Pixel-Art Cyber-Anime Terminal & Neural Architecture Portfolio" />
+
+  <!-- =====================================================================
+       BROWSER TAB TITLE (Also dynamically controlled via SITE_CONFIG below)
+       ===================================================================== -->
+  <title>Tetheris will be back soon</title>
+
+  <!-- Google Fonts: Authentic Retro Arcade & Pixel Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet" />
 
   <style>
+    /* =====================================================================
+       1. CSS DESIGN TOKENS & 4 ANIME COLOR PALETTES
+       ===================================================================== */
     :root {
-      --neon-cyan: #00f0ff;
-      --neon-pink: #ff2a85;
-      --neon-purple: #b829ff;
-      --neon-yellow: #fcee0a;
-      --bg-void: #070510;
-      --panel-bg: rgba(12, 8, 26, 0.82);
+      --bg-void: #06040d;
+      --bg-panel: rgba(11, 8, 24, 0.84);
+      --bg-panel-solid: #0e0a1f;
+      --bg-terminal: rgba(4, 3, 10, 0.92);
+      --neon-primary: #00f0ff;
+      --neon-secondary: #ff2a85;
+      --neon-tertiary: #b829ff;
+      --neon-accent: #fcee0a;
+      --neon-success: #00ff88;
+      --text-main: #f2eafc;
+      --text-muted: #a395b8;
+      --border-glow: rgba(0, 240, 255, 0.35);
+      --shadow-hard: 5px 5px 0px #ff2a85;
+      --shadow-hard-sm: 3px 3px 0px #ff2a85;
+      --font-pixel-title: 'Press Start 2P', monospace;
+      --font-pixel-lg: 'VT323', monospace;
+      --font-mono: 'Space Mono', monospace;
     }
 
+    /* Theme 2: Shibuya Sunset */
+    body[data-theme="sunset"] {
+      --bg-void: #120612;
+      --bg-panel: rgba(28, 10, 24, 0.85);
+      --bg-panel-solid: #1e0b1b;
+      --neon-primary: #ff9e00;
+      --neon-secondary: #ff2052;
+      --neon-tertiary: #9d4edd;
+      --neon-accent: #fff3b0;
+      --border-glow: rgba(255, 158, 0, 0.35);
+      --shadow-hard: 5px 5px 0px #ff2052;
+      --shadow-hard-sm: 3px 3px 0px #ff2052;
+    }
+
+    /* Theme 3: Akihabara Matrix */
+    body[data-theme="matrix"] {
+      --bg-void: #030d08;
+      --bg-panel: rgba(6, 22, 14, 0.85);
+      --bg-panel-solid: #071910;
+      --neon-primary: #00ff88;
+      --neon-secondary: #00b4d8;
+      --neon-tertiary: #10b981;
+      --neon-accent: #d9f99d;
+      --border-glow: rgba(0, 255, 136, 0.35);
+      --shadow-hard: 5px 5px 0px #00b4d8;
+      --shadow-hard-sm: 3px 3px 0px #00b4d8;
+    }
+
+    /* Theme 4: Blood Moon Eclipse */
+    body[data-theme="eclipse"] {
+      --bg-void: #0a0306;
+      --bg-panel: rgba(24, 7, 12, 0.86);
+      --bg-panel-solid: #18060b;
+      --neon-primary: #ff1e42;
+      --neon-secondary: #e2e8f0;
+      --neon-tertiary: #991b1b;
+      --neon-accent: #fca5a5;
+      --border-glow: rgba(255, 30, 66, 0.4);
+      --shadow-hard: 5px 5px 0px #991b1b;
+      --shadow-hard-sm: 3px 3px 0px #991b1b;
+    }
+
+    /* =====================================================================
+       2. GLOBAL RESET & BASE PIXEL STYLING
+       ===================================================================== */
     * {
       margin: 0;
       padding: 0;
@@ -28,16 +92,39 @@
       scroll-behavior: smooth;
     }
 
-    body {
-      background-color: var(--bg-void);
-      color: #f0e6ff;
-      font-family: 'Space Mono', monospace;
-      overflow-x: hidden;
-      selection-background-color: var(--neon-pink);
+    ::selection {
+      background: var(--neon-secondary);
+      color: #ffffff;
     }
 
-    /* Live Pixel Art Canvas Background */
-    #pixel-canvas {
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-void);
+      border-left: 1px solid var(--neon-tertiary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--neon-primary);
+      box-shadow: inset 0 0 4px #000;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--neon-secondary);
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      overflow-x: hidden;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* =====================================================================
+       3. LIVE PIXEL CANVAS & CRT RETRO OVERLAYS
+       ===================================================================== */
+    #world-canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -46,732 +133,2300 @@
       z-index: 0;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      pointer-events: none;
+      cursor: crosshair;
     }
 
-    /* Subtle Anime CRT Scanline Overlay */
-    .crt-overlay {
+    .crt-lines {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       z-index: 1;
       pointer-events: none;
       background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.28) 50%
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.32) 50%
       );
       background-size: 100% 4px;
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
     }
 
-    /* Pixel Navbar */
-    nav {
+    body.crt-off .crt-lines {
+      opacity: 0;
+    }
+
+    .vignette-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at center,
+        transparent 55%,
+        rgba(3, 2, 8, 0.72) 100%
+      );
+    }
+
+    /* =====================================================================
+       4. TOP CYBER HUD NAVBAR & SYSTEM TELEMETRY BAR
+       ===================================================================== */
+    header.hud-header {
       position: fixed;
       top: 0;
+      left: 0;
       width: 100%;
-      z-index: 20;
+      z-index: 50;
+      background: rgba(6, 4, 14, 0.9);
+      border-bottom: 2px solid var(--neon-primary);
+      box-shadow: 0 4px 25px var(--border-glow);
+      backdrop-filter: blur(8px);
+    }
+
+    .hud-top-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 6%;
-      background: rgba(7, 5, 16, 0.88);
-      border-bottom: 2px solid var(--neon-pink);
-      box-shadow: 0 4px 20px rgba(255, 42, 133, 0.25);
-      backdrop-filter: blur(6px);
-    }
-
-    .logo {
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(0.75rem, 2vw, 1rem);
-      color: var(--neon-cyan);
-      text-shadow: 2px 2px 0px var(--neon-pink);
+      padding: 4px 5%;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: var(--font-pixel-lg);
+      font-size: 1rem;
+      color: var(--text-muted);
       letter-spacing: 1px;
-      text-decoration: none;
     }
 
-    .nav-links {
+    .telemetry-group {
       display: flex;
-      gap: 24px;
+      gap: 18px;
       align-items: center;
     }
 
-    .nav-links a {
-      font-family: 'VT323', monospace;
-      font-size: 1.35rem;
-      color: #e2d4f0;
+    .telemetry-item span {
+      color: var(--neon-accent);
+    }
+
+    .hud-main-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 5%;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
-      letter-spacing: 1.5px;
+    }
+
+    .brand-cube {
+      width: 18px;
+      height: 18px;
+      background: var(--neon-primary);
+      border: 2px solid #fff;
+      box-shadow: 3px 3px 0px var(--neon-secondary);
+      animation: pulseCube 2s infinite alternate;
+    }
+
+    @keyframes pulseCube {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.12); background: var(--neon-accent); }
+    }
+
+    .brand-text {
+      font-family: var(--font-pixel-title);
+      font-size: clamp(0.75rem, 1.8vw, 1.05rem);
+      color: var(--neon-primary);
+      text-shadow: 2px 2px 0px var(--neon-secondary);
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.35rem;
+      color: var(--text-main);
+      text-decoration: none;
       text-transform: uppercase;
-      transition: 0.2s;
-      position: relative;
+      letter-spacing: 1.5px;
+      padding: 4px 8px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
     }
 
-    .nav-links a:hover {
-      color: var(--neon-yellow);
-      text-shadow: 0 0 8px var(--neon-yellow);
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--neon-accent);
+      border-color: var(--neon-primary);
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 2px 2px 0px var(--neon-secondary);
     }
 
-    .menu-toggle {
+    .hud-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.1rem;
+      background: var(--bg-panel-solid);
+      color: var(--neon-primary);
+      border: 2px solid var(--neon-primary);
+      padding: 4px 10px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--neon-secondary);
+      transition: transform 0.1s, background 0.15s;
+      white-space: nowrap;
+    }
+
+    .hud-btn:hover {
+      background: var(--neon-primary);
+      color: #05030a;
+      transform: translate(-1px, -1px);
+    }
+
+    .hud-btn:active {
+      transform: translate(1px, 1px);
+    }
+
+    .mobile-menu-btn {
       display: none;
-      font-family: 'Press Start 2P', monospace;
-      background: transparent;
-      border: 2px solid var(--neon-cyan);
-      color: var(--neon-cyan);
+      font-family: var(--font-pixel-title);
+      font-size: 0.7rem;
       padding: 8px 10px;
-      font-size: 0.75rem;
+      background: var(--neon-secondary);
+      color: #fff;
+      border: 2px solid #fff;
       cursor: pointer;
     }
 
-    /* Main Content Layout */
+    /* =====================================================================
+       5. MAIN CONTAINER & SECTION SCAFFOLDING
+       ===================================================================== */
     main {
       position: relative;
-      z-index: 5;
+      z-index: 10;
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 5%;
     }
 
     section {
       min-height: 100vh;
-      padding: 110px 6% 70px;
+      padding: 130px 0 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
-    /* RPG / Anime Dialogue Box Hero */
-    .hero-box {
-      background: var(--panel-bg);
-      border: 3px solid var(--neon-cyan);
-      box-shadow: 
-        6px 6px 0px var(--neon-pink),
-        0 0 30px rgba(0, 240, 255, 0.2);
-      padding: clamp(22px, 4vw, 42px);
-      max-width: 780px;
+    .section-header {
+      margin-bottom: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-tag {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.25rem;
+      color: var(--neon-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: var(--font-pixel-title);
+      font-size: clamp(1.15rem, 2.8vw, 1.85rem);
+      color: var(--neon-accent);
+      text-shadow: 3px 3px 0px var(--neon-secondary);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      line-height: 1.4;
+    }
+
+    .section-title::before {
+      content: "❖";
+      color: var(--neon-primary);
+    }
+
+    /* =====================================================================
+       6. HERO SECTION: PIXEL AVATAR + RPG DIALOGUE ENGINE
+       ===================================================================== */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .rpg-window {
+      background: var(--bg-panel);
+      border: 3px solid var(--neon-primary);
+      box-shadow: var(--shadow-hard), 0 0 35px rgba(0, 0, 0, 0.7);
+      padding: clamp(20px, 3.5vw, 36px);
       position: relative;
+      backdrop-filter: blur(6px);
     }
 
-    .status-bar {
+    /* Decorative Pixel Corner Brackets */
+    .rpg-window::before,
+    .rpg-window::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--neon-accent);
+      border: 2px solid #000;
+    }
+    .rpg-window::before { top: -6px; left: -6px; }
+    .rpg-window::after { bottom: -6px; right: -6px; }
+
+    .hero-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(255, 42, 133, 0.18);
-      border: 1px solid var(--neon-pink);
-      padding: 6px 12px;
-      font-family: 'VT323', monospace;
+      gap: 8px;
+      padding: 4px 12px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid var(--neon-success);
+      font-family: var(--font-pixel-lg);
       font-size: 1.15rem;
-      color: var(--neon-yellow);
-      margin-bottom: 18px;
+      color: var(--neon-success);
       letter-spacing: 1px;
     }
 
     .status-dot {
-      width: 10px;
-      height: 10px;
-      background: #00ff66;
-      box-shadow: 0 0 8px #00ff66;
-      display: inline-block;
-      animation: blink 1s steps(2, start) infinite;
+      width: 8px;
+      height: 8px;
+      background: var(--neon-success);
+      box-shadow: 0 0 8px var(--neon-success);
+      animation: blinkCursor 0.9s steps(2, start) infinite;
     }
 
-    h1 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(1.35rem, 3.8vw, 2.5rem);
+    .sector-pill {
+      padding: 4px 12px;
+      background: rgba(255, 42, 133, 0.15);
+      border: 1px solid var(--neon-secondary);
+      font-family: var(--font-pixel-lg);
+      font-size: 1.15rem;
+      color: var(--neon-accent);
+    }
+
+    .hero-title {
+      font-family: var(--font-pixel-title);
+      font-size: clamp(1.25rem, 3.2vw, 2.25rem);
       line-height: 1.45;
       color: #ffffff;
-      text-shadow: 3px 3px 0px var(--neon-purple);
-      margin-bottom: 20px;
+      text-shadow: 3px 3px 0px var(--neon-tertiary), -1px -1px 0px var(--neon-primary);
+      margin-bottom: 12px;
     }
 
-    /* Custom Animated Typewriter Box */
-    .dialogue-window {
-      background: rgba(5, 3, 12, 0.9);
-      border-left: 4px solid var(--neon-yellow);
-      padding: 16px 20px;
-      margin-bottom: 28px;
-      min-height: 84px;
-      display: flex;
+    .hero-subtitle {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    /* RPG Portrait + Typewriter Dialogue Box */
+    .dialogue-container {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 16px;
+      background: var(--bg-terminal);
+      border: 2px solid var(--neon-secondary);
+      padding: 16px;
+      margin-bottom: 24px;
       align-items: center;
     }
 
-    .typewriter-text {
-      font-family: 'VT323', monospace;
-      font-size: clamp(1.3rem, 2.5vw, 1.65rem);
-      color: var(--neon-cyan);
-      line-height: 1.4;
+    .avatar-frame {
+      width: 96px;
+      height: 96px;
+      border: 2px solid var(--neon-primary);
+      background: #080514;
+      position: relative;
+      box-shadow: 3px 3px 0px var(--neon-tertiary);
     }
 
-    .cursor {
+    #avatar-canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .avatar-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 42, 133, 0.9);
+      color: #fff;
+      font-family: var(--font-pixel-lg);
+      font-size: 0.85rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .dialogue-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 96px;
+    }
+
+    .speaker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.1rem;
+      color: var(--neon-accent);
+    }
+
+    .dialogue-line-wrap {
+      font-family: var(--font-pixel-lg);
+      font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+      color: var(--neon-primary);
+      line-height: 1.35;
+      min-height: 44px;
+    }
+
+    .cursor-block {
       display: inline-block;
-      width: 10px;
-      height: 1.2em;
-      background: var(--neon-pink);
-      vertical-align: middle;
+      width: 9px;
+      height: 1.1em;
+      background: var(--neon-secondary);
+      vertical-align: text-bottom;
       margin-left: 4px;
-      animation: blink 0.8s steps(2, start) infinite;
+      animation: blinkCursor 0.75s steps(2, start) infinite;
     }
 
-    @keyframes blink {
+    @keyframes blinkCursor {
       to { visibility: hidden; }
     }
 
-    .btn-row {
+    .dialogue-controls {
       display: flex;
-      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .line-counter {
+      font-family: var(--font-pixel-lg);
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .dialogue-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      font-family: var(--font-pixel-lg);
+      font-size: 1rem;
+      padding: 2px 8px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid var(--neon-primary);
+      color: var(--neon-primary);
+      cursor: pointer;
+    }
+
+    .mini-btn:hover {
+      background: var(--neon-primary);
+      color: #000;
+    }
+
+    /* Action Buttons */
+    .cta-group {
+      display: flex;
       flex-wrap: wrap;
+      gap: 14px;
     }
 
     .pixel-btn {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.75rem;
-      padding: 15px 22px;
+      font-family: var(--font-pixel-title);
+      font-size: 0.72rem;
+      padding: 14px 20px;
       text-decoration: none;
       text-transform: uppercase;
-      color: #070510;
-      background: var(--neon-cyan);
-      border: 2px solid #fff;
-      box-shadow: 4px 4px 0px var(--neon-pink);
-      transition: transform 0.1s, box-shadow 0.1s;
-      display: inline-block;
+      color: #05030a;
+      background: var(--neon-primary);
+      border: 2px solid #ffffff;
+      box-shadow: 4px 4px 0px var(--neon-secondary);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .pixel-btn:hover {
+      background: var(--neon-accent);
       transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--neon-yellow);
-      background: #fff;
+      box-shadow: 6px 6px 0px var(--neon-secondary);
     }
 
     .pixel-btn:active {
       transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px var(--neon-pink);
+      box-shadow: 2px 2px 0px var(--neon-secondary);
     }
 
-    .pixel-btn.alt {
+    .pixel-btn.secondary {
       background: transparent;
-      color: var(--neon-pink);
-      border-color: var(--neon-pink);
-      box-shadow: 4px 4px 0px var(--neon-purple);
+      color: var(--neon-secondary);
+      border-color: var(--neon-secondary);
+      box-shadow: 4px 4px 0px var(--neon-tertiary);
     }
 
-    .pixel-btn.alt:hover {
-      background: var(--neon-pink);
-      color: #fff;
+    .pixel-btn.secondary:hover {
+      background: var(--neon-secondary);
+      color: #ffffff;
     }
 
-    /* Section Headings */
-    .section-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-      color: var(--neon-yellow);
-      text-shadow: 3px 3px 0px var(--neon-pink);
-      margin-bottom: 36px;
+    /* Right Hero Card: Character Quick Telemetry & Interactive World Controls */
+    .hero-side-panel {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .section-title::before {
-      content: "▶";
-      color: var(--neon-cyan);
-    }
-
-    /* Pixel RPG Cards Grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .pixel-card {
-      background: var(--panel-bg);
-      border: 2px solid var(--neon-purple);
-      box-shadow: 5px 5px 0px rgba(0, 240, 255, 0.35);
-      padding: 24px;
-      transition: 0.2s;
-      position: relative;
-    }
-
-    .pixel-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--neon-cyan);
-      box-shadow: 6px 6px 0px var(--neon-pink);
-    }
-
-    .pixel-card h3 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.9rem;
-      color: var(--neon-cyan);
+    .side-card-title {
+      font-family: var(--font-pixel-title);
+      font-size: 0.8rem;
+      color: var(--neon-accent);
       margin-bottom: 14px;
-      line-height: 1.5;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--neon-tertiary);
     }
 
-    .pixel-card p {
-      font-size: 0.92rem;
-      color: #d8c8eb;
-      line-height: 1.65;
-      margin-bottom: 18px;
-    }
-
-    .tag-list {
+    .profile-kv-list {
+      list-style: none;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 10px;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.25rem;
+    }
+
+    .profile-kv-list li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+      padding-bottom: 4px;
+    }
+
+    .kv-key { color: var(--text-muted); }
+    .kv-val { color: var(--neon-primary); font-weight: bold; }
+
+    .world-sim-box {
+      background: var(--bg-terminal);
+      border: 1px solid var(--neon-tertiary);
+      padding: 12px;
+      margin-top: 8px;
+    }
+
+    .world-sim-title {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.1rem;
+      color: var(--neon-secondary);
+      margin-bottom: 8px;
+    }
+
+    .sim-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
 
-    .pixel-tag {
-      font-family: 'VT323', monospace;
-      font-size: 1.1rem;
-      padding: 2px 10px;
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid var(--neon-cyan);
-      color: var(--neon-yellow);
+    /* =====================================================================
+       7. FILTERABLE QUESTS / DEPLOYMENTS SECTION
+       ===================================================================== */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
     }
 
-    /* Stat Bars for Skills */
-    .stat-row {
-      margin-bottom: 14px;
+    .filter-btn {
+      font-family: var(--font-pixel-title);
+      font-size: 0.65rem;
+      padding: 10px 14px;
+      background: var(--bg-panel);
+      color: var(--text-muted);
+      border: 2px solid var(--neon-tertiary);
+      cursor: pointer;
+      transition: 0.15s;
     }
-    .stat-label {
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      color: #05030a;
+      background: var(--neon-primary);
+      border-color: #fff;
+      box-shadow: 3px 3px 0px var(--neon-secondary);
+    }
+
+    .quests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .quest-card {
+      background: var(--bg-panel);
+      border: 2px solid var(--neon-tertiary);
+      box-shadow: 5px 5px 0px rgba(0, 240, 255, 0.25);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      backdrop-filter: blur(6px);
+    }
+
+    .quest-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--neon-primary);
+      box-shadow: 6px 6px 0px var(--neon-secondary);
+    }
+
+    .quest-top {
       display: flex;
       justify-content: space-between;
-      font-family: 'VT323', monospace;
-      font-size: 1.25rem;
-      margin-bottom: 4px;
-      color: #fff;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.1rem;
     }
-    .stat-bar-bg {
+
+    .quest-rank {
+      padding: 2px 8px;
+      background: rgba(252, 238, 10, 0.15);
+      border: 1px solid var(--neon-accent);
+      color: var(--neon-accent);
+    }
+
+    .quest-status {
+      color: var(--neon-success);
+    }
+
+    .quest-card h3 {
+      font-family: var(--font-pixel-title);
+      font-size: 0.92rem;
+      color: var(--neon-primary);
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .quest-card p {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      opacity: 0.9;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .tech-tag {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.05rem;
+      padding: 2px 9px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--neon-primary);
+      color: var(--neon-accent);
+    }
+
+    .quest-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-top: 12px;
+    }
+
+    .quest-xp {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.15rem;
+      color: var(--neon-secondary);
+    }
+
+    .quest-link {
+      font-family: var(--font-pixel-title);
+      font-size: 0.62rem;
+      color: var(--neon-primary);
+      text-decoration: none;
+      padding: 6px 10px;
+      border: 1px solid var(--neon-primary);
+      transition: 0.15s;
+    }
+
+    .quest-link:hover {
+      background: var(--neon-primary);
+      color: #000;
+    }
+
+    /* =====================================================================
+       8. CHARACTER STATS, SKILL TREE & HARDWARE ARSENAL
+       ===================================================================== */
+    .stats-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+    }
+
+    .skill-bar-item {
+      margin-bottom: 16px;
+    }
+
+    .skill-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .skill-name { color: #ffffff; }
+    .skill-lvl { color: var(--neon-accent); }
+
+    .skill-track {
       width: 100%;
-      height: 12px;
-      background: #17112b;
-      border: 1px solid var(--neon-pink);
+      height: 16px;
+      background: #080512;
+      border: 2px solid var(--neon-tertiary);
       padding: 2px;
-    }
-    .stat-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
-    }
-
-    footer {
       position: relative;
-      z-index: 5;
-      text-align: center;
-      padding: 30px 6%;
-      background: rgba(7, 5, 16, 0.92);
-      border-top: 2px solid var(--neon-purple);
-      font-family: 'VT323', monospace;
-      font-size: 1.25rem;
-      color: #9e8fb2;
     }
 
-    /* Mobile Optimization */
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-secondary), var(--neon-primary));
+      position: relative;
+    }
+
+    .loadout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .loadout-slot {
+      background: var(--bg-terminal);
+      border: 1px solid var(--neon-primary);
+      padding: 12px;
+    }
+
+    .slot-type {
+      font-family: var(--font-pixel-lg);
+      font-size: 1rem;
+      color: var(--neon-secondary);
+      text-transform: uppercase;
+    }
+
+    .slot-item {
+      font-family: var(--font-pixel-title);
+      font-size: 0.68rem;
+      color: #fff;
+      margin: 4px 0;
+      line-height: 1.4;
+    }
+
+    .slot-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* =====================================================================
+       9. INTERACTIVE CYBER TERMINAL SECTION
+       ===================================================================== */
+    .terminal-box {
+      background: #04020a;
+      border: 3px solid var(--neon-primary);
+      box-shadow: var(--shadow-hard);
+      overflow: hidden;
+    }
+
+    .terminal-titlebar {
+      background: var(--neon-primary);
+      color: #05030a;
+      padding: 8px 16px;
+      font-family: var(--font-pixel-title);
+      font-size: 0.7rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .term-dot {
+      width: 10px;
+      height: 10px;
+      background: #05030a;
+      display: inline-block;
+    }
+
+    .terminal-body {
+      padding: 20px;
+      height: 320px;
+      overflow-y: auto;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.3rem;
+      line-height: 1.45;
+      color: var(--neon-primary);
+    }
+
+    .term-line {
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .term-line.cmd { color: var(--neon-accent); }
+    .term-line.sys { color: var(--neon-secondary); }
+    .term-line.out { color: #e2e8f0; }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      border-top: 2px solid var(--neon-tertiary);
+      background: #080514;
+      padding: 10px 16px;
+    }
+
+    .term-prompt {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.35rem;
+      color: var(--neon-secondary);
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+
+    #term-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--neon-accent);
+      font-family: var(--font-pixel-lg);
+      font-size: 1.35rem;
+    }
+
+    .quick-cmd-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    /* =====================================================================
+       10. UPLINK / SOCIAL FREQUENCY SECTION & FOOTER
+       ===================================================================== */
+    .uplink-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .uplink-card {
+      background: var(--bg-panel);
+      border: 2px solid var(--neon-primary);
+      padding: 20px;
+      text-decoration: none;
+      color: var(--text-main);
+      box-shadow: 4px 4px 0px var(--neon-secondary);
+      transition: transform 0.15s, background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .uplink-card:hover {
+      transform: translate(-3px, -3px);
+      background: rgba(0, 240, 255, 0.12);
+      box-shadow: 6px 6px 0px var(--neon-accent);
+    }
+
+    .uplink-channel {
+      font-family: var(--font-pixel-lg);
+      font-size: 1.05rem;
+      color: var(--neon-secondary);
+    }
+
+    .uplink-handle {
+      font-family: var(--font-pixel-title);
+      font-size: 0.8rem;
+      color: var(--neon-primary);
+    }
+
+    footer.cyber-footer {
+      position: relative;
+      z-index: 10;
+      background: rgba(5, 3, 12, 0.94);
+      border-top: 2px solid var(--neon-secondary);
+      padding: 32px 5%;
+      text-align: center;
+      font-family: var(--font-pixel-lg);
+      font-size: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    /* Floating XP / Click Popup */
+    .xp-popup {
+      position: fixed;
+      z-index: 99;
+      pointer-events: none;
+      font-family: var(--font-pixel-title);
+      font-size: 0.7rem;
+      color: var(--neon-accent);
+      text-shadow: 2px 2px 0px var(--neon-secondary);
+      animation: floatUp 0.95s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(0.9); }
+      100% { opacity: 0; transform: translateY(-45px) scale(1.1); }
+    }
+
+    /* =====================================================================
+       11. MOBILE & TABLET OPTIMIZATION
+       ===================================================================== */
+    @media (max-width: 992px) {
+      .hero-grid,
+      .stats-layout {
+        grid-template-columns: 1fr;
+      }
+      .hud-top-strip {
+        display: none;
+      }
+    }
+
     @media (max-width: 768px) {
-      .menu-toggle {
+      .mobile-menu-btn {
         display: block;
       }
-      .nav-links {
+      .nav-menu {
         display: none;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background: rgba(7, 5, 16, 0.97);
-        border-bottom: 2px solid var(--neon-cyan);
+        background: rgba(6, 4, 15, 0.98);
+        border-bottom: 2px solid var(--neon-primary);
         flex-direction: column;
-        padding: 20px 0;
-        gap: 16px;
+        padding: 18px 0;
+        gap: 14px;
       }
-      .nav-links.active {
+      .nav-menu.open {
         display: flex;
       }
-      section {
-        padding: 95px 5% 50px;
-      }
-      .pixel-btn {
-        width: 100%;
+      .dialogue-container {
+        grid-template-columns: 1fr;
+        justify-items: center;
         text-align: center;
+      }
+      .speaker-header {
+        width: 100%;
+      }
+      .loadout-grid {
+        grid-template-columns: 1fr;
+      }
+      section {
+        padding: 100px 0 60px;
+      }
+      .cta-group .pixel-btn {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
 </head>
-<body>
+<body data-theme="cyberpunk">
 
-  <!-- Live Pixel Art Anime City Background -->
-  <canvas id="pixel-canvas"></canvas>
-  <div class="crt-overlay"></div>
+  <!-- =====================================================================
+       LIVE 60FPS PIXEL-ART ANIME CITY CANVAS & CRT SCANLINES
+       ===================================================================== -->
+  <canvas id="world-canvas"></canvas>
+  <div class="crt-lines"></div>
+  <div class="vignette-overlay"></div>
 
-  <!-- Navigation Header -->
-  <nav>
-    <!-- 2. CHANGE TOP-LEFT LOGO TEXT HERE -->
-    <a href="#home" class="logo" id="nav-logo">TETHERIS // OS</a>
-    <button class="menu-toggle" id="menu-btn">MENU</button>
-    <div class="nav-links" id="nav-links">
-      <a href="#home">HOME</a>
-      <a href="#quests">QUESTS</a>
-      <a href="#stats">STATS</a>
-      <a href="https://github.com/sniperspace" target="_blank">GITHUB</a>
+  <!-- =====================================================================
+       TOP CYBER HUD NAVIGATION
+       ===================================================================== -->
+  <header class="hud-header">
+    <div class="hud-top-strip">
+      <div class="telemetry-group">
+        <div class="telemetry-item">DOMAIN: <span id="hud-domain">TETHERIS.APP</span></div>
+        <div class="telemetry-item">RENDERER: <span>PIXEL-ENGINE V4.2</span></div>
+        <div class="telemetry-item">FPS: <span id="fps-counter">60</span></div>
+      </div>
+      <div class="telemetry-group">
+        <div class="telemetry-item">REALM: <span id="theme-label">NEO-TOKYO MIDNIGHT</span></div>
+        <div class="telemetry-item">LOCAL TIME: <span id="hud-clock">00:00:00</span></div>
+      </div>
     </div>
-  </nav>
 
+    <div class="hud-main-nav">
+      <a href="#home" class="brand-logo">
+        <span class="brand-cube"></span>
+        <span class="brand-text" id="nav-logo-text">TETHERIS // OS</span>
+      </a>
+
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#home" class="active">01.CORE</a></li>
+        <li><a href="#quests">02.QUESTS</a></li>
+        <li><a href="#stats">03.STATS</a></li>
+        <li><a href="#terminal">04.TERMINAL</a></li>
+        <li><a href="#uplink">05.UPLINK</a></li>
+      </ul>
+
+      <div class="hud-controls">
+        <button class="hud-btn" id="theme-btn" title="Switch Anime World Theme">WORLD: 01</button>
+        <button class="hud-btn" id="bgm-btn" title="Toggle 8-Bit Synthwave Audio">BGM: OFF</button>
+        <button class="hud-btn" id="crt-btn" title="Toggle CRT Scanlines">CRT: ON</button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">MENU</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       MAIN CONTENT SECTIONS
+       ===================================================================== -->
   <main>
-    <!-- HERO SECTION -->
+
+    <!-- 1. HERO SECTION -->
     <section id="home">
-      <div class="hero-box">
-        <div class="status-bar">
-          <span class="status-dot"></span>
-          <span id="status-badge">ONLINE // NEURAL LINK ACTIVE</span>
-        </div>
+      <div class="hero-grid">
 
-        <!-- 3. CHANGE MAIN HEADLINE HERE -->
-        <h1 id="main-heading">WELCOME TO TETHERIS</h1>
+        <!-- Left RPG Dialogue & Hero Main Panel -->
+        <div class="rpg-window">
+          <div class="hero-badge-row">
+            <span class="status-pill">
+              <span class="status-dot"></span>
+              <span id="hero-status-text">SYSTEM ONLINE // LINK STABLE</span>
+            </span>
+            <span class="sector-pill" id="hero-sector-text">SECTOR // TETHERIS-07</span>
+          </div>
 
-        <!-- 4. ANIMATED CUSTOM LINES APPEAR HERE -->
-        <div class="dialogue-window">
-          <p class="typewriter-text">
-            <span id="typewriter"></span><span class="cursor"></span>
+          <h1 class="hero-title" id="hero-main-title">CYBER RONIN &amp; NEURAL ARCHITECT</h1>
+          <p class="hero-subtitle" id="hero-subtitle-text">
+            Engineering deep learning pipelines, intelligent data systems, and interactive retro-futuristic web worlds.
           </p>
+
+          <!-- Animated Pixel Portrait + Typewriter Custom Lines -->
+          <div class="dialogue-container">
+            <div class="avatar-frame">
+              <canvas id="avatar-canvas" width="32" height="32"></canvas>
+              <div class="avatar-label" id="avatar-name-tag">RONIN.AI</div>
+            </div>
+
+            <div class="dialogue-content">
+              <div class="speaker-header">
+                <span id="dialogue-speaker">>> TRANSMISSION LOG</span>
+                <span id="dialogue-mood">[MODE: SYNCHRONIZED]</span>
+              </div>
+
+              <div class="dialogue-line-wrap">
+                <span id="typewriter-output"></span><span class="cursor-block"></span>
+              </div>
+
+              <div class="dialogue-controls">
+                <span class="line-counter" id="line-counter">LINE 01 / 06</span>
+                <div class="dialogue-btns">
+                  <button class="mini-btn" id="prev-line-btn">◀ PREV</button>
+                  <button class="mini-btn" id="pause-line-btn">❚❚ PAUSE</button>
+                  <button class="mini-btn" id="next-line-btn">NEXT ▶</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-group">
+            <a href="#quests" class="pixel-btn">▶ EXPLORE MISSIONS</a>
+            <a href="#terminal" class="pixel-btn secondary">>_ OPEN TERMINAL</a>
+            <a href="https://github.com/sniperspace" target="_blank" rel="noopener" class="pixel-btn secondary">★ GITHUB ARCHIVE</a>
+          </div>
         </div>
 
-        <div class="btn-row">
-          <a href="#quests" class="pixel-btn">ENTER WORLD</a>
-          <a href="https://github.com/sniperspace" target="_blank" class="pixel-btn alt">GITHUB LOGS</a>
+        <!-- Right Hero Telemetry & Live World Control Panel -->
+        <div class="rpg-window hero-side-panel">
+          <div>
+            <h2 class="side-card-title">OPERATOR TELEMETRY</h2>
+            <ul class="profile-kv-list" id="telemetry-list">
+              <!-- Populated dynamically from SITE_CONFIG -->
+            </ul>
+          </div>
+
+          <div class="world-sim-box">
+            <div class="world-sim-title">⚡ LIVE PIXEL WORLD OVERRIDE</div>
+            <div class="sim-btn-grid">
+              <button class="hud-btn" id="spawn-train-btn">🚄 CALL SHINKANSEN</button>
+              <button class="hud-btn" id="spawn-firework-btn">🎆 LAUNCH FIREWORK</button>
+              <button class="hud-btn" id="spawn-meteor-btn">☄️ METEOR SHOWER</button>
+              <button class="hud-btn" id="cycle-world-btn">🌆 SWITCH REALM</button>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
 
-    <!-- PROJECTS / QUESTS SECTION -->
+    <!-- 2. ACTIVE QUESTS / PROJECTS SECTION -->
     <section id="quests">
-      <h2 class="section-title">ACTIVE MISSIONS</h2>
-      <div class="grid">
-        <div class="pixel-card">
-          <h3>[01] NEURAL ENGINE</h3>
-          <p>Deep learning predictive pipeline engineered with PyTorch, K-Fold validation, and custom feature extraction.</p>
-          <div class="tag-list">
-            <span class="pixel-tag">PyTorch</span>
-            <span class="pixel-tag">Python</span>
-            <span class="pixel-tag">AI/ML</span>
-          </div>
-        </div>
+      <div class="section-header">
+        <span class="section-tag">// MISSION LOGS &amp; DEPLOYMENTS</span>
+        <h2 class="section-title">ACTIVE QUESTS</h2>
+      </div>
 
-        <div class="pixel-card">
-          <h3>[02] SYNTH CLASSIFIER</h3>
-          <p>Machine learning classifier analyzing real-time audio intelligence and track features via cloud APIs.</p>
-          <div class="tag-list">
-            <span class="pixel-tag">Scikit-Learn</span>
-            <span class="pixel-tag">REST API</span>
-            <span class="pixel-tag">Data Science</span>
-          </div>
-        </div>
+      <div class="filter-bar" id="quest-filters">
+        <button class="filter-btn active" data-filter="all">ALL MISSIONS</button>
+        <button class="filter-btn" data-filter="ai">AI &amp; MACHINE LEARNING</button>
+        <button class="filter-btn" data-filter="systems">DATA &amp; CLOUD SYSTEMS</button>
+        <button class="filter-btn" data-filter="hardware">IOT &amp; HARDWARE</button>
+      </div>
 
-        <div class="pixel-card">
-          <h3>[03] CYBER HARDWARE MATRIX</h3>
-          <p>Embedded microcontroller IR signal decoder and physical relay automation rig for smart environment control.</p>
-          <div class="tag-list">
-            <span class="pixel-tag">Arduino</span>
-            <span class="pixel-tag">C++</span>
-            <span class="pixel-tag">IoT</span>
-          </div>
-        </div>
+      <div class="quests-grid" id="quests-grid">
+        <!-- Populated dynamically from SITE_CONFIG.quests -->
       </div>
     </section>
 
-    <!-- STATS / SKILLS SECTION -->
+    <!-- 3. CHARACTER STATS & HARDWARE ARSENAL SECTION -->
     <section id="stats">
-      <h2 class="section-title">CHARACTER STATS</h2>
-      <div class="grid">
-        <div class="pixel-card">
-          <h3>CORE ATTRIBUTES</h3>
-          <div class="stat-row">
-            <div class="stat-label"><span>MACHINE LEARNING & AI</span><span>LVL 92</span></div>
-            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 92%"></div></div>
-          </div>
-          <div class="stat-row">
-            <div class="stat-label"><span>DATA SCIENCE & PYTHON</span><span>LVL 95</span></div>
-            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 95%"></div></div>
-          </div>
-          <div class="stat-row">
-            <div class="stat-label"><span>SQL & CLOUD SYSTEMS</span><span>LVL 88</span></div>
-            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 88%"></div></div>
+      <div class="section-header">
+        <span class="section-tag">// ATTRIBUTES &amp; LOADOUT</span>
+        <h2 class="section-title">CHARACTER STATS</h2>
+      </div>
+
+      <div class="stats-layout">
+        <!-- Skill Bars -->
+        <div class="rpg-window">
+          <h3 class="side-card-title">NEURAL SKILL MATRIX</h3>
+          <div id="skills-container">
+            <!-- Populated dynamically from SITE_CONFIG.skills -->
           </div>
         </div>
 
-        <div class="pixel-card">
-          <h3>SYSTEM BIO</h3>
-          <p>
-            Code Ronin & Data Scientist crafting intelligent neural networks, low-latency cloud deployments, and retro-futuristic web experiences.
-          </p>
-          <div class="tag-list">
-            <span class="pixel-tag">CLASS: CYBER NINJA</span>
-            <span class="pixel-tag">SERVER: TETHERIS.APP</span>
+        <!-- Hardware & Software Equipment Loadout -->
+        <div class="rpg-window">
+          <h3 class="side-card-title">EQUIPPED CYBERWARE &amp; RIG</h3>
+          <div class="loadout-grid" id="loadout-container">
+            <!-- Populated dynamically from SITE_CONFIG.loadout -->
           </div>
         </div>
       </div>
     </section>
+
+    <!-- 4. INTERACTIVE COMMAND LINE TERMINAL -->
+    <section id="terminal">
+      <div class="section-header">
+        <span class="section-tag">// DIRECT SHELL ACCESS</span>
+        <h2 class="section-title">TETHERIS NEURAL SHELL</h2>
+      </div>
+
+      <div class="terminal-box">
+        <div class="terminal-titlebar">
+          <span>TETHERIS-OS // BASH v2026.11 (TTY1)</span>
+          <div class="terminal-dots">
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+          </div>
+        </div>
+
+        <div class="terminal-body" id="terminal-output">
+          <div class="term-line sys">TETHERIS NEURAL OS [Version 4.2.0-PIXEL]</div>
+          <div class="term-line out">Type <span style="color:var(--neon-accent)">help</span> or click a command below to inspect system files.</div>
+        </div>
+
+        <div class="terminal-input-row">
+          <span class="term-prompt">ronin@tetheris:~$</span>
+          <input type="text" id="term-input" placeholder="Type a command (help, whoami, quests, skills, theme, train, clear)..." autocomplete="off" />
+        </div>
+
+        <div class="quick-cmd-bar">
+          <button class="mini-btn" data-cmd="help">help</button>
+          <button class="mini-btn" data-cmd="whoami">whoami</button>
+          <button class="mini-btn" data-cmd="quests">quests</button>
+          <button class="mini-btn" data-cmd="skills">skills</button>
+          <button class="mini-btn" data-cmd="theme">theme</button>
+          <button class="mini-btn" data-cmd="train">train</button>
+          <button class="mini-btn" data-cmd="clear">clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. UPLINK / SOCIAL FREQUENCY LINKS -->
+    <section id="uplink">
+      <div class="section-header">
+        <span class="section-tag">// ENCRYPTED CHANNELS</span>
+        <h2 class="section-title">ESTABLISH UPLINK</h2>
+      </div>
+
+      <div class="rpg-window">
+        <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 16px;" id="uplink-intro">
+          Ready to collaborate on AI deployments, open-source data science, hackathons, or futuristic web builds? Connect across any frequency below:
+        </p>
+
+        <div class="uplink-grid" id="uplink-grid">
+          <!-- Populated dynamically from SITE_CONFIG.uplinks -->
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer>
-    TETHERIS.APP // PIXEL ANIME ENGINE // ALL SYSTEMS NOMINAL
+  <footer class="cyber-footer">
+    <div id="footer-text">TETHERIS.APP // CRAFTED WITH PIXEL-ART ENGINE &amp; THREE-LAYER PARALLAX // 2026</div>
   </footer>
 
+  <!-- =====================================================================
+       MASTER CONFIGURATION & LIVE PIXEL ANIME ENGINE
+       ===================================================================== -->
   <script>
-    /* ==========================================================
-       ✨ CUSTOMIZE YOUR WEBSITE TEXT & LINES RIGHT HERE! ✨
-       ========================================================== */
+    /* =====================================================================
+       1. ✨ MASTER CUSTOMIZATION CONFIG (EDIT ALL YOUR TEXT HERE!) ✨
+       ===================================================================== */
     const SITE_CONFIG = {
-      browserTabTitle: "TETHERIS // Cyber-Anime Portal",
+      // Browser Tab & Top Navbar
+      browserTabTitle: "Tetheris will be back soon",
+      domainBadge: "TETHERIS.APP",
       topLogoText: "TETHERIS // OS",
-      statusBadge: "ONLINE // SECTOR 07 NIGHT CITY",
-      mainHeading: "CODE RONIN // NEURAL ARCHITECT",
-      
-      // Write as many custom lines as you want here! They will type out one by one:
+
+      // Hero Section Text
+      statusBadge: "SYSTEM ONLINE // LINK STABLE",
+      sectorBadge: "SECTOR // TETHERIS-07",
+      mainHeading: "CYBER RONIN & NEURAL ARCHITECT",
+      subHeading: "Engineering deep learning pipelines, intelligent data systems, and interactive retro-futuristic web worlds.",
+      avatarLabel: "RONIN.AI",
+      dialogueSpeaker: ">> TRANSMISSION LOG",
+
+      // ✨ WRITE YOUR CUSTOM TYPEWRITER LINES HERE! ✨
       customLines: [
-        ">> Initializing Tetheris Neural Interface...",
-        ">> Crafting AI models, data pipelines & futuristic web worlds.",
-        ">> Welcome to my digital cyber-sanctuary.",
-        ">> Scroll down to inspect active deployments and character stats."
-      ]
+        ">> Welcome to TETHERIS.APP — my digital cyber-sanctuary.",
+        ">> Building end-to-end Machine Learning models & PyTorch neural pipelines.",
+        ">> Blending statistical data science with pixel-art anime aesthetics.",
+        ">> Click anywhere in the night sky to launch pixel fireworks!",
+        ">> Use the [WORLD] button in the top bar to switch anime time-of-day.",
+        ">> Scroll down to inspect active mission deployments and character stats."
+      ],
+
+      // Right Hero Panel: Operator Telemetry Key-Values
+      telemetry: [
+        { key: "CALLSIGN", val: "SNIPERSPACE // AGNI" },
+        { key: "CLASS", val: "DATA SCIENTIST & ML DEV" },
+        { key: "CORE ENGINE", val: "PYTORCH // SCIKIT-LEARN" },
+        { key: "DATABASE", val: "ORACLE SQL // PYTHON" },
+        { key: "STATUS", val: "OPEN FOR COLLABS" }
+      ],
+
+      // Active Quests / Projects (Filter categories: 'ai', 'systems', 'hardware')
+      quests: [
+        {
+          id: "QUEST-01",
+          rank: "S-RANK // AI",
+          category: "ai",
+          status: "DEPLOYED",
+          title: "NEURAL EXAM SCORE PREDICTOR",
+          desc: "Multi-layer perceptron architecture built in PyTorch featuring K-Fold cross-validation, custom feature engineering, and hyperparameter tuning.",
+          tags: ["PyTorch", "Deep Learning", "K-Fold CV", "Pandas"],
+          xp: "+2500 XP",
+          linkText: "INSPECT CODE",
+          linkUrl: "https://github.com/sniperspace"
+        },
+        {
+          id: "QUEST-02",
+          rank: "S-RANK // ML",
+          category: "ai",
+          status: "DEPLOYED",
+          title: "AUDIO POPULARITY CLASSIFIER",
+          desc: "End-to-end machine learning pipeline analyzing acoustic track features and metadata via REST APIs to classify and forecast song popularity.",
+          tags: ["Scikit-Learn", "Spotify API", "Python", "Feature Eng"],
+          xp: "+2200 XP",
+          linkText: "INSPECT CODE",
+          linkUrl: "https://github.com/sniperspace"
+        },
+        {
+          id: "QUEST-03",
+          rank: "A-RANK // IOT",
+          category: "hardware",
+          status: "ACTIVE",
+          title: "IR HARDWARE RELAY MATRIX",
+          desc: "Microcontroller infrared signal decoder and physical relay switching array for real-time hardware automation and smart lighting control.",
+          tags: ["Arduino", "Embedded C++", "IR Receiver", "Hardware"],
+          xp: "+1800 XP",
+          linkText: "SCHEMATICS",
+          linkUrl: "https://github.com/sniperspace"
+        },
+        {
+          id: "QUEST-04",
+          rank: "S-RANK // SYS",
+          category: "systems",
+          status: "ONLINE",
+          title: "CAMPUS LOST & FOUND MATRIX",
+          desc: "Full-stack automated object recovery and matching platform architected for rapid campus deployment and hackathon scaling.",
+          tags: ["Database Design", "Full-Stack", "REST API", "Cloud"],
+          xp: "+2100 XP",
+          linkText: "LAUNCH APP",
+          linkUrl: "https://github.com/sniperspace"
+        },
+        {
+          id: "QUEST-05",
+          rank: "A-RANK // OSS",
+          category: "ai",
+          status: "CONTRIBUTOR",
+          title: "OPEN-SOURCE DATA SCIENCE KIT",
+          desc: "Open-source data science toolkit contributions streamlining preprocessing, model evaluation metrics, and reproducible workflows.",
+          tags: ["Open Source", "Python", "NumPy", "Git"],
+          xp: "+1950 XP",
+          linkText: "VIEW REPO",
+          linkUrl: "https://github.com/sniperspace"
+        },
+        {
+          id: "QUEST-06",
+          rank: "SSR // WEB",
+          category: "systems",
+          status: "LIVE",
+          title: "TETHERIS PIXEL ANIME ENGINE",
+          desc: "Custom 60FPS procedural HTML5 Canvas pixel-art anime city with parallax skylines, Web Audio chiptune synth, and interactive CLI shell.",
+          tags: ["HTML5 Canvas", "Pixel Art", "Web Audio", "JavaScript"],
+          xp: "+3000 XP",
+          linkText: "LIVE DOMAIN",
+          linkUrl: "https://tetheris.app"
+        }
+      ],
+
+      // Character Skill Bars
+      skills: [
+        { name: "MACHINE LEARNING & PYTORCH", level: "LVL 94", percent: 94 },
+        { name: "PYTHON, PANDAS & NUMPY", level: "LVL 96", percent: 96 },
+        { name: "STATISTICAL COMPUTING (R) & MATH", level: "LVL 89", percent: 89 },
+        { name: "ORACLE SQL & DATABASE SYSTEMS", level: "LVL 91", percent: 91 },
+        { name: "JAVA OOP & ALGORITHMS", level: "LVL 88", percent: 88 },
+        { name: "CLOUD VPS & FULL-STACK DEPLOYMENT", level: "LVL 86", percent: 86 }
+      ],
+
+      // Equipped Cyberware / Developer Toolchain
+      loadout: [
+        { slot: "PRIMARY DECK", item: "ASUS TUF A15 RIG", desc: "CUDA-accelerated local model training & shader dev" },
+        { slot: "NEURAL CORE", item: "PYTORCH + SKLEARN", desc: "Deep neural networks & ensemble pipelines" },
+        { slot: "DATA VAULT", item: "ORACLE SQL 23ai", desc: "Relational schema design & high-speed queries" },
+        { slot: "IDE MATRIX", item: "VS CODE + JUPYTER", desc: "Agentic AI workflows & interactive notebooks" }
+      ],
+
+      // Uplink / Social Channels
+      uplinks: [
+        { channel: "01 // CODE REPOSITORY", handle: "GITHUB @SNIPERSPACE", url: "https://github.com/sniperspace" },
+        { channel: "02 // LIVE PORTAL", handle: "TETHERIS.APP", url: "https://tetheris.app" },
+        { channel: "03 // NEURAL COMPETITIONS", handle: "KAGGLE PIPELINES", url: "https://www.kaggle.com" },
+        { channel: "04 // PROFESSIONAL LINK", handle: "LINKEDIN NETWORK", url: "https://www.linkedin.com" }
+      ],
+
+      footerText: "TETHERIS.APP // PROCEDURAL PIXEL-ART ANIME ENGINE // ALL SYSTEMS NOMINAL"
     };
 
-    // Apply custom config to page
-    document.title = SITE_CONFIG.browserTabTitle;
-    document.getElementById('nav-logo').textContent = SITE_CONFIG.topLogoText;
-    document.getElementById('status-badge').textContent = SITE_CONFIG.statusBadge;
-    document.getElementById('main-heading').textContent = SITE_CONFIG.mainHeading;
+    /* =====================================================================
+       2. INITIALIZE DOM WITH SITE_CONFIG DATA
+       ===================================================================== */
+    function hydrateDOM() {
+      document.title = SITE_CONFIG.browserTabTitle;
+      document.getElementById('hud-domain').textContent = SITE_CONFIG.domainBadge;
+      document.getElementById('nav-logo-text').textContent = SITE_CONFIG.topLogoText;
+      document.getElementById('hero-status-text').textContent = SITE_CONFIG.statusBadge;
+      document.getElementById('hero-sector-text').textContent = SITE_CONFIG.sectorBadge;
+      document.getElementById('hero-main-title').textContent = SITE_CONFIG.mainHeading;
+      document.getElementById('hero-subtitle-text').textContent = SITE_CONFIG.subHeading;
+      document.getElementById('avatar-name-tag').textContent = SITE_CONFIG.avatarLabel;
+      document.getElementById('dialogue-speaker').textContent = SITE_CONFIG.dialogueSpeaker;
+      document.getElementById('footer-text').textContent = SITE_CONFIG.footerText;
 
-    // Mobile Menu Toggle
-    const menuBtn = document.getElementById('menu-btn');
-    const navLinks = document.getElementById('nav-links');
-    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('active'));
-    });
+      // Render Telemetry List
+      const telList = document.getElementById('telemetry-list');
+      telList.innerHTML = SITE_CONFIG.telemetry.map(item => `
+        <li>
+          <span class="kv-key">${item.key}</span>
+          <span class="kv-val">${item.val}</span>
+        </li>
+      `).join('');
 
-    // RPG Typewriter Effect for Custom Lines
-    const typeTarget = document.getElementById('typewriter');
-    let lineIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
+      // Render Quests
+      renderQuests('all');
 
-    function runTypewriter() {
-      const currentLine = SITE_CONFIG.customLines[lineIndex];
-      if (!isDeleting) {
-        typeTarget.textContent = currentLine.slice(0, ++charIndex);
-        if (charIndex === currentLine.length) {
-          isDeleting = true;
-          setTimeout(runTypewriter, 2600); // Pause at end of line
+      // Render Skills
+      const skillsBox = document.getElementById('skills-container');
+      skillsBox.innerHTML = SITE_CONFIG.skills.map(s => `
+        <div class="skill-bar-item">
+          <div class="skill-bar-header">
+            <span class="skill-name">${s.name}</span>
+            <span class="skill-lvl">${s.level}</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" style="width: ${s.percent}%"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // Render Loadout
+      const loadoutBox = document.getElementById('loadout-container');
+      loadoutBox.innerHTML = SITE_CONFIG.loadout.map(l => `
+        <div class="loadout-slot">
+          <div class="slot-type">${l.slot}</div>
+          <div class="slot-item">${l.item}</div>
+          <div class="slot-desc">${l.desc}</div>
+        </div>
+      `).join('');
+
+      // Render Uplinks
+      const uplinkBox = document.getElementById('uplink-grid');
+      uplinkBox.innerHTML = SITE_CONFIG.uplinks.map(u => `
+        <a href="${u.url}" target="_blank" rel="noopener" class="uplink-card">
+          <span class="uplink-channel">${u.channel}</span>
+          <span class="uplink-handle">${u.handle}</span>
+        </a>
+      `).join('');
+    }
+
+    function renderQuests(filter) {
+      const grid = document.getElementById('quests-grid');
+      const filtered = filter === 'all'
+        ? SITE_CONFIG.quests
+        : SITE_CONFIG.quests.filter(q => q.category === filter);
+
+      grid.innerHTML = filtered.map(q => `
+        <article class="quest-card">
+          <div>
+            <div class="quest-top">
+              <span class="quest-rank">${q.rank}</span>
+              <span class="quest-status">● ${q.status}</span>
+            </div>
+            <h3>${q.title}</h3>
+            <p>${q.desc}</p>
+            <div class="tag-row">
+              ${q.tags.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="quest-footer">
+            <span class="quest-xp">${q.xp}</span>
+            <a href="${q.linkUrl}" target="_blank" rel="noopener" class="quest-link">${q.linkText} ▶</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    /* =====================================================================
+       3. WEB AUDIO API 8-BIT SYNTHESIZER (CHIPTUNE BGM & UI SFX)
+       ===================================================================== */
+    class ChiptuneSynth {
+      constructor() {
+        this.ctx = null;
+        this.isPlayingBGM = false;
+        this.bgmTimer = null;
+        this.step = 0;
+        // Cyberpunk minor pentatonic arpeggio notes (Hz)
+        this.notes = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 392.00];
+      }
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      beep(freq = 660, duration = 0.045, type = 'square', vol = 0.03) {
+        try {
+          this.initContext();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      toggleBGM() {
+        this.initContext();
+        this.isPlayingBGM = !this.isPlayingBGM;
+        if (this.isPlayingBGM) {
+          this.bgmTimer = setInterval(() => {
+            const freq = this.notes[this.step % this.notes.length];
+            this.beep(freq, 0.16, 'triangle', 0.035);
+            if (this.step % 4 === 0) {
+              this.beep(freq / 2, 0.28, 'sawtooth', 0.02);
+            }
+            this.step++;
+          }, 210);
+        } else {
+          clearInterval(this.bgmTimer);
+        }
+        return this.isPlayingBGM;
+      }
+    }
+
+    const soundFX = new ChiptuneSynth();
+
+    /* =====================================================================
+       4. PROCEDURAL PIXEL-ART AVATAR PORTRAIT (32x32 CANVAS)
+       ===================================================================== */
+    const avatarCanvas = document.getElementById('avatar-canvas');
+    const actx = avatarCanvas.getContext('2d');
+    let avatarFrame = 0;
+
+    function drawPixelAvatar() {
+      avatarFrame += 0.05;
+      actx.clearRect(0, 0, 32, 32);
+
+      // Background Cyber Grid
+      actx.fillStyle = '#0b061a';
+      actx.fillRect(0, 0, 32, 32);
+      actx.fillStyle = 'rgba(0, 240, 255, 0.12)';
+      for (let i = 0; i < 32; i += 4) {
+        actx.fillRect(0, i, 32, 1);
+        actx.fillRect(i, 0, 1, 32);
+      }
+
+      // Hood / Cloak Silhouette
+      actx.fillStyle = '#1c1136';
+      actx.fillRect(7, 6, 18, 22);
+      actx.fillRect(5, 10, 22, 18);
+      actx.fillRect(4, 24, 24, 8);
+
+      // Inner Hood Shadow
+      actx.fillStyle = '#07040e';
+      actx.fillRect(9, 9, 14, 14);
+
+      // Cyber Mask / Lower Faceplate
+      actx.fillStyle = '#2d1e4a';
+      actx.fillRect(10, 16, 12, 7);
+      actx.fillStyle = '#ff2a85';
+      actx.fillRect(12, 19, 8, 1);
+
+      // Glowing Anime Cyber Visor (Blinks & Scans)
+      const isBlinking = Math.sin(avatarFrame * 1.7) > 0.92;
+      if (!isBlinking) {
+        actx.fillStyle = '#00f0ff';
+        actx.fillRect(10, 13, 5, 2);
+        actx.fillRect(17, 13, 5, 2);
+        // Visor highlight pixel
+        const scanOffset = Math.floor((Math.sin(avatarFrame * 2) + 1) * 2);
+        actx.fillStyle = '#ffffff';
+        actx.fillRect(10 + scanOffset, 13, 1, 1);
+        actx.fillRect(17 + scanOffset, 13, 1, 1);
+      } else {
+        actx.fillStyle = '#ff2a85';
+        actx.fillRect(10, 14, 12, 1);
+      }
+
+      // Neon Collar Trim
+      actx.fillStyle = '#00f0ff';
+      actx.fillRect(7, 25, 2, 5);
+      actx.fillRect(23, 25, 2, 5);
+
+      requestAnimationFrame(drawPixelAvatar);
+    }
+
+    /* =====================================================================
+       5. RPG TYPEWRITER DIALOGUE CONTROLLER
+       ===================================================================== */
+    let currentLineIdx = 0;
+    let currentCharIdx = 0;
+    let isDeletingLine = false;
+    let isDialoguePaused = false;
+    let typewriterTimeout = null;
+
+    const typeOutputEl = document.getElementById('typewriter-output');
+    const lineCounterEl = document.getElementById('line-counter');
+
+    function updateLineCounter() {
+      const total = String(SITE_CONFIG.customLines.length).padStart(2, '0');
+      const curr = String(currentLineIdx + 1).padStart(2, '0');
+      lineCounterEl.textContent = `LINE ${curr} / ${total}`;
+    }
+
+    function stepTypewriter() {
+      if (isDialoguePaused) return;
+      const lines = SITE_CONFIG.customLines;
+      const fullText = lines[currentLineIdx];
+      updateLineCounter();
+
+      if (!isDeletingLine) {
+        currentCharIdx++;
+        typeOutputEl.textContent = fullText.slice(0, currentCharIdx);
+        if (currentCharIdx >= fullText.length) {
+          isDeletingLine = true;
+          typewriterTimeout = setTimeout(stepTypewriter, 3000);
           return;
         }
       } else {
-        typeTarget.textContent = currentLine.slice(0, --charIndex);
-        if (charIndex === 0) {
-          isDeleting = false;
-          lineIndex = (lineIndex + 1) % SITE_CONFIG.customLines.length;
+        currentCharIdx--;
+        typeOutputEl.textContent = fullText.slice(0, currentCharIdx);
+        if (currentCharIdx <= 0) {
+          isDeletingLine = false;
+          currentLineIdx = (currentLineIdx + 1) % lines.length;
         }
       }
-      setTimeout(runTypewriter, isDeleting ? 22 : 45);
+
+      const speed = isDeletingLine ? 18 : 38;
+      typewriterTimeout = setTimeout(stepTypewriter, speed);
     }
-    runTypewriter();
 
-    /* ==========================================================
-       🎮 LIVE PIXEL-ART ANIME NIGHT CITY ENGINE (60FPS CANVAS)
-       ========================================================== */
-    const canvas = document.getElementById('pixel-canvas');
-    const ctx = canvas.getContext('2d');
+    function jumpToLine(newIdx) {
+      clearTimeout(typewriterTimeout);
+      const len = SITE_CONFIG.customLines.length;
+      currentLineIdx = (newIdx + len) % len;
+      currentCharIdx = SITE_CONFIG.customLines[currentLineIdx].length;
+      isDeletingLine = false;
+      typeOutputEl.textContent = SITE_CONFIG.customLines[currentLineIdx];
+      updateLineCounter();
+      if (!isDialoguePaused) {
+        isDeletingLine = true;
+        typewriterTimeout = setTimeout(stepTypewriter, 3200);
+      }
+    }
 
-    // Low internal resolution creates authentic crisp pixel art!
-    const PIXEL_SCALE = 4;
-    let width, height;
-    let stars = [], buildings = [], particles = [], shootingStars = [];
-    let pointerX = 0, pointerY = 0;
+    /* =====================================================================
+       6. MULTI-LAYER 60FPS PIXEL ANIME WORLD ENGINE
+       ===================================================================== */
+    const worldCanvas = document.getElementById('world-canvas');
+    const wctx = worldCanvas.getContext('2d');
 
-    function initScene() {
-      width = Math.ceil(window.innerWidth / PIXEL_SCALE);
-      height = Math.ceil(window.innerHeight / PIXEL_SCALE);
-      canvas.width = width;
-      canvas.height = height;
-      ctx.imageSmoothingEnabled = false;
+    const WORLD_PALETTES = [
+      {
+        id: 'cyberpunk',
+        name: 'NEO-TOKYO MIDNIGHT',
+        sky: ['#05030d', '#0b061d', '#160b33', '#271049', '#3d155f'],
+        sunTop: '#fcee0a',
+        sunBot: '#ff2a85',
+        mountain: '#120829',
+        mountainWire: 'rgba(184, 41, 255, 0.3)',
+        farBldg: '#0a0518',
+        midBldg: '#110926',
+        nearBldg: '#070410',
+        winColors: ['#00f0ff', '#ff2a85', '#fcee0a'],
+        gridFloor: '#070312',
+        gridLineA: 'rgba(255, 42, 133, 0.55)',
+        gridLineB: 'rgba(0, 240, 255, 0.45)',
+        particleA: '#ff2a85',
+        particleB: '#00f0ff'
+      },
+      {
+        id: 'sunset',
+        name: 'SHIBUYA SUNSET',
+        sky: ['#120517', '#290924', '#4d102c', '#7c1d31', '#b5382a'],
+        sunTop: '#fff3b0',
+        sunBot: '#ff2052',
+        mountain: '#210718',
+        mountainWire: 'rgba(255, 158, 0, 0.3)',
+        farBldg: '#170614',
+        midBldg: '#240a1d',
+        nearBldg: '#10030d',
+        winColors: ['#ff9e00', '#ff2052', '#fff3b0'],
+        gridFloor: '#12040e',
+        gridLineA: 'rgba(255, 158, 0, 0.55)',
+        gridLineB: 'rgba(255, 32, 82, 0.45)',
+        particleA: '#ff9e00',
+        particleB: '#fff3b0'
+      },
+      {
+        id: 'matrix',
+        name: 'AKIHABARA MATRIX',
+        sky: ['#020805', '#04140c', '#072416', '#0a3621', '#0f4c2f'],
+        sunTop: '#d9f99d',
+        sunBot: '#00ff88',
+        mountain: '#04170e',
+        mountainWire: 'rgba(0, 255, 136, 0.28)',
+        farBldg: '#03100a',
+        midBldg: '#061c12',
+        nearBldg: '#020906',
+        winColors: ['#00ff88', '#00b4d8', '#d9f99d'],
+        gridFloor: '#020a06',
+        gridLineA: 'rgba(0, 255, 136, 0.55)',
+        gridLineB: 'rgba(0, 180, 216, 0.45)',
+        particleA: '#00ff88',
+        particleB: '#d9f99d'
+      },
+      {
+        id: 'eclipse',
+        name: 'BLOOD MOON ECLIPSE',
+        sky: ['#060204', '#120408', '#21060e', '#360814', '#4f0b1d'],
+        sunTop: '#ff1e42',
+        sunBot: '#7f1d1d',
+        mountain: '#140408',
+        mountainWire: 'rgba(255, 30, 66, 0.3)',
+        farBldg: '#0c0205',
+        midBldg: '#170509',
+        nearBldg: '#080103',
+        winColors: ['#ff1e42', '#fca5a5', '#ffffff'],
+        gridFloor: '#080204',
+        gridLineA: 'rgba(255, 30, 66, 0.55)',
+        gridLineB: 'rgba(252, 165, 165, 0.35)',
+        particleA: '#ff1e42',
+        particleB: '#e2e8f0'
+      }
+    ];
 
-      // Generate Twinkling Pixel Stars
-      stars = Array.from({ length: 70 }, () => ({
-        x: Math.floor(Math.random() * width),
-        y: Math.floor(Math.random() * (height * 0.65)),
-        blinkSpeed: 0.02 + Math.random() * 0.05,
+    let currentPaletteIdx = 0;
+    let pw = 320, ph = 200;
+    let pixelScale = 4;
+
+    let stars = [];
+    let farBuildings = [];
+    let midBuildings = [];
+    let flyingCars = [];
+    let sakuraParticles = [];
+    let fireworks = [];
+    let meteors = [];
+    let bulletTrain = { x: -180, speed: 2.2, active: true };
+
+    let mouseX = 0, mouseY = 0;
+    let targetMouseX = 0, targetMouseY = 0;
+
+    function initPixelWorld() {
+      pixelScale = window.innerWidth < 768 ? 3 : 4;
+      pw = Math.ceil(window.innerWidth / pixelScale);
+      ph = Math.ceil(window.innerHeight / pixelScale);
+      worldCanvas.width = pw;
+      worldCanvas.height = ph;
+      wctx.imageSmoothingEnabled = false;
+
+      const palette = WORLD_PALETTES[currentPaletteIdx];
+
+      // 1. Stars
+      stars = Array.from({ length: 85 }, () => ({
+        x: Math.floor(Math.random() * pw),
+        y: Math.floor(Math.random() * (ph * 0.62)),
         phase: Math.random() * Math.PI * 2,
-        color: Math.random() > 0.3 ? '#ffffff' : '#00f0ff'
+        size: Math.random() > 0.88 ? 2 : 1
       }));
 
-      // Generate Cyberpunk Anime City Skyline
-      buildings = [];
-      let bx = -20;
-      while (bx < width + 40) {
-        const bw = 14 + Math.floor(Math.random() * 22);
-        const bh = 25 + Math.floor(Math.random() * (height * 0.38));
-        const windows = [];
-        for (let wy = 4; wy < bh - 6; wy += 4) {
-          for (let wx = 3; wx < bw - 3; wx += 4) {
+      // 2. Far Layer Megastructures
+      farBuildings = [];
+      let fx = -30;
+      while (fx < pw + 60) {
+        const w = 16 + Math.floor(Math.random() * 24);
+        const h = 35 + Math.floor(Math.random() * (ph * 0.38));
+        farBuildings.push({
+          x: fx,
+          w,
+          h,
+          beacon: Math.random() > 0.4
+        });
+        fx += w - 3;
+      }
+
+      // 3. Mid Layer Cyberpunk Buildings with Windows & Neon Signs
+      midBuildings = [];
+      let mx = -30;
+      while (mx < pw + 60) {
+        const w = 18 + Math.floor(Math.random() * 26);
+        const h = 22 + Math.floor(Math.random() * (ph * 0.32));
+        const wins = [];
+        for (let wy = 5; wy < h - 6; wy += 4) {
+          for (let wx = 3; wx < w - 4; wx += 4) {
             if (Math.random() > 0.35) {
-              windows.push({
+              wins.push({
                 x: wx,
                 y: wy,
-                color: Math.random() > 0.25 ? '#00f0ff' : (Math.random() > 0.5 ? '#ff2a85' : '#fcee0a')
+                cIdx: Math.floor(Math.random() * 3)
               });
             }
           }
         }
-        buildings.push({
-          x: bx,
-          w: bw,
-          h: bh,
-          shade: Math.random() > 0.5 ? '#0d0822' : '#140c30',
-          hasAntenna: Math.random() > 0.5,
-          windows
+        midBuildings.push({
+          x: mx,
+          w,
+          h,
+          hasSign: Math.random() > 0.55,
+          signColorIdx: Math.floor(Math.random() * 3),
+          wins
         });
-        bx += bw - 2;
+        mx += w + 1;
       }
 
-      // Generate Falling Neon Sakura / Cyber Rain Particles
-      particles = Array.from({ length: 45 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: -0.3 - Math.random() * 0.3,
-        vy: 0.5 + Math.random() * 0.7,
-        size: Math.random() > 0.7 ? 2 : 1,
-        color: Math.random() > 0.4 ? '#ff2a85' : '#00f0ff'
+      // 4. Flying Cyber Cars
+      flyingCars = Array.from({ length: 12 }, () => ({
+        x: Math.random() * pw,
+        y: Math.floor(ph * 0.35 + Math.random() * (ph * 0.28)),
+        vx: (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 1.1),
+        len: 4 + Math.floor(Math.random() * 5)
+      }));
+
+      // 5. Falling Neon Sakura / Cyber Rain
+      sakuraParticles = Array.from({ length: 55 }, () => ({
+        x: Math.random() * pw,
+        y: Math.random() * ph,
+        vx: -0.25 - Math.random() * 0.35,
+        vy: 0.45 + Math.random() * 0.65,
+        size: Math.random() > 0.75 ? 2 : 1,
+        type: Math.random() > 0.5 ? 0 : 1
       }));
     }
 
-    window.addEventListener('resize', initScene);
-    window.addEventListener('mousemove', (e) => {
-      pointerX = (e.clientX / window.innerWidth - 0.5) * 16;
-      pointerY = (e.clientY / window.innerHeight - 0.5) * 8;
-    });
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches[0]) {
-        pointerX = (e.touches[0].clientX / window.innerWidth - 0.5) * 12;
+    function spawnFirework(px, py) {
+      const pal = WORLD_PALETTES[currentPaletteIdx];
+      const colors = [pal.sunTop, pal.sunBot, ...pal.winColors];
+      const count = 26;
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.2;
+        const speed = 0.6 + Math.random() * 1.8;
+        fireworks.push({
+          x: px,
+          y: py,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 28 + Math.floor(Math.random() * 16),
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
       }
-    }, { passive: true });
+    }
 
-    initScene();
+    function triggerMeteorShower() {
+      for (let i = 0; i < 6; i++) {
+        meteors.push({
+          x: Math.random() * pw * 0.8,
+          y: Math.random() * (ph * 0.25),
+          len: 12 + Math.floor(Math.random() * 8),
+          life: 26
+        });
+      }
+    }
 
-    let time = 0;
-    function drawPixelWorld() {
-      time += 0.03;
-      const horizonY = Math.floor(height * 0.68);
+    // FPS Counter State
+    let worldTime = 0;
+    let frameCount = 0;
+    let lastFpsUpdate = performance.now();
+    const fpsEl = document.getElementById('fps-counter');
 
-      // 1. Anime Night Sky Gradient (Banded Pixel Style)
-      const skyBands = ['#070510', '#0c0721', '#180c38', '#291147', '#3d155f'];
-      const bandHeight = Math.ceil(horizonY / skyBands.length);
-      skyBands.forEach((col, i) => {
-        ctx.fillStyle = col;
-        ctx.fillRect(0, i * bandHeight, width, bandHeight + 1);
-      });
+    function renderPixelWorld(now) {
+      worldTime += 0.03;
+      frameCount++;
+      if (now - lastFpsUpdate >= 1000) {
+        fpsEl.textContent = frameCount;
+        frameCount = 0;
+        lastFpsUpdate = now;
+      }
 
-      // 2. Pixel Stars
+      // Smooth Mouse Parallax
+      mouseX += (targetMouseX - mouseX) * 0.08;
+      mouseY += (targetMouseY - mouseY) * 0.08;
+
+      const pal = WORLD_PALETTES[currentPaletteIdx];
+      const horizonY = Math.floor(ph * 0.70);
+
+      // 1. Banded Pixel Sky Gradient
+      const bandH = Math.ceil(horizonY / pal.sky.length);
+      for (let i = 0; i < pal.sky.length; i++) {
+        wctx.fillStyle = pal.sky[i];
+        wctx.fillRect(0, i * bandH, pw, bandH + 1);
+      }
+
+      // 2. Pixel Dither Transitions Between Sky Bands
+      for (let i = 1; i < pal.sky.length; i++) {
+        const dy = i * bandH;
+        wctx.fillStyle = pal.sky[i - 1];
+        for (let dx = 0; dx < pw; dx += 2) {
+          wctx.fillRect(dx, dy, 1, 1);
+        }
+      }
+
+      // 3. Twinkling Stars
       stars.forEach(s => {
-        if (Math.sin(time * 2 + s.phase) > -0.2) {
-          ctx.fillStyle = s.color;
-          ctx.fillRect(Math.floor(s.x - pointerX * 0.15), s.y, 1, 1);
+        if (Math.sin(worldTime * 2 + s.phase) > -0.25) {
+          wctx.fillStyle = s.size === 2 ? pal.sunTop : '#ffffff';
+          const sx = Math.floor(s.x - mouseX * 0.15);
+          wctx.fillRect(sx, s.y, s.size, s.size);
         }
       });
 
-      // 3. Occasional Anime Shooting Star
-      if (Math.random() < 0.015 && shootingStars.length < 2) {
-        shootingStars.push({ x: Math.random() * width, y: Math.random() * (horizonY * 0.4), len: 8, life: 15 });
+      // 4. Meteors / Shooting Stars
+      if (Math.random() < 0.012 && meteors.length < 3) {
+        meteors.push({
+          x: Math.random() * pw * 0.7,
+          y: Math.random() * (horizonY * 0.35),
+          len: 10,
+          life: 20
+        });
       }
-      shootingStars.forEach((ss, idx) => {
-        ctx.fillStyle = '#ffffff';
-        for (let i = 0; i < ss.len; i++) {
-          ctx.fillRect(Math.floor(ss.x - i), Math.floor(ss.y + i * 0.5), 1, 1);
+      for (let i = meteors.length - 1; i >= 0; i--) {
+        const m = meteors[i];
+        wctx.fillStyle = '#ffffff';
+        for (let t = 0; t < m.len; t++) {
+          wctx.fillRect(Math.floor(m.x - t), Math.floor(m.y + t * 0.5), 1, 1);
         }
-        ss.x += 3;
-        ss.y += 1.5;
-        ss.life--;
-        if (ss.life <= 0) shootingStars.splice(idx, 1);
-      });
-
-      // 4. Giant Retro-Anime Sliced Neon Moon/Sun
-      const sunX = Math.floor(width * 0.72 - pointerX * 0.3);
-      const sunY = Math.floor(horizonY - 28);
-      const sunRadius = Math.min(28, Math.floor(width * 0.14));
-      for (let y = -sunRadius; y <= sunRadius; y++) {
-        // Horizontal slice gaps near bottom
-        if (y > 4 && y % 4 === 0) continue;
-        const halfRow = Math.floor(Math.sqrt(sunRadius * sunRadius - y * y));
-        ctx.fillStyle = y < 0 ? '#fcee0a' : '#ff2a85';
-        ctx.fillRect(sunX - halfRow, sunY + y, halfRow * 2, 1);
+        m.x += 3.2;
+        m.y += 1.6;
+        m.life--;
+        if (m.life <= 0) meteors.splice(i, 1);
       }
 
-      // 5. Parallax Cyberpunk City Skyline
-      buildings.forEach(b => {
-        const bx = Math.floor(b.x - pointerX * 0.6);
+      // 5. Giant Retro-Anime Sliced Synthwave Moon / Sun
+      const sunX = Math.floor(pw * 0.72 - mouseX * 0.25);
+      const sunY = Math.floor(horizonY - 34 - mouseY * 0.15);
+      const sunR = Math.min(32, Math.floor(pw * 0.15));
+
+      for (let y = -sunR; y <= sunR; y++) {
+        if (y > 4 && (y % 4 === 0 || y % 4 === 1)) continue;
+        const halfW = Math.floor(Math.sqrt(sunR * sunR - y * y));
+        wctx.fillStyle = y < 0 ? pal.sunTop : pal.sunBot;
+        wctx.fillRect(sunX - halfW, sunY + y, halfW * 2, 1);
+      }
+
+      // 6. Distant Cyber Mountain Peak (Mt. Fuji Silhouette)
+      const peakX = Math.floor(pw * 0.28 - mouseX * 0.35);
+      const peakH = 38;
+      wctx.fillStyle = pal.mountain;
+      for (let y = 0; y < peakH; y++) {
+        const span = Math.floor(8 + y * 2.1);
+        wctx.fillRect(peakX - span, horizonY - peakH + y, span * 2, 1);
+      }
+
+      // 7. Far Layer Megastructures
+      farBuildings.forEach(b => {
+        const bx = Math.floor(b.x - mouseX * 0.45);
         const by = horizonY - b.h;
-        ctx.fillStyle = b.shade;
-        ctx.fillRect(bx, by, b.w, b.h);
+        wctx.fillStyle = pal.farBldg;
+        wctx.fillRect(bx, by, b.w, b.h);
 
-        // Rooftop Beacon
-        if (b.hasAntenna) {
-          ctx.fillStyle = '#291147';
-          ctx.fillRect(bx + Math.floor(b.w / 2), by - 6, 1, 6);
-          if (Math.sin(time * 3 + b.x) > 0) {
-            ctx.fillStyle = '#ff2a85';
-            ctx.fillRect(bx + Math.floor(b.w / 2), by - 7, 1, 1);
+        if (b.beacon) {
+          wctx.fillStyle = pal.farBldg;
+          wctx.fillRect(bx + Math.floor(b.w / 2), by - 6, 1, 6);
+          if (Math.sin(worldTime * 3 + b.x) > 0) {
+            wctx.fillStyle = pal.winColors[1];
+            wctx.fillRect(bx + Math.floor(b.w / 2), by - 7, 1, 1);
           }
         }
+      });
 
-        // Lit Pixel Windows
-        b.windows.forEach(w => {
-          ctx.fillStyle = w.color;
-          ctx.fillRect(bx + w.x, by + w.y, 2, 2);
+      // 8. Mid Layer Cyberpunk Buildings + Neon Billboards
+      midBuildings.forEach(b => {
+        const bx = Math.floor(b.x - mouseX * 0.75);
+        const by = horizonY - b.h;
+        wctx.fillStyle = pal.midBldg;
+        wctx.fillRect(bx, by, b.w, b.h);
+
+        // Windows
+        b.wins.forEach(w => {
+          wctx.fillStyle = pal.winColors[w.cIdx];
+          wctx.fillRect(bx + w.x, by + w.y, 2, 2);
+        });
+
+        // Vertical Neon Billboard on Side of Building
+        if (b.hasSign && b.h > 30) {
+          const signCol = pal.winColors[b.signColorIdx];
+          wctx.fillStyle = signCol;
+          wctx.fillRect(bx - 3, by + 6, 2, 14);
+          // Pixel Katakana Glyphs inside sign
+          wctx.fillStyle = '#ffffff';
+          for (let gy = by + 8; gy < by + 18; gy += 3) {
+            wctx.fillRect(bx - 3, gy, 1, 1);
+          }
+        }
+      });
+
+      // 9. Elevated Cyber Monorail Viaduct + Animated Shinkansen Bullet Train
+      const trackY = horizonY - 12;
+      wctx.fillStyle = '#05030a';
+      wctx.fillRect(0, trackY, pw, 2);
+
+      // Train Movement
+      bulletTrain.x += bulletTrain.speed;
+      if (bulletTrain.x > pw + 220) {
+        bulletTrain.x = -160;
+      }
+      const tx = Math.floor(bulletTrain.x - mouseX * 0.9);
+      // Train Body
+      wctx.fillStyle = pal.winColors[0];
+      wctx.fillRect(tx, trackY - 4, 56, 4);
+      // Train Glowing Windows
+      wctx.fillStyle = '#ffffff';
+      for (let wx = tx + 4; wx < tx + 50; wx += 5) {
+        wctx.fillRect(wx, trackY - 3, 3, 1);
+      }
+      // Headlight beam
+      wctx.fillStyle = pal.sunTop;
+      wctx.fillRect(tx + 56, trackY - 3, 8, 1);
+
+      // 10. Flying Spinner Cars in the Sky Lanes
+      flyingCars.forEach(c => {
+        c.x += c.vx;
+        if (c.vx > 0 && c.x > pw + 20) c.x = -20;
+        if (c.vx < 0 && c.x < -20) c.x = pw + 20;
+        const cx = Math.floor(c.x - mouseX * 0.6);
+        wctx.fillStyle = c.vx > 0 ? pal.winColors[0] : pal.winColors[1];
+        wctx.fillRect(cx, c.y, c.len, 1);
+        wctx.fillStyle = '#ffffff';
+        wctx.fillRect(c.vx > 0 ? cx + c.len : cx - 1, c.y, 1, 1);
+      });
+
+      // 11. 3D Perspective Synthwave Cyber Grid Floor
+      wctx.fillStyle = pal.gridFloor;
+      wctx.fillRect(0, horizonY, pw, ph - horizonY);
+
+      // Glowing Horizon Strip
+      wctx.fillStyle = pal.winColors[0];
+      wctx.fillRect(0, horizonY, pw, 1);
+
+      // Scrolling Horizontal Perspective Lines
+      const scrollGrid = (worldTime * 8) % 10;
+      for (let z = 1; z < 16; z++) {
+        const gy = horizonY + Math.floor(Math.pow((z + scrollGrid / 10) / 15, 2.05) * (ph - horizonY));
+        if (gy < ph) {
+          wctx.fillStyle = z % 2 === 0 ? pal.gridLineA : pal.gridLineB;
+          wctx.fillRect(0, gy, pw, 1);
+        }
+      }
+
+      // Perspective Radial Lines
+      const vanishX = Math.floor(pw / 2 - mouseX * 0.9);
+      const floorH = ph - horizonY;
+      for (let i = -12; i <= 12; i++) {
+        const botX = vanishX + i * 24;
+        for (let s = 0; s < floorH; s += 2) {
+          const t = s / floorH;
+          const lx = Math.floor(vanishX + (botX - vanishX) * t);
+          wctx.fillStyle = pal.gridLineB;
+          wctx.fillRect(lx, horizonY + s, 1, 1);
+        }
+      }
+
+      // 12. Foreground Rooftop Ledge + Pixel Anime Cyber-Ronin Character (Right Side)
+      const roofX = Math.floor(pw * 0.80 - mouseX * 1.25);
+      const roofY = ph - 26;
+      wctx.fillStyle = pal.nearBldg;
+      wctx.fillRect(roofX, roofY, 70, 26);
+      wctx.fillStyle = pal.winColors[0];
+      wctx.fillRect(roofX, roofY, 70, 1);
+
+      // Cyber-Ronin Sprite Standing on Ledge
+      const rx = roofX + 14;
+      const ry = roofY - 14;
+      // Legs & Boots
+      wctx.fillStyle = '#090514';
+      wctx.fillRect(rx + 2, ry + 9, 2, 5);
+      wctx.fillRect(rx + 5, ry + 9, 2, 5);
+      // Torso & Cloak
+      wctx.fillStyle = '#1b1035';
+      wctx.fillRect(rx + 1, ry + 4, 7, 6);
+      // Head & Hood
+      wctx.fillRect(rx + 2, ry, 5, 4);
+      // Glowing Visor Eye
+      wctx.fillStyle = pal.winColors[0];
+      wctx.fillRect(rx + 2, ry + 1, 3, 1);
+      //Glowing Cyber Katana Held at Side
+      wctx.fillStyle = pal.winColors[1];
+      wctx.fillRect(rx - 4, ry + 5, 6, 1);
+      // Animated Flowing Neon Scarf in the Wind
+      const scarfWave = Math.floor(Math.sin(worldTime * 4) * 1.5);
+      wctx.fillStyle = pal.winColors[1];
+      wctx.fillRect(rx + 6, ry + 3, 4, 2);
+      wctx.fillRect(rx + 10, ry + 3 + scarfWave, 4, 2);
+      wctx.fillRect(rx + 14, ry + 2 - scarfWave, 3, 1);
+
+      // 13. Interactive Click Fireworks
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        const fw = fireworks[i];
+        wctx.fillStyle = fw.color;
+        wctx.fillRect(Math.floor(fw.x), Math.floor(fw.y), 2, 2);
+        fw.x += fw.vx;
+        fw.y += fw.vy;
+        fw.vy += 0.03; // pixel gravity
+        fw.life--;
+        if (fw.life <= 0) fireworks.splice(i, 1);
+      }
+
+      // 14. Falling Neon Sakura Petals / Pixel Rain
+      sakuraParticles.forEach(p => {
+        wctx.fillStyle = p.type === 0 ? pal.particleA : pal.particleB;
+        wctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y > ph) {
+          p.y = -2;
+          p.x = Math.random() * pw;
+        }
+        if (p.x < 0) p.x = pw;
+      });
+
+      requestAnimationFrame(renderPixelWorld);
+    }
+
+    /* =====================================================================
+       7. INTERACTIVE SHELL TERMINAL ENGINE
+       ===================================================================== */
+    const termOutput = document.getElementById('terminal-output');
+    const termInput = document.getElementById('term-input');
+
+    function printTermLine(text, cls = 'out') {
+      const div = document.createElement('div');
+      div.className = `term-line ${cls}`;
+      div.innerHTML = text;
+      termOutput.appendChild(div);
+      termOutput.scrollTop = termOutput.scrollHeight;
+    }
+
+    function executeTerminalCommand(rawCmd) {
+      const cmd = rawCmd.trim().toLowerCase();
+      if (!cmd) return;
+
+      soundFX.beep(520, 0.04, 'square', 0.03);
+      printTermLine(`ronin@tetheris:~$ ${rawCmd}`, 'cmd');
+
+      switch (cmd) {
+        case 'help':
+          printTermLine('AVAILABLE NEURAL COMMANDS:', 'sys');
+          printTermLine('• <b>whoami</b>   — Display operator profile & telemetry');
+          printTermLine('• <b>quests</b>   — List active AI/ML & IoT deployments');
+          printTermLine('• <b>skills</b>   — Inspect neural skill matrix levels');
+          printTermLine('• <b>theme</b>    — Cycle through the 4 live anime world realms');
+          printTermLine('• <b>train</b>    — Summon the high-speed Shinkansen bullet train');
+          printTermLine('• <b>firework</b> — Launch a barrage of pixel fireworks');
+          printTermLine('• <b>clear</b>    — Clear terminal buffer');
+          break;
+
+        case 'whoami':
+          printTermLine(`OPERATOR: ${SITE_CONFIG.mainHeading}`, 'sys');
+          printTermLine(SITE_CONFIG.subHeading);
+          SITE_CONFIG.telemetry.forEach(t => {
+            printTermLine(`  [${t.key}] :: ${t.val}`);
+          });
+          break;
+
+        case 'quests':
+        case 'projects':
+          printTermLine('ACTIVE DEPLOYMENTS ON TETHERIS.APP:', 'sys');
+          SITE_CONFIG.quests.forEach(q => {
+            printTermLine(`• <b>${q.title}</b> (${q.rank}) — ${q.xp}`);
+          });
+          break;
+
+        case 'skills':
+          printTermLine('CHARACTER SKILL MATRIX:', 'sys');
+          SITE_CONFIG.skills.forEach(s => {
+            printTermLine(`• ${s.name}: <b>${s.level}</b> (${s.percent}%)`);
+          });
+          break;
+
+        case 'theme':
+          cycleWorldPalette();
+          printTermLine(`REALM SWITCHED TO: ${WORLD_PALETTES[currentPaletteIdx].name}`, 'sys');
+          break;
+
+        case 'train':
+          bulletTrain.x = -60;
+          printTermLine('🚄 SHINKANSEN EXPRESS DISPATCHED ACROSS SECTOR 07!', 'sys');
+          break;
+
+        case 'firework':
+          for (let i = 0; i < 4; i++) {
+            setTimeout(() => {
+              spawnFirework(
+                Math.floor(pw * (0.2 + Math.random() * 0.6)),
+                Math.floor(ph * (0.2 + Math.random() * 0.35))
+              );
+              soundFX.beep(320 + i * 110, 0.08, 'sawtooth', 0.04);
+            }, i * 180);
+          }
+          printTermLine('🎆 PIXEL FIREWORK SALVO LAUNCHED!', 'sys');
+          break;
+
+        case 'clear':
+          termOutput.innerHTML = '';
+          break;
+
+        default:
+          printTermLine(`Command not recognized: "${rawCmd}". Type <b>help</b> for available commands.`, 'sys');
+      }
+    }
+
+    /* =====================================================================
+       8. EVENT LISTENERS, THEME SWITCHER & HUD INTERACTIVITY
+       ===================================================================== */
+    function cycleWorldPalette() {
+      currentPaletteIdx = (currentPaletteIdx + 1) % WORLD_PALETTES.length;
+      const pal = WORLD_PALETTES[currentPaletteIdx];
+      document.body.setAttribute('data-theme', pal.id);
+      document.getElementById('theme-label').textContent = pal.name;
+      document.getElementById('theme-btn').textContent = `WORLD: 0${currentPaletteIdx + 1}`;
+      soundFX.beep(780, 0.06, 'square', 0.035);
+    }
+
+    function spawnFloatingXPPopup(clientX, clientY) {
+      const phrases = ['+100 XP', 'CRITICAL SYNC!', 'NEURAL BOOST!', 'LEVEL UP!', '+250 DATA'];
+      const el = document.createElement('div');
+      el.className = 'xp-popup';
+      el.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      el.style.left = `${clientX - 30}px`;
+      el.style.top = `${clientY - 15}px`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 950);
+    }
+
+    // Boot Everything
+    window.addEventListener('DOMContentLoaded', () => {
+      hydrateDOM();
+      initPixelWorld();
+      drawPixelAvatar();
+      stepTypewriter();
+      requestAnimationFrame(renderPixelWorld);
+
+      // Live HUD Clock
+      setInterval(() => {
+        const now = new Date();
+        document.getElementById('hud-clock').textContent = now.toTimeString().split(' ')[0];
+      }, 1000);
+
+      // Mouse & Touch Parallax
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = (e.clientX / window.innerWidth - 0.5) * 24;
+        targetMouseY = (e.clientY / window.innerHeight - 0.5) * 12;
+      });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches[0]) {
+          targetMouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 18;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', initPixelWorld);
+
+      // Click Anywhere on Background to Launch Fireworks & XP Popup
+      window.addEventListener('click', (e) => {
+        const tag = e.target.tagName.toLowerCase();
+        if (['button', 'a', 'input'].includes(tag)) return;
+        const px = Math.floor(e.clientX / pixelScale);
+        const py = Math.floor(e.clientY / pixelScale);
+        spawnFirework(px, py);
+        spawnFloatingXPPopup(e.clientX, e.clientY);
+        soundFX.beep(480, 0.05, 'triangle', 0.03);
+      });
+
+      // Top HUD Buttons
+      document.getElementById('theme-btn').addEventListener('click', cycleWorldPalette);
+      document.getElementById('cycle-world-btn').addEventListener('click', cycleWorldPalette);
+
+      document.getElementById('bgm-btn').addEventListener('click', (e) => {
+        const playing = soundFX.toggleBGM();
+        e.target.textContent = playing ? 'BGM: ON' : 'BGM: OFF';
+      });
+
+      document.getElementById('crt-btn').addEventListener('click', (e) => {
+        document.body.classList.toggle('crt-off');
+        const isOff = document.body.classList.contains('crt-off');
+        e.target.textContent = isOff ? 'CRT: OFF' : 'CRT: ON';
+        soundFX.beep(600, 0.04);
+      });
+
+      // Mobile Hamburger Menu
+      const mobBtn = document.getElementById('mobile-menu-btn');
+      const navMenu = document.getElementById('nav-menu');
+      mobBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+        soundFX.beep(540, 0.04);
+      });
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => navMenu.classList.remove('open'));
+      });
+
+      // Dialogue Controls
+      document.getElementById('prev-line-btn').addEventListener('click', () => {
+        soundFX.beep(440, 0.04);
+        jumpToLine(currentLineIdx - 1);
+      });
+      document.getElementById('next-line-btn').addEventListener('click', () => {
+        soundFX.beep(660, 0.04);
+        jumpToLine(currentLineIdx + 1);
+      });
+      document.getElementById('pause-line-btn').addEventListener('click', (e) => {
+        isDialoguePaused = !isDialoguePaused;
+        e.target.textContent = isDialoguePaused ? '▶ PLAY' : '❚❚ PAUSE';
+        soundFX.beep(520, 0.04);
+        if (!isDialoguePaused) stepTypewriter();
+      });
+
+      // World Override Buttons
+      document.getElementById('spawn-train-btn').addEventListener('click', () => {
+        bulletTrain.x = -60;
+        soundFX.beep(360, 0.09, 'sawtooth', 0.04);
+      });
+      document.getElementById('spawn-firework-btn').addEventListener('click', () => {
+        spawnFirework(Math.floor(pw * (0.3 + Math.random() * 0.4)), Math.floor(ph * 0.3));
+        soundFX.beep(720, 0.07, 'triangle', 0.04);
+      });
+      document.getElementById('spawn-meteor-btn').addEventListener('click', () => {
+        triggerMeteorShower();
+        soundFX.beep(880, 0.08, 'sine', 0.04);
+      });
+
+      // Quest Category Filter Buttons
+      document.querySelectorAll('#quest-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#quest-filters .filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderQuests(btn.getAttribute('data-filter'));
+          soundFX.beep(620, 0.04);
         });
       });
 
-      // 6. 3D Perspective Synthwave Cyber Grid Floor
-      ctx.fillStyle = '#090414';
-      ctx.fillRect(0, horizonY, width, height - horizonY);
-
-      // Glowing Horizon Line
-      ctx.fillStyle = '#00f0ff';
-      ctx.fillRect(0, horizonY, width, 1);
-
-      // Moving Horizontal Grid Lines
-      const gridOffset = (time * 8) % 10;
-      for (let z = 1; z < 16; z++) {
-        const py = horizonY + Math.floor(Math.pow((z + gridOffset / 10) / 15, 2.1) * (height - horizonY));
-        if (py < height) {
-          ctx.fillStyle = z % 2 === 0 ? 'rgba(255, 42, 133, 0.55)' : 'rgba(0, 240, 255, 0.4)';
-          ctx.fillRect(0, py, width, 1);
+      // Terminal Input & Quick Command Buttons
+      termInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          executeTerminalCommand(termInput.value);
+          termInput.value = '';
         }
-      }
-
-      // Perspective Vertical Grid Lines
-      const centerX = Math.floor(width / 2 - pointerX);
-      for (let i = -12; i <= 12; i++) {
-        const bottomX = centerX + i * 24;
-        const steps = height - horizonY;
-        for (let s = 0; s < steps; s += 2) {
-          const t = s / steps;
-          const px = Math.floor(centerX + (bottomX - centerX) * t);
-          ctx.fillStyle = '#b829ff';
-          ctx.fillRect(px, horizonY + s, 1, 1);
-        }
-      }
-
-      // 7. Falling Neon Sakura Petals / Pixel Rain
-      particles.forEach(p => {
-        ctx.fillStyle = p.color;
-        ctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.y > height) {
-          p.y = -2;
-          p.x = Math.random() * width;
-        }
-        if (p.x < 0) p.x = width;
       });
 
-      requestAnimationFrame(drawPixelWorld);
-    }
-
-    drawPixelWorld();
+      document.querySelectorAll('.quick-cmd-bar .mini-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          executeTerminalCommand(btn.getAttribute('data-cmd'));
+        });
+      });
+    });
   </script>
 </body>
 </html>
