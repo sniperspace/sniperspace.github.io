@@ -3,350 +3,775 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SNIPERSPACE // 3D Neural Portfolio</title>
+  <!-- 1. CHANGE BROWSER TAB TITLE HERE -->
+  <title>Tetheris will be back</title>
+  
+  <!-- Retro Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --neon-cyan: #00f2fe;
-      --neon-purple: #f093fb;
-      --bg-dark: #05050a;
-      --glass: rgba(12, 16, 28, 0.65);
+      --neon-cyan: #00f0ff;
+      --neon-pink: #ff2a85;
+      --neon-purple: #b829ff;
+      --neon-yellow: #fcee0a;
+      --bg-void: #070510;
+      --panel-bg: rgba(12, 8, 26, 0.82);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
     body {
-      background: var(--bg-dark);
-      color: #e2e8f0;
-      font-family: 'Segoe UI', system-ui, -apple-system, monospace;
+      background-color: var(--bg-void);
+      color: #f0e6ff;
+      font-family: 'Space Mono', monospace;
       overflow-x: hidden;
+      selection-background-color: var(--neon-pink);
     }
-    canvas {
+
+    /* Live Pixel Art Canvas Background */
+    #pixel-canvas {
       position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 0;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
       pointer-events: none;
     }
-    /* Navbar HUD */
+
+    /* Subtle Anime CRT Scanline Overlay */
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.28) 50%
+      );
+      background-size: 100% 4px;
+    }
+
+    /* Pixel Navbar */
     nav {
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 8%;
-      background: rgba(5, 5, 10, 0.6);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+      padding: 16px 6%;
+      background: rgba(7, 5, 16, 0.88);
+      border-bottom: 2px solid var(--neon-pink);
+      box-shadow: 0 4px 20px rgba(255, 42, 133, 0.25);
+      backdrop-filter: blur(6px);
     }
-    .logo {
-      font-weight: 800;
-      letter-spacing: 0.2em;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
-    }
-    .nav-links a {
-      color: #94a3b8;
-      text-decoration: none;
-      margin-left: 28px;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: 0.3s;
-    }
-    .nav-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan); }
 
-    /* Sections */
-    section {
+    .logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      color: var(--neon-cyan);
+      text-shadow: 2px 2px 0px var(--neon-pink);
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: 'VT323', monospace;
+      font-size: 1.35rem;
+      color: #e2d4f0;
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: 0.2s;
       position: relative;
-      z-index: 2;
+    }
+
+    .nav-links a:hover {
+      color: var(--neon-yellow);
+      text-shadow: 0 0 8px var(--neon-yellow);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-family: 'Press Start 2P', monospace;
+      background: transparent;
+      border: 2px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    /* Main Content Layout */
+    main {
+      position: relative;
+      z-index: 5;
+    }
+
+    section {
       min-height: 100vh;
-      padding: 120px 8% 80px;
+      padding: 110px 6% 70px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-    }
-    .hero { align-items: flex-start; max-width: 800px; }
-    .badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border: 1px solid var(--neon-cyan);
-      border-radius: 20px;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: var(--neon-cyan);
-      margin-bottom: 20px;
-      background: rgba(0, 242, 254, 0.08);
-    }
-    h1 {
-      font-size: clamp(2.8rem, 6vw, 5.2rem);
-      line-height: 1.05;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #ffffff, var(--neon-cyan), var(--neon-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 20px;
-    }
-    .subtitle {
-      font-size: 1.15rem;
-      color: #94a3b8;
-      line-height: 1.7;
-      margin-bottom: 35px;
-      max-width: 600px;
-    }
-    .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn {
-      padding: 14px 32px;
-      border: 1px solid var(--neon-cyan);
-      background: rgba(0, 242, 254, 0.1);
-      color: var(--neon-cyan);
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-radius: 4px;
-      backdrop-filter: blur(8px);
-      transition: 0.3s ease;
-    }
-    .btn:hover {
-      background: var(--neon-cyan);
-      color: #05050a;
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
-    }
-    .btn-secondary {
-      border-color: rgba(255, 255, 255, 0.25);
-      color: #e2e8f0;
-      background: rgba(255, 255, 255, 0.03);
-    }
-    .btn-secondary:hover {
-      border-color: var(--neon-purple);
-      background: var(--neon-purple);
-      color: #05050a;
-      box-shadow: 0 0 25px rgba(240, 147, 251, 0.7);
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    /* Grid & Glass Cards */
-    h2 {
-      font-size: 2.2rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 40px;
-      color: #fff;
-      border-left: 4px solid var(--neon-cyan);
-      padding-left: 16px;
+    /* RPG / Anime Dialogue Box Hero */
+    .hero-box {
+      background: var(--panel-bg);
+      border: 3px solid var(--neon-cyan);
+      box-shadow: 
+        6px 6px 0px var(--neon-pink),
+        0 0 30px rgba(0, 240, 255, 0.2);
+      padding: clamp(22px, 4vw, 42px);
+      max-width: 780px;
+      position: relative;
     }
+
+    .status-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 42, 133, 0.18);
+      border: 1px solid var(--neon-pink);
+      padding: 6px 12px;
+      font-family: 'VT323', monospace;
+      font-size: 1.15rem;
+      color: var(--neon-yellow);
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #00ff66;
+      box-shadow: 0 0 8px #00ff66;
+      display: inline-block;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1.35rem, 3.8vw, 2.5rem);
+      line-height: 1.45;
+      color: #ffffff;
+      text-shadow: 3px 3px 0px var(--neon-purple);
+      margin-bottom: 20px;
+    }
+
+    /* Custom Animated Typewriter Box */
+    .dialogue-window {
+      background: rgba(5, 3, 12, 0.9);
+      border-left: 4px solid var(--neon-yellow);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+    }
+
+    .typewriter-text {
+      font-family: 'VT323', monospace;
+      font-size: clamp(1.3rem, 2.5vw, 1.65rem);
+      color: var(--neon-cyan);
+      line-height: 1.4;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background: var(--neon-pink);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 0.8s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pixel-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.75rem;
+      padding: 15px 22px;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #070510;
+      background: var(--neon-cyan);
+      border: 2px solid #fff;
+      box-shadow: 4px 4px 0px var(--neon-pink);
+      transition: transform 0.1s, box-shadow 0.1s;
+      display: inline-block;
+    }
+
+    .pixel-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--neon-yellow);
+      background: #fff;
+    }
+
+    .pixel-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--neon-pink);
+    }
+
+    .pixel-btn.alt {
+      background: transparent;
+      color: var(--neon-pink);
+      border-color: var(--neon-pink);
+      box-shadow: 4px 4px 0px var(--neon-purple);
+    }
+
+    .pixel-btn.alt:hover {
+      background: var(--neon-pink);
+      color: #fff;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--neon-yellow);
+      text-shadow: 3px 3px 0px var(--neon-pink);
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::before {
+      content: "▶";
+      color: var(--neon-cyan);
+    }
+
+    /* Pixel RPG Cards Grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
     }
-    .card {
-      background: var(--glass);
-      border: 1px solid rgba(0, 242, 254, 0.2);
-      border-radius: 10px;
-      padding: 28px;
-      backdrop-filter: blur(12px);
-      transition: 0.35s ease;
+
+    .pixel-card {
+      background: var(--panel-bg);
+      border: 2px solid var(--neon-purple);
+      box-shadow: 5px 5px 0px rgba(0, 240, 255, 0.35);
+      padding: 24px;
+      transition: 0.2s;
+      position: relative;
     }
-    .card:hover {
-      transform: translateY(-8px);
+
+    .pixel-card:hover {
+      transform: translateY(-5px);
       border-color: var(--neon-cyan);
-      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+      box-shadow: 6px 6px 0px var(--neon-pink);
     }
-    .card h3 { color: var(--neon-cyan); margin-bottom: 12px; font-size: 1.3rem; }
-    .card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; }
-    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      background: rgba(240, 147, 251, 0.12);
-      color: var(--neon-purple);
-      border: 1px solid rgba(240, 147, 251, 0.3);
-      border-radius: 4px;
+
+    .pixel-card h3 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.9rem;
+      color: var(--neon-cyan);
+      margin-bottom: 14px;
+      line-height: 1.5;
     }
+
+    .pixel-card p {
+      font-size: 0.92rem;
+      color: #d8c8eb;
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pixel-tag {
+      font-family: 'VT323', monospace;
+      font-size: 1.1rem;
+      padding: 2px 10px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-yellow);
+    }
+
+    /* Stat Bars for Skills */
+    .stat-row {
+      margin-bottom: 14px;
+    }
+    .stat-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'VT323', monospace;
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .stat-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #17112b;
+      border: 1px solid var(--neon-pink);
+      padding: 2px;
+    }
+    .stat-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+    }
+
     footer {
       position: relative;
-      z-index: 2;
+      z-index: 5;
       text-align: center;
-      padding: 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      color: #64748b;
-      font-size: 0.85rem;
+      padding: 30px 6%;
+      background: rgba(7, 5, 16, 0.92);
+      border-top: 2px solid var(--neon-purple);
+      font-family: 'VT323', monospace;
+      font-size: 1.25rem;
+      color: #9e8fb2;
+    }
+
+    /* Mobile Optimization */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(7, 5, 16, 0.97);
+        border-bottom: 2px solid var(--neon-cyan);
+        flex-direction: column;
+        padding: 20px 0;
+        gap: 16px;
+      }
+      .nav-links.active {
+        display: flex;
+      }
+      section {
+        padding: 95px 5% 50px;
+      }
+      .pixel-btn {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Live Pixel Art Anime City Background -->
+  <canvas id="pixel-canvas"></canvas>
+  <div class="crt-overlay"></div>
+
+  <!-- Navigation Header -->
   <nav>
-    <div class="logo">SNIPERSPACE // OS</div>
-    <div class="nav-links">
-      <a href="#home">Core</a>
-      <a href="#projects">Deployments</a>
-      <a href="#arsenal">Arsenal</a>
-      <a href="https://github.com/sniperspace" target="_blank">GitHub</a>
+    <!-- 2. CHANGE TOP-LEFT LOGO TEXT HERE -->
+    <a href="#home" class="logo" id="nav-logo">TETHERIS // OS</a>
+    <button class="menu-toggle" id="menu-btn">MENU</button>
+    <div class="nav-links" id="nav-links">
+      <a href="#home">HOME</a>
+      <a href="#quests">QUESTS</a>
+      <a href="#stats">STATS</a>
+      <a href="https://github.com/sniperspace" target="_blank">GITHUB</a>
     </div>
   </nav>
 
-  <section id="home" class="hero">
-    <span class="badge">● SYSTEM ONLINE // V2.026</span>
-    <h1>ARCHITECTING INTELLIGENT SYSTEMS</h1>
-    <p class="subtitle">
-      Data Science, Machine Learning & Full-Stack Engineering. Building scalable neural pipelines, interactive 3D web interfaces, and hardware-software integrations.
-    </p>
-    <div class="btn-group">
-      <a href="#projects" class="btn">Explore Deployments</a>
-      <a href="https://github.com/sniperspace" target="_blank" class="btn btn-secondary">GitHub Terminal</a>
-    </div>
-  </section>
+  <main>
+    <!-- HERO SECTION -->
+    <section id="home">
+      <div class="hero-box">
+        <div class="status-bar">
+          <span class="status-dot"></span>
+          <span id="status-badge">ONLINE // NEURAL LINK ACTIVE</span>
+        </div>
 
-  <section id="projects">
-    <h2>Active Deployments</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>01 // Predictive Neural Pipeline</h3>
-        <p>Deep learning multi-layer perceptron architecture with K-Fold cross-validation and automated feature engineering.</p>
-        <div class="tags">
-          <span class="tag">PyTorch</span>
-          <span class="tag">Scikit-Learn</span>
-          <span class="tag">Python</span>
-        </div>
-      </div>
-      <div class="card">
-        <h3>02 // Audio Intelligence Classifier</h3>
-        <p>End-to-end machine learning model analyzing acoustic features and metadata via REST APIs to predict track popularity.</p>
-        <div class="tags">
-          <span class="tag">Machine Learning</span>
-          <span class="tag">API Integration</span>
-          <span class="tag">Pandas</span>
-        </div>
-      </div>
-      <div class="card">
-        <h3>03 // IoT Hardware Relay Matrix</h3>
-        <p>Microcontroller infrared signal decoder and automated relay control system for real-time physical hardware switching.</p>
-        <div class="tags">
-          <span class="tag">Arduino</span>
-          <span class="tag">Embedded C++</span>
-          <span class="tag">IoT</span>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- 3. CHANGE MAIN HEADLINE HERE -->
+        <h1 id="main-heading">WELCOME TO TETHERIS</h1>
 
-  <section id="arsenal">
-    <h2>Technical Arsenal</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>AI & Data Science</h3>
-        <p>PyTorch, Scikit-Learn, NumPy, Pandas, R Statistical Computing, Jupyter, Feature Engineering & Model Deployment.</p>
+        <!-- 4. ANIMATED CUSTOM LINES APPEAR HERE -->
+        <div class="dialogue-window">
+          <p class="typewriter-text">
+            <span id="typewriter"></span><span class="cursor"></span>
+          </p>
+        </div>
+
+        <div class="btn-row">
+          <a href="#quests" class="pixel-btn">ENTER WORLD</a>
+          <a href="https://github.com/sniperspace" target="_blank" class="pixel-btn alt">GITHUB LOGS</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>Systems & Databases</h3>
-        <p>Python, Java OOP, Oracle SQL, Linux VPS Administration, Git Workflows & Cloud API Hosting.</p>
+    </section>
+
+    <!-- PROJECTS / QUESTS SECTION -->
+    <section id="quests">
+      <h2 class="section-title">ACTIVE MISSIONS</h2>
+      <div class="grid">
+        <div class="pixel-card">
+          <h3>[01] NEURAL ENGINE</h3>
+          <p>Deep learning predictive pipeline engineered with PyTorch, K-Fold validation, and custom feature extraction.</p>
+          <div class="tag-list">
+            <span class="pixel-tag">PyTorch</span>
+            <span class="pixel-tag">Python</span>
+            <span class="pixel-tag">AI/ML</span>
+          </div>
+        </div>
+
+        <div class="pixel-card">
+          <h3>[02] SYNTH CLASSIFIER</h3>
+          <p>Machine learning classifier analyzing real-time audio intelligence and track features via cloud APIs.</p>
+          <div class="tag-list">
+            <span class="pixel-tag">Scikit-Learn</span>
+            <span class="pixel-tag">REST API</span>
+            <span class="pixel-tag">Data Science</span>
+          </div>
+        </div>
+
+        <div class="pixel-card">
+          <h3>[03] CYBER HARDWARE MATRIX</h3>
+          <p>Embedded microcontroller IR signal decoder and physical relay automation rig for smart environment control.</p>
+          <div class="tag-list">
+            <span class="pixel-tag">Arduino</span>
+            <span class="pixel-tag">C++</span>
+            <span class="pixel-tag">IoT</span>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <h3>Creative & WebGL</h3>
-        <p>Three.js, Interactive 3D Shaders, Responsive Glassmorphism UI, and Automated CI/CD via GitHub Pages.</p>
+    </section>
+
+    <!-- STATS / SKILLS SECTION -->
+    <section id="stats">
+      <h2 class="section-title">CHARACTER STATS</h2>
+      <div class="grid">
+        <div class="pixel-card">
+          <h3>CORE ATTRIBUTES</h3>
+          <div class="stat-row">
+            <div class="stat-label"><span>MACHINE LEARNING & AI</span><span>LVL 92</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 92%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label"><span>DATA SCIENCE & PYTHON</span><span>LVL 95</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 95%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-label"><span>SQL & CLOUD SYSTEMS</span><span>LVL 88</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 88%"></div></div>
+          </div>
+        </div>
+
+        <div class="pixel-card">
+          <h3>SYSTEM BIO</h3>
+          <p>
+            Code Ronin & Data Scientist crafting intelligent neural networks, low-latency cloud deployments, and retro-futuristic web experiences.
+          </p>
+          <div class="tag-list">
+            <span class="pixel-tag">CLASS: CYBER NINJA</span>
+            <span class="pixel-tag">SERVER: TETHERIS.APP</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer>
-    SNIPERSPACE TERMINAL // POWERED BY THREE.JS & GITHUB PAGES
+    TETHERIS.APP // PIXEL ANIME ENGINE // ALL SYSTEMS NOMINAL
   </footer>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.170.0/build/three.module.js"
+  <script>
+    /* ==========================================================
+       ✨ CUSTOMIZE YOUR WEBSITE TEXT & LINES RIGHT HERE! ✨
+       ========================================================== */
+    const SITE_CONFIG = {
+      browserTabTitle: "TETHERIS // Cyber-Anime Portal",
+      topLogoText: "TETHERIS // OS",
+      statusBadge: "ONLINE // SECTOR 07 NIGHT CITY",
+      mainHeading: "CODE RONIN // NEURAL ARCHITECT",
+      
+      // Write as many custom lines as you want here! They will type out one by one:
+      customLines: [
+        ">> Initializing Tetheris Neural Interface...",
+        ">> Crafting AI models, data pipelines & futuristic web worlds.",
+        ">> Welcome to my digital cyber-sanctuary.",
+        ">> Scroll down to inspect active deployments and character stats."
+      ]
+    };
+
+    // Apply custom config to page
+    document.title = SITE_CONFIG.browserTabTitle;
+    document.getElementById('nav-logo').textContent = SITE_CONFIG.topLogoText;
+    document.getElementById('status-badge').textContent = SITE_CONFIG.statusBadge;
+    document.getElementById('main-heading').textContent = SITE_CONFIG.mainHeading;
+
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('active'));
+    });
+
+    // RPG Typewriter Effect for Custom Lines
+    const typeTarget = document.getElementById('typewriter');
+    let lineIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function runTypewriter() {
+      const currentLine = SITE_CONFIG.customLines[lineIndex];
+      if (!isDeleting) {
+        typeTarget.textContent = currentLine.slice(0, ++charIndex);
+        if (charIndex === currentLine.length) {
+          isDeleting = true;
+          setTimeout(runTypewriter, 2600); // Pause at end of line
+          return;
+        }
+      } else {
+        typeTarget.textContent = currentLine.slice(0, --charIndex);
+        if (charIndex === 0) {
+          isDeleting = false;
+          lineIndex = (lineIndex + 1) % SITE_CONFIG.customLines.length;
+        }
       }
+      setTimeout(runTypewriter, isDeleting ? 22 : 45);
     }
-  </script>
-  <script type="module">
-    import * as THREE from 'three';
+    runTypewriter();
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    document.body.appendChild(renderer.domElement);
+    /* ==========================================================
+       🎮 LIVE PIXEL-ART ANIME NIGHT CITY ENGINE (60FPS CANVAS)
+       ========================================================== */
+    const canvas = document.getElementById('pixel-canvas');
+    const ctx = canvas.getContext('2d');
 
-    const group = new THREE.Group();
-    scene.add(group);
+    // Low internal resolution creates authentic crisp pixel art!
+    const PIXEL_SCALE = 4;
+    let width, height;
+    let stars = [], buildings = [], particles = [], shootingStars = [];
+    let pointerX = 0, pointerY = 0;
 
-    // Outer Cyberpunk Wireframe Sphere
-    const outerGeo = new THREE.IcosahedronGeometry(2.4, 1);
-    const outerMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, wireframe: true, transparent: true, opacity: 0.35 });
-    const outerMesh = new THREE.Mesh(outerGeo, outerMat);
-    group.add(outerMesh);
+    function initScene() {
+      width = Math.ceil(window.innerWidth / PIXEL_SCALE);
+      height = Math.ceil(window.innerHeight / PIXEL_SCALE);
+      canvas.width = width;
+      canvas.height = height;
+      ctx.imageSmoothingEnabled = false;
 
-    // Inner Energy Core
-    const innerGeo = new THREE.OctahedronGeometry(1.3, 0);
-    const innerMat = new THREE.MeshBasicMaterial({ color: 0xf093fb, wireframe: true, transparent: true, opacity: 0.7 });
-    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-    group.add(innerMesh);
+      // Generate Twinkling Pixel Stars
+      stars = Array.from({ length: 70 }, () => ({
+        x: Math.floor(Math.random() * width),
+        y: Math.floor(Math.random() * (height * 0.65)),
+        blinkSpeed: 0.02 + Math.random() * 0.05,
+        phase: Math.random() * Math.PI * 2,
+        color: Math.random() > 0.3 ? '#ffffff' : '#00f0ff'
+      }));
 
-    // Orbital Ring
-    const ringGeo = new THREE.TorusGeometry(3.4, 0.015, 16, 100);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, transparent: true, opacity: 0.5 });
-    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-    ringMesh.rotation.x = Math.PI / 2.3;
-    group.add(ringMesh);
+      // Generate Cyberpunk Anime City Skyline
+      buildings = [];
+      let bx = -20;
+      while (bx < width + 40) {
+        const bw = 14 + Math.floor(Math.random() * 22);
+        const bh = 25 + Math.floor(Math.random() * (height * 0.38));
+        const windows = [];
+        for (let wy = 4; wy < bh - 6; wy += 4) {
+          for (let wx = 3; wx < bw - 3; wx += 4) {
+            if (Math.random() > 0.35) {
+              windows.push({
+                x: wx,
+                y: wy,
+                color: Math.random() > 0.25 ? '#00f0ff' : (Math.random() > 0.5 ? '#ff2a85' : '#fcee0a')
+              });
+            }
+          }
+        }
+        buildings.push({
+          x: bx,
+          w: bw,
+          h: bh,
+          shade: Math.random() > 0.5 ? '#0d0822' : '#140c30',
+          hasAntenna: Math.random() > 0.5,
+          windows
+        });
+        bx += bw - 2;
+      }
 
-    // Position 3D core slightly to the right on desktop
-    group.position.x = window.innerWidth > 768 ? 2.2 : 0;
-
-    // 3D Starfield
-    const starGeo = new THREE.BufferGeometry();
-    const starCount = 2200;
-    const posArray = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 35;
+      // Generate Falling Neon Sakura / Cyber Rain Particles
+      particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: -0.3 - Math.random() * 0.3,
+        vy: 0.5 + Math.random() * 0.7,
+        size: Math.random() > 0.7 ? 2 : 1,
+        color: Math.random() > 0.4 ? '#ff2a85' : '#00f0ff'
+      }));
     }
-    starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const starMat = new THREE.PointsMaterial({ size: 0.03, color: 0x4facfe });
-    const stars = new THREE.Points(starGeo, starMat);
-    scene.add(stars);
 
-    camera.position.z = 6.5;
-
-    // Mouse & Scroll Reactivity
-    let mouseX = 0, mouseY = 0;
+    window.addEventListener('resize', initScene);
     window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      pointerX = (e.clientX / window.innerWidth - 0.5) * 16;
+      pointerY = (e.clientY / window.innerHeight - 0.5) * 8;
     });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches[0]) {
+        pointerX = (e.touches[0].clientX / window.innerWidth - 0.5) * 12;
+      }
+    }, { passive: true });
 
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      group.rotation.z = scrollY * 0.0015;
-      camera.position.y = -scrollY * 0.002;
-    });
+    initScene();
 
-    function animate() {
-      requestAnimationFrame(animate);
-      outerMesh.rotation.x += 0.002;
-      outerMesh.rotation.y += 0.004;
-      innerMesh.rotation.x -= 0.006;
-      innerMesh.rotation.y -= 0.005;
-      ringMesh.rotation.z -= 0.003;
-      stars.rotation.y += 0.0005;
+    let time = 0;
+    function drawPixelWorld() {
+      time += 0.03;
+      const horizonY = Math.floor(height * 0.68);
 
-      group.rotation.y += (mouseX * 0.5 - group.rotation.y) * 0.05;
-      group.rotation.x += (mouseY * 0.5 - group.rotation.x) * 0.05;
+      // 1. Anime Night Sky Gradient (Banded Pixel Style)
+      const skyBands = ['#070510', '#0c0721', '#180c38', '#291147', '#3d155f'];
+      const bandHeight = Math.ceil(horizonY / skyBands.length);
+      skyBands.forEach((col, i) => {
+        ctx.fillStyle = col;
+        ctx.fillRect(0, i * bandHeight, width, bandHeight + 1);
+      });
 
-      renderer.render(scene, camera);
+      // 2. Pixel Stars
+      stars.forEach(s => {
+        if (Math.sin(time * 2 + s.phase) > -0.2) {
+          ctx.fillStyle = s.color;
+          ctx.fillRect(Math.floor(s.x - pointerX * 0.15), s.y, 1, 1);
+        }
+      });
+
+      // 3. Occasional Anime Shooting Star
+      if (Math.random() < 0.015 && shootingStars.length < 2) {
+        shootingStars.push({ x: Math.random() * width, y: Math.random() * (horizonY * 0.4), len: 8, life: 15 });
+      }
+      shootingStars.forEach((ss, idx) => {
+        ctx.fillStyle = '#ffffff';
+        for (let i = 0; i < ss.len; i++) {
+          ctx.fillRect(Math.floor(ss.x - i), Math.floor(ss.y + i * 0.5), 1, 1);
+        }
+        ss.x += 3;
+        ss.y += 1.5;
+        ss.life--;
+        if (ss.life <= 0) shootingStars.splice(idx, 1);
+      });
+
+      // 4. Giant Retro-Anime Sliced Neon Moon/Sun
+      const sunX = Math.floor(width * 0.72 - pointerX * 0.3);
+      const sunY = Math.floor(horizonY - 28);
+      const sunRadius = Math.min(28, Math.floor(width * 0.14));
+      for (let y = -sunRadius; y <= sunRadius; y++) {
+        // Horizontal slice gaps near bottom
+        if (y > 4 && y % 4 === 0) continue;
+        const halfRow = Math.floor(Math.sqrt(sunRadius * sunRadius - y * y));
+        ctx.fillStyle = y < 0 ? '#fcee0a' : '#ff2a85';
+        ctx.fillRect(sunX - halfRow, sunY + y, halfRow * 2, 1);
+      }
+
+      // 5. Parallax Cyberpunk City Skyline
+      buildings.forEach(b => {
+        const bx = Math.floor(b.x - pointerX * 0.6);
+        const by = horizonY - b.h;
+        ctx.fillStyle = b.shade;
+        ctx.fillRect(bx, by, b.w, b.h);
+
+        // Rooftop Beacon
+        if (b.hasAntenna) {
+          ctx.fillStyle = '#291147';
+          ctx.fillRect(bx + Math.floor(b.w / 2), by - 6, 1, 6);
+          if (Math.sin(time * 3 + b.x) > 0) {
+            ctx.fillStyle = '#ff2a85';
+            ctx.fillRect(bx + Math.floor(b.w / 2), by - 7, 1, 1);
+          }
+        }
+
+        // Lit Pixel Windows
+        b.windows.forEach(w => {
+          ctx.fillStyle = w.color;
+          ctx.fillRect(bx + w.x, by + w.y, 2, 2);
+        });
+      });
+
+      // 6. 3D Perspective Synthwave Cyber Grid Floor
+      ctx.fillStyle = '#090414';
+      ctx.fillRect(0, horizonY, width, height - horizonY);
+
+      // Glowing Horizon Line
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillRect(0, horizonY, width, 1);
+
+      // Moving Horizontal Grid Lines
+      const gridOffset = (time * 8) % 10;
+      for (let z = 1; z < 16; z++) {
+        const py = horizonY + Math.floor(Math.pow((z + gridOffset / 10) / 15, 2.1) * (height - horizonY));
+        if (py < height) {
+          ctx.fillStyle = z % 2 === 0 ? 'rgba(255, 42, 133, 0.55)' : 'rgba(0, 240, 255, 0.4)';
+          ctx.fillRect(0, py, width, 1);
+        }
+      }
+
+      // Perspective Vertical Grid Lines
+      const centerX = Math.floor(width / 2 - pointerX);
+      for (let i = -12; i <= 12; i++) {
+        const bottomX = centerX + i * 24;
+        const steps = height - horizonY;
+        for (let s = 0; s < steps; s += 2) {
+          const t = s / steps;
+          const px = Math.floor(centerX + (bottomX - centerX) * t);
+          ctx.fillStyle = '#b829ff';
+          ctx.fillRect(px, horizonY + s, 1, 1);
+        }
+      }
+
+      // 7. Falling Neon Sakura Petals / Pixel Rain
+      particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y > height) {
+          p.y = -2;
+          p.x = Math.random() * width;
+        }
+        if (p.x < 0) p.x = width;
+      });
+
+      requestAnimationFrame(drawPixelWorld);
     }
-    animate();
 
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      group.position.x = window.innerWidth > 768 ? 2.2 : 0;
-    });
+    drawPixelWorld();
   </script>
 </body>
 </html>
