@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNIPERSPACE // 3D Neural Portfolio</title>
+  <style>
+    :root {
+      --neon-cyan: #00f2fe;
+      --neon-purple: #f093fb;
+      --bg-dark: #05050a;
+      --glass: rgba(12, 16, 28, 0.65);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body {
+      background: var(--bg-dark);
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, -apple-system, monospace;
+      overflow-x: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    /* Navbar HUD */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(5, 5, 10, 0.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+    }
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+    }
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: 0.3s;
+    }
+    .nav-links a:hover { color: var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan); }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: 120px 8% 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hero { align-items: flex-start; max-width: 800px; }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--neon-cyan);
+      margin-bottom: 20px;
+      background: rgba(0, 242, 254, 0.08);
+    }
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, var(--neon-cyan), var(--neon-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    .subtitle {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin-bottom: 35px;
+      max-width: 600px;
+    }
+    .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      padding: 14px 32px;
+      border: 1px solid var(--neon-cyan);
+      background: rgba(0, 242, 254, 0.1);
+      color: var(--neon-cyan);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 4px;
+      backdrop-filter: blur(8px);
+      transition: 0.3s ease;
+    }
+    .btn:hover {
+      background: var(--neon-cyan);
+      color: #05050a;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.7);
+    }
+    .btn-secondary {
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .btn-secondary:hover {
+      border-color: var(--neon-purple);
+      background: var(--neon-purple);
+      color: #05050a;
+      box-shadow: 0 0 25px rgba(240, 147, 251, 0.7);
+    }
+
+    /* Grid & Glass Cards */
+    h2 {
+      font-size: 2.2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      color: #fff;
+      border-left: 4px solid var(--neon-cyan);
+      padding-left: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      border-radius: 10px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      transition: 0.35s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+    }
+    .card h3 { color: var(--neon-cyan); margin-bottom: 12px; font-size: 1.3rem; }
+    .card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      background: rgba(240, 147, 251, 0.12);
+      color: var(--neon-purple);
+      border: 1px solid rgba(240, 147, 251, 0.3);
+      border-radius: 4px;
+    }
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">SNIPERSPACE // OS</div>
+    <div class="nav-links">
+      <a href="#home">Core</a>
+      <a href="#projects">Deployments</a>
+      <a href="#arsenal">Arsenal</a>
+      <a href="https://github.com/sniperspace" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <span class="badge">● SYSTEM ONLINE // V2.026</span>
+    <h1>ARCHITECTING INTELLIGENT SYSTEMS</h1>
+    <p class="subtitle">
+      Data Science, Machine Learning & Full-Stack Engineering. Building scalable neural pipelines, interactive 3D web interfaces, and hardware-software integrations.
+    </p>
+    <div class="btn-group">
+      <a href="#projects" class="btn">Explore Deployments</a>
+      <a href="https://github.com/sniperspace" target="_blank" class="btn btn-secondary">GitHub Terminal</a>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Active Deployments</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>01 // Predictive Neural Pipeline</h3>
+        <p>Deep learning multi-layer perceptron architecture with K-Fold cross-validation and automated feature engineering.</p>
+        <div class="tags">
+          <span class="tag">PyTorch</span>
+          <span class="tag">Scikit-Learn</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>02 // Audio Intelligence Classifier</h3>
+        <p>End-to-end machine learning model analyzing acoustic features and metadata via REST APIs to predict track popularity.</p>
+        <div class="tags">
+          <span class="tag">Machine Learning</span>
+          <span class="tag">API Integration</span>
+          <span class="tag">Pandas</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>03 // IoT Hardware Relay Matrix</h3>
+        <p>Microcontroller infrared signal decoder and automated relay control system for real-time physical hardware switching.</p>
+        <div class="tags">
+          <span class="tag">Arduino</span>
+          <span class="tag">Embedded C++</span>
+          <span class="tag">IoT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="arsenal">
+    <h2>Technical Arsenal</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>AI & Data Science</h3>
+        <p>PyTorch, Scikit-Learn, NumPy, Pandas, R Statistical Computing, Jupyter, Feature Engineering & Model Deployment.</p>
+      </div>
+      <div class="card">
+        <h3>Systems & Databases</h3>
+        <p>Python, Java OOP, Oracle SQL, Linux VPS Administration, Git Workflows & Cloud API Hosting.</p>
+      </div>
+      <div class="card">
+        <h3>Creative & WebGL</h3>
+        <p>Three.js, Interactive 3D Shaders, Responsive Glassmorphism UI, and Automated CI/CD via GitHub Pages.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    SNIPERSPACE TERMINAL // POWERED BY THREE.JS & GITHUB PAGES
+  </footer>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.170.0/build/three.module.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.body.appendChild(renderer.domElement);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Outer Cyberpunk Wireframe Sphere
+    const outerGeo = new THREE.IcosahedronGeometry(2.4, 1);
+    const outerMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, wireframe: true, transparent: true, opacity: 0.35 });
+    const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+    group.add(outerMesh);
+
+    // Inner Energy Core
+    const innerGeo = new THREE.OctahedronGeometry(1.3, 0);
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0xf093fb, wireframe: true, transparent: true, opacity: 0.7 });
+    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+    group.add(innerMesh);
+
+    // Orbital Ring
+    const ringGeo = new THREE.TorusGeometry(3.4, 0.015, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, transparent: true, opacity: 0.5 });
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = Math.PI / 2.3;
+    group.add(ringMesh);
+
+    // Position 3D core slightly to the right on desktop
+    group.position.x = window.innerWidth > 768 ? 2.2 : 0;
+
+    // 3D Starfield
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 2200;
+    const posArray = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 35;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const starMat = new THREE.PointsMaterial({ size: 0.03, color: 0x4facfe });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    camera.position.z = 6.5;
+
+    // Mouse & Scroll Reactivity
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      group.rotation.z = scrollY * 0.0015;
+      camera.position.y = -scrollY * 0.002;
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      outerMesh.rotation.x += 0.002;
+      outerMesh.rotation.y += 0.004;
+      innerMesh.rotation.x -= 0.006;
+      innerMesh.rotation.y -= 0.005;
+      ringMesh.rotation.z -= 0.003;
+      stars.rotation.y += 0.0005;
+
+      group.rotation.y += (mouseX * 0.5 - group.rotation.y) * 0.05;
+      group.rotation.x += (mouseY * 0.5 - group.rotation.x) * 0.05;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      group.position.x = window.innerWidth > 768 ? 2.2 : 0;
+    });
+  </script>
+</body>
+</html>
