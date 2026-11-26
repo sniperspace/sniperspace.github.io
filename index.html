@@ -3,100 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#09020e" />
-  <meta name="description" content="OUTMATH // Coming Soon — Cyber-Japan Blood Dragon Teaser" />
-  <title>OUTMATH // COMING SOON</title>
+  <meta name="theme-color" content="#05070d" />
+  <meta name="description" content="OUTMATH — Coming Soon | Real-World 3D Cinematic Teaser" />
+  <title>OUTMATH — Coming Soon</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.css" rel="stylesheet" />
 
   <style>
     :root {
-      --blood-red: #ff003c;
-      --neon-pink: #ff1e8e;
-      --neon-cyan: #00f0ff;
-      --sunset-amber: #ff8c00;
-      --void: #07010d;
-      --hud-text: #f3e8ff;
+      --bg-space: #03050a;
+      --glass: rgba(10, 14, 24, 0.56);
+      --glass-hover: rgba(255, 255, 255, 0.14);
+      --border: rgba(255, 255, 255, 0.16);
+      --text-main: #f8fafc;
+      --text-dim: rgba(248, 250, 252, 0.72);
+      --accent-blue: #8ab4f8;
+      --accent-green: #81c995;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: var(--void);
-      color: var(--hud-text);
-      font-family: 'Share Tech Mono', monospace;
+      background:
+        radial-gradient(1.5px 1.5px at 15% 22%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 78% 18%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 42% 82%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 88% 74%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(circle at 50% 45%, #0c1428 0%, var(--bg-space) 75%);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* 3D WebGL Viewport */
-    #webgl-container {
+    /* Fullscreen Real-World 3D Map */
+    #map {
       position: fixed;
       inset: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
-      cursor: crosshair;
     }
 
-    /* VHS CRT Scanlines & Chromatic Vignette */
-    .vhs-scanlines {
+    /* Subtle attribution styling */
+    .maplibregl-ctrl-attrib {
+      background: rgba(5, 8, 16, 0.55) !important;
+      color: rgba(255, 255, 255, 0.55) !important;
+      font-size: 10px !important;
+      border-radius: 8px 0 0 0;
+    }
+    .maplibregl-ctrl-attrib a {
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+
+    /* Cinematic Vignette & Color Grade */
+    .cinema-vignette {
       position: fixed;
       inset: 0;
       z-index: 2;
       pointer-events: none;
       background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 0, 0, 0.28) 0px,
-          rgba(0, 0, 0, 0.28) 1px,
-          transparent 1px,
-          transparent 3px
-        );
+        radial-gradient(circle at 50% 48%, rgba(6, 9, 16, 0.05) 35%, rgba(5, 8, 14, 0.72) 100%),
+        linear-gradient(180deg, rgba(5, 8, 14, 0.58) 0%, transparent 22%, transparent 74%, rgba(5, 8, 14, 0.82) 100%);
     }
 
-    .vhs-vignette {
-      position: fixed;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 50%, transparent 45%, rgba(6, 0, 14, 0.88) 100%),
-        linear-gradient(180deg, rgba(255, 0, 60, 0.14) 0%, transparent 18%, transparent 82%, rgba(0, 240, 255, 0.12) 100%);
-    }
-
-    /* VHS Tracking Glitch Flash */
-    .vhs-tracking-bar {
-      position: fixed;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: rgba(0, 240, 255, 0.35);
-      box-shadow: 0 0 18px var(--neon-cyan), 0 4px 0 rgba(255, 0, 60, 0.55);
-      z-index: 4;
-      pointer-events: none;
-      opacity: 0;
-      top: -10px;
-      animation: trackingSweep 7.5s linear infinite;
-    }
-
-    @keyframes trackingSweep {
-      0%, 86% { opacity: 0; top: -10px; }
-      88% { opacity: 0.75; top: 15%; }
-      92% { opacity: 0.45; top: 70%; }
-      95% { opacity: 0.85; top: 96%; }
-      100% { opacity: 0; top: 105%; }
-    }
-
-    /* Cinematic HUD Frame Layer */
-    .hud-layer {
+    /* Clean Google-Style Floating HUD */
+    .hud {
       position: fixed;
       inset: 0;
       z-index: 10;
@@ -104,1304 +81,594 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: clamp(14px, 3vw, 28px);
+      padding: clamp(16px, 3vw, 32px);
     }
 
-    /* Corner Military-Arcade Brackets */
-    .corner {
-      position: fixed;
-      width: 24px;
-      height: 24px;
-      z-index: 11;
-      pointer-events: none;
-      border-color: var(--neon-cyan);
-      opacity: 0.75;
-    }
-    .corner.tl { top: 14px; left: 14px; border-top: 2px solid; border-left: 2px solid; }
-    .corner.tr { top: 14px; right: 14px; border-top: 2px solid; border-right: 2px solid; border-color: var(--blood-red); }
-    .corner.bl { bottom: 14px; left: 14px; border-bottom: 2px solid; border-left: 2px solid; border-color: var(--blood-red); }
-    .corner.br { bottom: 14px; right: 14px; border-bottom: 2px solid; border-right: 2px solid; }
-
-    /* Top VHS Telemetry Bar */
     .hud-top {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .vhs-rec {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: clamp(0.72rem, 1.5vw, 0.88rem);
-      letter-spacing: 0.14em;
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-    }
-
-    .rec-row {
-      display: flex;
+    .status-pill {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: #fff;
-    }
-
-    .rec-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--blood-red);
-      box-shadow: 0 0 12px var(--blood-red);
-      animation: recBlink 1s steps(2, start) infinite;
-    }
-
-    @keyframes recBlink {
-      to { opacity: 0.15; }
-    }
-
-    .sector-meta {
-      color: var(--neon-cyan);
-      opacity: 0.85;
-    }
-
-    .hud-top-actions {
-      display: flex;
       gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
       pointer-events: auto;
     }
 
-    .cyber-btn {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: clamp(0.7rem, 1.4vw, 0.82rem);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 8px 14px;
-      background: rgba(12, 3, 24, 0.72);
-      color: var(--neon-cyan);
-      border: 1px solid var(--neon-cyan);
-      box-shadow: 0 0 14px rgba(0, 240, 255, 0.2), inset 0 0 10px rgba(0, 240, 255, 0.12);
+    .glass-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--text-main);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 16px;
       cursor: pointer;
-      backdrop-filter: blur(4px);
-      transition: all 0.18s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
 
-    .cyber-btn:hover,
-    .cyber-btn.active {
-      background: var(--neon-cyan);
-      color: #07010d;
-      box-shadow: 0 0 22px var(--neon-cyan);
+    .glass-btn:hover {
+      background: var(--glass-hover);
+      border-color: rgba(255, 255, 255, 0.35);
     }
 
-    .cyber-btn.blood {
-      color: #fff;
-      border-color: var(--blood-red);
-      background: rgba(255, 0, 60, 0.16);
-      box-shadow: 0 0 16px rgba(255, 0, 60, 0.35), inset 0 0 12px rgba(255, 0, 60, 0.2);
+    .glass-btn.active {
+      background: rgba(138, 180, 248, 0.22);
+      border-color: var(--accent-blue);
     }
 
-    .cyber-btn.blood:hover,
-    .cyber-btn.blood.active {
-      background: var(--blood-red);
-      color: #fff;
-      box-shadow: 0 0 28px var(--blood-red);
-    }
-
-    /* Center Hero Title Lockup */
+    /* Center Hero Title */
     .hero-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
       margin: auto;
-      padding: 16px;
-      max-width: 900px;
-      transition: transform 0.25s ease;
+      text-align: center;
+      max-width: 760px;
+      padding: 0 14px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
-    body.hyperdrive .hero-center {
-      transform: scale(1.04);
-    }
-
-    .jp-subtitle {
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 900;
-      font-size: clamp(0.85rem, 2.2vw, 1.25rem);
-      letter-spacing: 0.45em;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 12px var(--neon-cyan), 2px 2px 0 var(--blood-red);
-      margin-bottom: 10px;
-      padding-left: 0.45em;
-    }
-
-    /* Iconic 80s Blood Dragon Chrome + Glitch Title */
-    .title-wrap {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 14px;
-    }
-
-    .game-title {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-style: italic;
-      font-size: clamp(3rem, 11vw, 7.6rem);
-      line-height: 0.95;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #d2fbff 32%,
-        #ff1e8e 52%,
-        #ff003c 72%,
-        #ff9900 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 18px rgba(255, 0, 60, 0.75)) drop-shadow(0 6px 0 rgba(12, 0, 22, 0.95));
-      position: relative;
-      z-index: 2;
-      padding: 0 10px;
-    }
-
-    .game-title::before,
-    .game-title::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      padding: 0 10px;
-      pointer-events: none;
-      -webkit-text-fill-color: transparent;
+    body.explore-mode .hero-center {
       opacity: 0;
+      transform: translateY(-16px);
     }
 
-    .game-title::before {
-      text-shadow: -4px 0 var(--neon-cyan);
-      animation: glitchCyan 5.5s infinite;
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.7rem, 1.4vw, 0.84rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: 14px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
     }
 
-    .game-title::after {
-      text-shadow: 4px 0 var(--blood-red);
-      animation: glitchRed 5.5s infinite;
-    }
-
-    @keyframes glitchCyan {
-      0%, 91%, 100% { opacity: 0; transform: translate(0); }
-      92% { opacity: 0.85; transform: translate(-4px, -1px); clip-path: inset(12% 0 58% 0); }
-      94% { opacity: 0.85; transform: translate(3px, 2px); clip-path: inset(62% 0 10% 0); }
-      96% { opacity: 0; }
-    }
-
-    @keyframes glitchRed {
-      0%, 91%, 100% { opacity: 0; transform: translate(0); }
-      93% { opacity: 0.9; transform: translate(5px, 1px); clip-path: inset(30% 0 38% 0); }
-      95% { opacity: 0.9; transform: translate(-3px, -2px); clip-path: inset(70% 0 5% 0); }
-      97% { opacity: 0; }
-    }
-
-    /* Coming Soon Laser Banner */
-    .coming-soon-bar {
-      display: inline-flex;
-      align-items: center;
-      gap: clamp(10px, 2.5vw, 22px);
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.2rem, 11vw, 7.2rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      padding-left: 0.14em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 12px 42px rgba(0, 0, 0, 0.7);
       margin-bottom: 18px;
     }
 
-    .laser-line {
-      width: clamp(32px, 8vw, 96px);
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--blood-red), var(--neon-cyan));
-      box-shadow: 0 0 12px var(--blood-red);
+    .divider-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
-    .laser-line.right {
-      background: linear-gradient(90deg, var(--neon-cyan), var(--blood-red), transparent);
+    .hairline {
+      width: clamp(28px, 6vw, 64px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65));
+    }
+    .hairline.right {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.65), transparent);
     }
 
-    .coming-soon-badge {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: clamp(0.95rem, 2.6vw, 1.55rem);
-      letter-spacing: 0.36em;
-      padding-left: 0.36em;
-      color: #ffffff;
-      text-shadow: 0 0 14px var(--blood-red), 0 0 28px var(--neon-pink);
-      animation: neonPulse 2.4s ease-in-out infinite;
-    }
-
-    @keyframes neonPulse {
-      0%, 100% { opacity: 1; text-shadow: 0 0 14px var(--blood-red), 0 0 28px var(--neon-pink); }
-      50% { opacity: 0.82; text-shadow: 0 0 6px var(--blood-red), 0 0 14px var(--neon-cyan); }
+    .coming-soon {
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+      font-weight: 500;
+      letter-spacing: 0.42em;
+      padding-left: 0.42em;
+      text-transform: uppercase;
     }
 
     .tagline {
-      font-size: clamp(0.8rem, 1.8vw, 1.05rem);
-      letter-spacing: 0.24em;
-      color: rgba(243, 232, 255, 0.88);
-      background: rgba(8, 2, 16, 0.55);
-      border: 1px solid rgba(255, 0, 60, 0.45);
-      padding: 8px 18px;
-      backdrop-filter: blur(4px);
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+      font-size: clamp(0.9rem, 1.8vw, 1.06rem);
+      font-weight: 300;
+      color: var(--text-dim);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
     }
 
-    /* Optional Countdown Display (Hidden if no launchDate set) */
-    .countdown-box {
-      display: none;
-      gap: clamp(10px, 2vw, 22px);
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      background: rgba(8, 2, 16, 0.65);
-      border-top: 2px solid var(--neon-cyan);
-      border-bottom: 2px solid var(--blood-red);
-      backdrop-filter: blur(5px);
-    }
-
-    .countdown-box.visible {
-      display: inline-flex;
-    }
-
-    .cd-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 48px;
-    }
-
-    .cd-num {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.1rem, 2.8vw, 1.7rem);
-      font-weight: 900;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 12px var(--neon-cyan);
-    }
-
-    .cd-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.16em;
-      color: var(--neon-pink);
-    }
-
-    .center-controls {
-      display: flex;
-      gap: 12px;
-      pointer-events: auto;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* Bottom Telemetry Bar */
+    /* Bottom Telemetry & Location Switcher */
     .hud-bottom {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .telemetry {
+      padding: 12px 18px;
+      border-radius: 16px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      min-width: 245px;
+    }
+
+    .loc-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .loc-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      font-size: clamp(0.68rem, 1.3vw, 0.8rem);
-      letter-spacing: 0.14em;
-      color: rgba(243, 232, 255, 0.72);
     }
 
-    .speed-meter {
+    .waypoints {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
+      pointer-events: auto;
+      padding: 6px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
-    .speed-val {
-      color: var(--neon-cyan);
-      font-weight: bold;
+    .wp-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      background: transparent;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    body.hyperdrive .speed-val {
-      color: var(--blood-red);
-      text-shadow: 0 0 10px var(--blood-red);
+    .wp-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
     }
 
-    .domain-stamp {
-      color: var(--neon-pink);
-      text-shadow: 0 0 8px rgba(255, 30, 142, 0.55);
+    .wp-btn.active {
+      background: #ffffff;
+      color: #060910;
+      font-weight: 600;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .hud-bottom {
-        justify-content: center;
-        text-align: center;
+        flex-direction: column;
+        align-items: stretch;
       }
-      .corner {
-        width: 16px;
-        height: 16px;
+      .waypoints {
+        border-radius: 16px;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 3D Three.js Canvas -->
-  <div id="webgl-container"></div>
+  <div id="map"></div>
+  <div class="cinema-vignette"></div>
 
-  <!-- VHS / Blood Dragon Screen Overlays -->
-  <div class="vhs-scanlines"></div>
-  <div class="vhs-vignette"></div>
-  <div class="vhs-tracking-bar"></div>
-
-  <!-- Corner HUD Brackets -->
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
-
-  <!-- Minimalist Cinematic Teaser HUD -->
-  <div class="hud-layer">
+  <div class="hud">
     <header class="hud-top">
-      <div class="vhs-rec">
-        <div class="rec-row">
-          <span class="rec-dot"></span>
-          <span>PLAY ▶ VHS // <span id="tape-timer">00:00:00</span></span>
-        </div>
-        <div class="sector-meta" id="sector-label">NEO-KYOTO // BLOOD DRAGON PROTOCOL</div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span id="mode-label">LIVE 3D EARTH // AUTOPILOT</span>
       </div>
 
-      <div class="hud-top-actions">
-        <button class="cyber-btn" id="audio-btn">▶ SYNTH: OFF</button>
+      <div class="top-actions">
+        <button class="glass-btn active" id="autopilot-btn">Autopilot: ON</button>
+        <button class="glass-btn" id="explore-btn">Free Explore</button>
       </div>
     </header>
 
     <main class="hero-center">
-      <div class="jp-subtitle" id="jp-sub">アウトマス // 血龍覚醒</div>
-
-      <div class="title-wrap">
-        <h1 class="game-title" id="main-title" data-text="OUTMATH">OUTMATH</h1>
+      <div class="eyebrow" id="eyebrow-el">TETHERIS.APP // REAL-WORLD 3D</div>
+      <h1 class="hero-title" id="title-el">OUTMATH</h1>
+      <div class="divider-row">
+        <span class="hairline"></span>
+        <span class="coming-soon">COMING SOON</span>
+        <span class="hairline right"></span>
       </div>
-
-      <div class="coming-soon-bar">
-        <span class="laser-line"></span>
-        <span class="coming-soon-badge" id="status-badge">COMING SOON</span>
-        <span class="laser-line right"></span>
-      </div>
-
-      <p class="tagline" id="tagline-el">CALCULATE. SURVIVE. OVERRIDE.</p>
-
-      <!-- Auto-activates if you add a date in TEASER_CONFIG.launchDate -->
-      <div class="countdown-box" id="countdown-box">
-        <div class="cd-unit"><span class="cd-num" id="cd-d">00</span><span class="cd-label">DAYS</span></div>
-        <div class="cd-unit"><span class="cd-num" id="cd-h">00</span><span class="cd-label">HRS</span></div>
-        <div class="cd-unit"><span class="cd-num" id="cd-m">00</span><span class="cd-label">MIN</span></div>
-        <div class="cd-unit"><span class="cd-num" id="cd-s">00</span><span class="cd-label">SEC</span></div>
-      </div>
-
-      <div class="center-controls">
-        <button class="cyber-btn blood" id="hyperdrive-btn">⚡ HOLD FOR HYPERDRIVE</button>
-      </div>
+      <p class="tagline" id="tagline-el">
+        Precision strategy, live computation, and a new world to master. Launching soon.
+      </p>
     </main>
 
     <footer class="hud-bottom">
-      <div class="speed-meter">
-        <span>VELOCITY: <span class="speed-val" id="speed-readout">88.0 MPH</span></span>
-        <span>//</span>
-        <span id="hint-text">HOLD SCREEN OR [SPACE] TO BOOST</span>
+      <div class="telemetry">
+        <div class="loc-title" id="loc-title">Orbital Approach — Earth</div>
+        <div class="loc-meta">
+          <span id="meta-coords">35.3606° N, 138.7274° E</span>
+          <span id="meta-zoom">ZOOM 2.2</span>
+          <span id="meta-hdg">HDG 000°</span>
+        </div>
       </div>
-      <div class="domain-stamp" id="domain-stamp">TETHERIS.APP // TRANSMISSION LOCKED</div>
+
+      <nav class="waypoints" id="waypoint-nav" aria-label="Locations"></nav>
     </footer>
   </div>
 
-  <!-- Three.js r187 (Latest Stable Module) -->
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.187.0/build/three.module.js"
-      }
-    }
-  </script>
-
   <script type="module">
-    import * as THREE from 'three';
+    import * as maplibregl from 'https://unpkg.com/maplibre-gl@6.19.0/dist/maplibre-gl.mjs';
 
     /* =========================================================================
-       ✨ TEASER CONFIGURATION — CUSTOMIZE YOUR GAME DETAILS HERE
+       ✨ CUSTOMIZE YOUR TEASER TEXT & REAL-WORLD FLYTHROUGH LOCATIONS HERE
        ========================================================================= */
     const TEASER_CONFIG = {
-      gameTitle: "OUTMATH",
-      japaneseSubtitle: "アウトマス // 血龍覚醒",
-      statusText: "COMING SOON",
-      tagline: "CALCULATE. SURVIVE. OVERRIDE.",
-      sectorLabel: "NEO-KYOTO // BLOOD DRAGON PROTOCOL",
-      domainStamp: "TETHERIS.APP // TRANSMISSION LOCKED",
-      // Optional: Set a launch date like "2027-01-01T00:00:00" to enable countdown.
-      // Leave empty "" for a pure mysterious "COMING SOON" teaser.
-      launchDate: ""
+      eyebrow: "TETHERIS.APP // REAL-WORLD 3D",
+      title: "OUTMATH",
+      tagline: "Precision strategy, live computation, and a new world to master. Launching soon."
     };
 
-    // Apply config to HUD
-    document.title = `${TEASER_CONFIG.gameTitle} // ${TEASER_CONFIG.statusText}`;
-    const titleEl = document.getElementById('main-title');
-    titleEl.textContent = TEASER_CONFIG.gameTitle;
-    titleEl.setAttribute('data-text', TEASER_CONFIG.gameTitle);
-    document.getElementById('jp-sub').textContent = TEASER_CONFIG.japaneseSubtitle;
-    document.getElementById('status-badge').textContent = TEASER_CONFIG.statusText;
-    document.getElementById('tagline-el').textContent = TEASER_CONFIG.tagline;
-    document.getElementById('sector-label').textContent = TEASER_CONFIG.sectorLabel;
-    document.getElementById('domain-stamp').textContent = TEASER_CONFIG.domainStamp;
-
-    /* =========================================================================
-       1. THREE.JS SCENE, CAMERA & RENDERER SETUP
-       ========================================================================= */
-    const container = document.getElementById('webgl-container');
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x07010d);
-    scene.fog = new THREE.FogExp2(0x13021f, 0.0115);
-
-    const camera = new THREE.PerspectiveCamera(
-      68,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      420
-    );
-    camera.position.set(0, 4.2, 18);
-
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    container.appendChild(renderer.domElement);
-
-    // Dramatic Blood Dragon Lighting
-    const ambientLight = new THREE.AmbientLight(0x3a0c4e, 1.4);
-    scene.add(ambientLight);
-
-    const sunLight = new THREE.DirectionalLight(0xff1e6e, 2.5);
-    sunLight.position.set(0, 30, -150);
-    scene.add(sunLight);
-
-    const cyanPulseLight = new THREE.PointLight(0x00f0ff, 50, 70, 1.5);
-    cyanPulseLight.position.set(0, 6, 4);
-    scene.add(cyanPulseLight);
-
-    const crimsonPulseLight = new THREE.PointLight(0xff003c, 65, 85, 1.5);
-    crimsonPulseLight.position.set(0, 10, -28);
-    scene.add(crimsonPulseLight);
-
-    /* =========================================================================
-       2. BLOOD DRAGON SLICED SUN (CUSTOM GLSL SHADER)
-       ========================================================================= */
-    const sunUniforms = {
-      uTime: { value: 0 },
-      uBoost: { value: 0 }
-    };
-
-    const sunMaterial = new THREE.ShaderMaterial({
-      uniforms: sunUniforms,
-      transparent: true,
-      depthWrite: false,
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform float uBoost;
-        varying vec2 vUv;
-
-        void main() {
-          vec2 p = vUv * 2.0 - 1.0;
-          float r = length(p);
-          if (r > 1.0) discard;
-
-          // Blood Dragon palette: white-amber crown -> hot magenta -> deep blood crimson
-          vec3 topCol = vec3(1.0, 0.78, 0.22);
-          vec3 midCol = vec3(1.0, 0.08, 0.45);
-          vec3 botCol = vec3(0.75, 0.0, 0.28);
-
-          float grad = smoothstep(-0.9, 0.9, p.y);
-          vec3 col = mix(botCol, midCol, smoothstep(0.0, 0.55, grad));
-          col = mix(col, topCol, smoothstep(0.55, 1.0, grad));
-
-          // Iconic retro-synth horizontal VHS slices on lower half
-          if (p.y < 0.15) {
-            float sliceFreq = 26.0;
-            float wave = fract((p.y - uTime * (0.04 + uBoost * 0.08)) * sliceFreq);
-            float gap = mix(0.42, 0.04, smoothstep(-0.85, 0.15, p.y));
-            if (wave < gap) discard;
-          }
-
-          // Outer plasma rim glow
-          float edgeGlow = smoothstep(1.0, 0.82, r);
-          col += vec3(0.25, 0.0, 0.12) * uBoost;
-
-          gl_FragColor = vec4(col * 1.35, edgeGlow);
-        }
-      `
-    });
-
-    const bloodSun = new THREE.Mesh(new THREE.CircleGeometry(42, 64), sunMaterial);
-    bloodSun.position.set(0, 32, -210);
-    scene.add(bloodSun);
-
-    // Outer Halo behind Sun
-    const haloMat = new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec2 vUv;
-        void main() {
-          float d = length(vUv * 2.0 - 1.0);
-          float alpha = pow(max(0.0, 1.0 - d), 2.4) * 0.65;
-          vec3 col = mix(vec3(1.0, 0.0, 0.35), vec3(0.45, 0.0, 0.8), d);
-          gl_FragColor = vec4(col, alpha);
-        }
-      `
-    });
-    const sunHalo = new THREE.Mesh(new THREE.PlaneGeometry(155, 155), haloMat);
-    sunHalo.position.set(0, 32, -215);
-    scene.add(sunHalo);
-
-    /* =========================================================================
-       3. DISTANT WIREFRAME CYBER MT. FUJI SILHOUETTE
-       ========================================================================= */
-    function buildCyberFuji() {
-      const fujiGroup = new THREE.Group();
-      // Truncated volcanic cone silhouette
-      const fujiGeo = new THREE.CylinderGeometry(11, 78, 42, 24, 6, true);
-      const pos = fujiGeo.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        const y = pos.getY(i);
-        const x = pos.getX(i);
-        const z = pos.getZ(i);
-        // Subtle organic ridge crinkle
-        const noise = Math.sin(x * 0.15) * Math.cos(z * 0.15) * 1.8;
-        pos.setX(i, x + noise);
-        pos.setY(i, y + Math.sin(x * 0.08 + z * 0.08) * 1.1);
+    const SCENES = [
+      {
+        label: "Mt. Fuji",
+        title: "Mount Fuji — Honshu, Japan",
+        center: [138.7274, 35.3606],
+        zoom: 12.6,
+        pitch: 74,
+        bearing: 135,
+        orbitSeconds: 16
+      },
+      {
+        label: "Tokyo",
+        title: "Minato & Tokyo Tower — Japan",
+        center: [139.7454, 35.6586],
+        zoom: 15.8,
+        pitch: 66,
+        bearing: -35,
+        orbitSeconds: 16
+      },
+      {
+        label: "Swiss Alps",
+        title: "Matterhorn Peak — Zermatt, Switzerland",
+        center: [7.6586, 45.9766],
+        zoom: 13.1,
+        pitch: 75,
+        bearing: 45,
+        orbitSeconds: 16
+      },
+      {
+        label: "Manhattan",
+        title: "Midtown Skyline — New York, USA",
+        center: [-73.9855, 40.7484],
+        zoom: 15.7,
+        pitch: 68,
+        bearing: 25,
+        orbitSeconds: 16
+      },
+      {
+        label: "Grand Canyon",
+        title: "Grand Canyon National Park — Arizona, USA",
+        center: [-112.1129, 36.1069],
+        zoom: 13.0,
+        pitch: 73,
+        bearing: -110,
+        orbitSeconds: 16
       }
-      fujiGeo.computeVertexNormals();
-
-      const darkFill = new THREE.MeshBasicMaterial({ color: 0x090112 });
-      const wireMat = new THREE.MeshBasicMaterial({
-        color: 0xff0044,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.42
-      });
-
-      fujiGroup.add(new THREE.Mesh(fujiGeo, darkFill));
-      fujiGroup.add(new THREE.Mesh(fujiGeo, wireMat));
-
-      // Glowing snowcap wireframe crown
-      const capGeo = new THREE.CylinderGeometry(11.2, 24, 10, 24, 2, true);
-      const capWire = new THREE.MeshBasicMaterial({
-        color: 0x00f0ff,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.55
-      });
-      const capMesh = new THREE.Mesh(capGeo, capWire);
-      capMesh.position.y = 16.1;
-      fujiGroup.add(capMesh);
-
-      fujiGroup.position.set(0, 17, -178);
-      return fujiGroup;
-    }
-    scene.add(buildCyberFuji());
-
-    /* =========================================================================
-       4. INFINITE SCROLLING BLOOD DRAGON CYBER-GRID HIGHWAY (SHADER)
-       ========================================================================= */
-    const gridUniforms = {
-      uOffset: { value: 0 },
-      uBoost: { value: 0 }
-    };
-
-    const gridMaterial = new THREE.ShaderMaterial({
-      uniforms: gridUniforms,
-      transparent: true,
-      vertexShader: `
-        varying vec2 vWorldXZ;
-        varying float vDist;
-        void main() {
-          vec4 wp = modelMatrix * vec4(position, 1.0);
-          vWorldXZ = wp.xz;
-          vDist = length(wp.xyz - cameraPosition);
-          gl_Position = projectionMatrix * viewMatrix * wp;
-        }
-      `,
-      fragmentShader: `
-        uniform float uOffset;
-        uniform float uBoost;
-        varying vec2 vWorldXZ;
-        varying float vDist;
-
-        void main() {
-          float cellSize = 4.0;
-          float gx = abs(fract(vWorldXZ.x / cellSize - 0.5) - 0.5);
-          float gz = abs(fract((vWorldXZ.y - uOffset) / cellSize - 0.5) - 0.5);
-
-          float lineX = 1.0 - smoothstep(0.015, 0.055, gx);
-          float lineZ = 1.0 - smoothstep(0.015, 0.055, gz);
-          float grid = max(lineX, lineZ);
-
-          // Twin glowing cyber highway guide rails at x = +/- 9.5
-          float rail = 1.0 - smoothstep(0.08, 0.35, abs(abs(vWorldXZ.x) - 9.5));
-          // Center neon lane dash
-          float centerLine = (1.0 - smoothstep(0.05, 0.22, abs(vWorldXZ.x))) *
-                             step(0.45, fract((vWorldXZ.y - uOffset) * 0.08));
-
-          vec3 baseFloor = vec3(0.03, 0.005, 0.07);
-          vec3 gridCol = mix(vec3(0.95, 0.0, 0.38), vec3(0.0, 0.94, 1.0), uBoost * 0.45);
-          vec3 railCol = vec3(0.0, 0.95, 1.0);
-          vec3 centerCol = vec3(1.0, 0.05, 0.35);
-
-          vec3 col = baseFloor;
-          col += gridCol * grid * 0.85;
-          col += railCol * rail * 1.4;
-          col += centerCol * centerLine * 1.2;
-
-          float fogFactor = exp(-pow(vDist * 0.0105, 2.0));
-          col = mix(vec3(0.075, 0.008, 0.12), col, fogFactor);
-
-          gl_FragColor = vec4(col, 1.0);
-        }
-      `
-    });
-
-    const highwayMesh = new THREE.Mesh(new THREE.PlaneGeometry(240, 260), gridMaterial);
-    highwayMesh.rotation.x = -Math.PI / 2;
-    highwayMesh.position.set(0, 0, -95);
-    scene.add(highwayMesh);
-
-    /* =========================================================================
-       5. SCROLLING WIREFRAME BLOOD DRAGON CANYON MOUNTAINS
-       ========================================================================= */
-    const CANYON_LENGTH = 160;
-    function createCanyonChunk() {
-      const geo = new THREE.PlaneGeometry(170, CANYON_LENGTH, 44, 28);
-      geo.rotateX(-Math.PI / 2);
-      const pos = geo.attributes.position;
-
-      for (let i = 0; i < pos.count; i++) {
-        const x = pos.getX(i);
-        const z = pos.getZ(i);
-        const absX = Math.abs(x);
-
-        // Keep center highway corridor flat and clear
-        if (absX < 14) {
-          pos.setY(i, -0.2);
-        } else {
-          // Make Z periodic so front & back seams tile seamlessly
-          const zNorm = (z / CANYON_LENGTH) * Math.PI * 2;
-          const ridge =
-            Math.abs(Math.sin(x * 0.14 + Math.cos(zNorm * 2.0))) * 14 +
-            Math.abs(Math.cos(x * 0.07 - Math.sin(zNorm * 3.0))) * 11;
-          const slope = Math.min(1.0, (absX - 14) / 22);
-          pos.setY(i, ridge * slope * slope);
-        }
-      }
-      geo.computeVertexNormals();
-
-      const group = new THREE.Group();
-      const darkSolid = new THREE.MeshBasicMaterial({ color: 0x090213 });
-      const neonWire = new THREE.MeshBasicMaterial({
-        color: 0xb800ff,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.48
-      });
-
-      group.add(new THREE.Mesh(geo, darkSolid));
-      const wireMesh = new THREE.Mesh(geo, neonWire);
-      wireMesh.position.y = 0.06;
-      group.add(wireMesh);
-      return group;
-    }
-
-    const canyonChunks = [createCanyonChunk(), createCanyonChunk()];
-    canyonChunks[0].position.z = -50;
-    canyonChunks[1].position.z = -50 - CANYON_LENGTH;
-    scene.add(canyonChunks[0], canyonChunks[1]);
-
-    /* =========================================================================
-       6. 3D JAPANESE NEON TORII GATES + FLOATING KATAKANA HOLOGRAMS
-       ========================================================================= */
-    const katakanaWords = ['アウトマス', '血龍覚醒', '電脳計算', '禁域突破'];
-    const signTextures = katakanaWords.map((word, idx) => {
-      const c = document.createElement('canvas');
-      c.width = 128;
-      c.height = 512;
-      const ctx = c.getContext('2d');
-
-      const accent = idx % 2 === 0 ? '#00f0ff' : '#ff003c';
-      ctx.fillStyle = 'rgba(10, 2, 22, 0.72)';
-      ctx.fillRect(8, 8, 112, 496);
-
-      ctx.strokeStyle = accent;
-      ctx.lineWidth = 6;
-      ctx.strokeRect(10, 10, 108, 492);
-
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = accent;
-      ctx.shadowBlur = 22;
-      ctx.font = '900 58px "Noto Sans JP", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      const chars = word.split('');
-      chars.forEach((ch, ci) => {
-        ctx.fillText(ch, 64, 85 + ci * 92);
-      });
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.needsUpdate = true;
-      return tex;
-    });
-
-    // Shared Torii Materials
-    const toriiRedMat = new THREE.MeshStandardMaterial({
-      color: 0xaa0022,
-      emissive: 0x660016,
-      emissiveIntensity: 0.9,
-      roughness: 0.35,
-      metalness: 0.4
-    });
-    const toriiDarkMat = new THREE.MeshStandardMaterial({
-      color: 0x0c0518,
-      roughness: 0.5,
-      metalness: 0.7
-    });
-    const cyanGlowMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-    const redGlowMat = new THREE.MeshBasicMaterial({ color: 0xff003c });
-
-    function createCyberToriiGate(index) {
-      const gate = new THREE.Group();
-      const pillarOffset = 10.2;
-      const pillarHeight = 14.5;
-
-      // Twin Crimson Pillars
-      const pillarGeo = new THREE.CylinderGeometry(0.55, 0.68, pillarHeight, 12);
-      const leftPillar = new THREE.Mesh(pillarGeo, toriiRedMat);
-      leftPillar.position.set(-pillarOffset, pillarHeight / 2, 0);
-      const rightPillar = new THREE.Mesh(pillarGeo, toriiRedMat);
-      rightPillar.position.set(pillarOffset, pillarHeight / 2, 0);
-      gate.add(leftPillar, rightPillar);
-
-      // Dark Cyber Pedestals (Nemaki)
-      const baseGeo = new THREE.BoxGeometry(2.1, 2.2, 2.1);
-      const lBase = new THREE.Mesh(baseGeo, toriiDarkMat);
-      lBase.position.set(-pillarOffset, 1.1, 0);
-      const rBase = new THREE.Mesh(baseGeo, toriiDarkMat);
-      rBase.position.set(pillarOffset, 1.1, 0);
-      gate.add(lBase, rBase);
-
-      // Vertical Neon Cyber Strips along inside of pillars
-      const stripGeo = new THREE.BoxGeometry(0.14, 11.5, 0.14);
-      const lStrip = new THREE.Mesh(stripGeo, cyanGlowMat);
-      lStrip.position.set(-pillarOffset + 0.62, 7.6, 0.35);
-      const rStrip = new THREE.Mesh(stripGeo, cyanGlowMat);
-      rStrip.position.set(pillarOffset - 0.62, 7.6, 0.35);
-      gate.add(lStrip, rStrip);
-
-      // Lower Crossbeam (Nuki)
-      const nuki = new THREE.Mesh(new THREE.BoxGeometry(25.5, 1.05, 0.9), toriiRedMat);
-      nuki.position.set(0, 11.8, 0);
-      gate.add(nuki);
-
-      const nukiLaser = new THREE.Mesh(new THREE.BoxGeometry(25.8, 0.14, 1.0), redGlowMat);
-      nukiLaser.position.set(0, 11.25, 0);
-      gate.add(nukiLaser);
-
-      // Top Lintel (Kasagi) with Traditional Upturned Japanese Wing Tips
-      const kasagiCenter = new THREE.Mesh(new THREE.BoxGeometry(23.5, 1.3, 1.6), toriiRedMat);
-      kasagiCenter.position.set(0, 14.5, 0);
-      const kasagiCap = new THREE.Mesh(new THREE.BoxGeometry(24.0, 0.45, 1.8), toriiDarkMat);
-      kasagiCap.position.set(0, 15.35, 0);
-      gate.add(kasagiCenter, kasagiCap);
-
-      // Left & Right Upturned Tips
-      const tipGeo = new THREE.BoxGeometry(4.2, 1.15, 1.55);
-      const leftTip = new THREE.Mesh(tipGeo, toriiRedMat);
-      leftTip.position.set(-13.4, 15.05, 0);
-      leftTip.rotation.z = -0.24;
-      const rightTip = new THREE.Mesh(tipGeo, toriiRedMat);
-      rightTip.position.set(13.4, 15.05, 0);
-      rightTip.rotation.z = 0.24;
-      gate.add(leftTip, rightTip);
-
-      // Center Shrine Emblem (Gakuzuka) + Glowing Math Crystal
-      const tablet = new THREE.Mesh(new THREE.BoxGeometry(1.7, 2.3, 0.6), toriiDarkMat);
-      tablet.position.set(0, 13.15, 0);
-      const emblem = new THREE.Mesh(
-        new THREE.OctahedronGeometry(0.65, 0),
-        index % 2 === 0 ? cyanGlowMat : redGlowMat
-      );
-      emblem.position.set(0, 13.15, 0.55);
-      gate.add(tablet, emblem);
-
-      // Floating Neon Japanese Katakana Hologram Sign on Alternating Sides
-      const signMat = new THREE.MeshBasicMaterial({
-        map: signTextures[index % signTextures.length],
-        transparent: true,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      const signMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 10.5), signMat);
-      const side = index % 2 === 0 ? -1 : 1;
-      signMesh.position.set(side * (pillarOffset + 3.6), 7.8, 0.4);
-      signMesh.rotation.y = side * -0.25;
-      gate.add(signMesh);
-
-      gate.userData.emblem = emblem;
-      return gate;
-    }
-
-    const GATE_COUNT = 7;
-    const GATE_SPACING = 30;
-    const toriiGates = [];
-    for (let i = 0; i < GATE_COUNT; i++) {
-      const gate = createCyberToriiGate(i);
-      gate.position.z = -i * GATE_SPACING - 12;
-      scene.add(gate);
-      toriiGates.push(gate);
-    }
-
-    /* =========================================================================
-       7. FLOATING HOLOGRAPHIC MATH POLYHEDRA ("OUTMATH" ARTIFACTS)
-       ========================================================================= */
-    const mathNodes = [];
-    const polyGeos = [
-      new THREE.IcosahedronGeometry(1.4, 0),
-      new THREE.OctahedronGeometry(1.3, 0),
-      new THREE.TetrahedronGeometry(1.4, 0)
     ];
 
-    for (let i = 0; i < 8; i++) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0x00f0ff : 0xff0055,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.7
-      });
-      const mesh = new THREE.Mesh(polyGeos[i % polyGeos.length], mat);
-      const side = i % 2 === 0 ? -1 : 1;
-      mesh.position.set(
-        side * (13 + Math.random() * 14),
-        6 + Math.random() * 14,
-        -25 - i * 24
-      );
-      mesh.userData = {
-        baseY: mesh.position.y,
-        phase: Math.random() * Math.PI * 2,
-        rotSpeed: 0.012 + Math.random() * 0.015
-      };
-      scene.add(mesh);
-      mathNodes.push(mesh);
-    }
+    document.getElementById("eyebrow-el").textContent = TEASER_CONFIG.eyebrow;
+    document.getElementById("title-el").textContent = TEASER_CONFIG.title;
+    document.getElementById("tagline-el").textContent = TEASER_CONFIG.tagline;
 
     /* =========================================================================
-       8. CYBER SAKURA EMBERS, STARS & BLOOD DRAGON SKY LASERS
+       1. INITIALIZE 100% FREE REAL-WORLD 3D GLOBE + TERRAIN + 3D BUILDINGS
        ========================================================================= */
-    // Deep Cyber Starfield
-    const starCount = 1200;
-    const starPos = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-      starPos[i * 3] = (Math.random() - 0.5) * 340;
-      starPos[i * 3 + 1] = 18 + Math.random() * 120;
-      starPos[i * 3 + 2] = -60 - Math.random() * 240;
-    }
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-    const starField = new THREE.Points(
-      starGeo,
-      new THREE.PointsMaterial({ color: 0xffe0f5, size: 0.55, transparent: true, opacity: 0.8 })
-    );
-    scene.add(starField);
-
-    // Drifting Neon Sakura Petals / Crimson Embers
-    const petalCount = 420;
-    const petalPos = new Float32Array(petalCount * 3);
-    const petalColors = new Float32Array(petalCount * 3);
-    const cPink = new THREE.Color(0xff1e8e);
-    const cRed = new THREE.Color(0xff003c);
-    const cCyan = new THREE.Color(0x00f0ff);
-
-    for (let i = 0; i < petalCount; i++) {
-      petalPos[i * 3] = (Math.random() - 0.5) * 60;
-      petalPos[i * 3 + 1] = Math.random() * 28;
-      petalPos[i * 3 + 2] = -Math.random() * 180 + 20;
-
-      const pick = Math.random();
-      const c = pick < 0.55 ? cPink : (pick < 0.85 ? cRed : cCyan);
-      petalColors[i * 3] = c.r;
-      petalColors[i * 3 + 1] = c.g;
-      petalColors[i * 3 + 2] = c.b;
-    }
-
-    const petalGeo = new THREE.BufferGeometry();
-    petalGeo.setAttribute('position', new THREE.BufferAttribute(petalPos, 3));
-    petalGeo.setAttribute('color', new THREE.BufferAttribute(petalColors, 3));
-    const petalMat = new THREE.PointsMaterial({
-      size: 0.42,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.9,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
-    const cyberPetals = new THREE.Points(petalGeo, petalMat);
-    scene.add(cyberPetals);
-
-    // Blood Dragon Horizon Laser Beams
-    const lasers = [];
-    for (let i = 0; i < 4; i++) {
-      const lGeo = new THREE.BoxGeometry(0.18, 0.18, 38);
-      const lMat = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0xff003c : 0x00f0ff,
-        transparent: true,
-        opacity: 0.9
-      });
-      const beam = new THREE.Mesh(lGeo, lMat);
-      beam.position.set((Math.random() - 0.5) * 90, 14 + Math.random() * 24, -180 - Math.random() * 100);
-      beam.userData = { speed: 120 + Math.random() * 70 };
-      scene.add(beam);
-      lasers.push(beam);
-    }
-
-    /* =========================================================================
-       9. PROCEDURAL 80s BLOOD DRAGON SYNTHWAVE ENGINE (WEB AUDIO API)
-       ========================================================================= */
-    class BloodDragonSynth {
-      constructor() {
-        this.ctx = null;
-        this.playing = false;
-        this.timer = null;
-        this.step = 0;
-        this.boost = 0;
-        // Dark D-minor 80s bass progression (Hz): D2, F2, C2, A1
-        this.bassRoots = [73.42, 73.42, 87.31, 65.41];
-        this.arpNotes = [293.66, 349.23, 440.0, 523.25, 440.0, 349.23, 329.63, 261.63];
-      }
-
-      init() {
-        if (!this.ctx) {
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioCtx();
-        }
-        if (this.ctx.state === 'suspended') this.ctx.resume();
-      }
-
-      playBass(freq, time, duration) {
-        const osc = this.ctx.createOscillator();
-        const filter = this.ctx.createBiquadFilter();
-        const gain = this.ctx.createGain();
-
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(freq, time);
-
-        filter.type = 'lowpass';
-        const cutoff = 380 + this.boost * 950;
-        filter.frequency.setValueAtTime(cutoff, time);
-        filter.frequency.exponentialRampToValueAtTime(140, time + duration);
-        filter.Q.value = 4.5;
-
-        gain.gain.setValueAtTime(0.11, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(time);
-        osc.stop(time + duration);
-      }
-
-      playArp(freq, time, duration) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(freq, time);
-        gain.gain.setValueAtTime(0.032, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(time);
-        osc.stop(time + duration);
-      }
-
-      playKick(time) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.frequency.setValueAtTime(135, time);
-        osc.frequency.exponentialRampToValueAtTime(36, time + 0.13);
-        gain.gain.setValueAtTime(0.22, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.16);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(time);
-        osc.stop(time + 0.17);
-      }
-
-      playSnare(time) {
-        const bufferSize = this.ctx.sampleRate * 0.12;
-        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = buffer;
-
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = 1350;
-
-        const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(0.09, time);
-        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.ctx.destination);
-        noise.start(time);
-      }
-
-      toggle() {
-        this.init();
-        this.playing = !this.playing;
-        if (this.playing) {
-          // 118 BPM 16th-note sequencer (~127ms per step)
-          this.timer = setInterval(() => {
-            const now = this.ctx.currentTime;
-            const bar = Math.floor(this.step / 16) % this.bassRoots.length;
-            const root = this.bassRoots[bar];
-            const bassFreq = (this.step % 2 === 0) ? root : root * 2;
-
-            this.playBass(bassFreq, now, 0.11);
-
-            if (this.step % 4 === 0) this.playKick(now);
-            if (this.step % 8 === 4) this.playSnare(now);
-            if (this.step % 2 === 0) {
-              const arpFreq = this.arpNotes[(this.step / 2) % this.arpNotes.length];
-              this.playArp(arpFreq * (this.boost > 0.5 ? 2 : 1), now, 0.18);
+    const map = new maplibregl.Map({
+      container: "map",
+      center: [138.7274, 35.3606],
+      zoom: 2.1,
+      pitch: 18,
+      bearing: 0,
+      maxPitch: 82,
+      attributionControl: { compact: true },
+      style: {
+        version: 8,
+        projection: { type: "globe" },
+        sources: {
+          satellite: {
+            type: "raster",
+            tiles: [
+              "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            ],
+            tileSize: 256,
+            maxzoom: 18,
+            attribution: "Imagery © Esri"
+          },
+          terrainSource: {
+            type: "raster-dem",
+            tiles: [
+              "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
+            ],
+            encoding: "terrarium",
+            tileSize: 256,
+            maxzoom: 14,
+            attribution: "3D Terrain © AWS Open Data"
+          },
+          openfreemap: {
+            type: "vector",
+            url: "https://tiles.openfreemap.org/planet"
+          }
+        },
+        layers: [
+          {
+            id: "satellite-layer",
+            type: "raster",
+            source: "satellite",
+            paint: {
+              "raster-contrast": 0.06,
+              "raster-saturation": 0.08
             }
-
-            this.step++;
-          }, 127);
-        } else {
-          clearInterval(this.timer);
+          },
+          {
+            id: "3d-buildings",
+            source: "openfreemap",
+            "source-layer": "building",
+            type: "fill-extrusion",
+            minzoom: 13.5,
+            filter: ["!=", ["get", "hide_3d"], true],
+            paint: {
+              "fill-extrusion-color": [
+                "interpolate",
+                ["linear"],
+                ["coalesce", ["get", "render_height"], 0],
+                0, "#cbd5e1",
+                90, "#94a3b8",
+                220, "#60a5fa",
+                420, "#e0f2fe"
+              ],
+              "fill-extrusion-height": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                13.5, 0,
+                14.5, ["coalesce", ["get", "render_height"], 0]
+              ],
+              "fill-extrusion-base": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                13.5, 0,
+                14.5, ["coalesce", ["get", "render_min_height"], 0]
+              ],
+              "fill-extrusion-opacity": 0.78
+            }
+          }
+        ],
+        terrain: {
+          source: "terrainSource",
+          exaggeration: 1.45
+        },
+        sky: {
+          "sky-color": "#0b1a3d",
+          "sky-horizon-blend": 0.55,
+          "horizon-color": "#a8c7fa",
+          "horizon-fog-blend": 0.75,
+          "fog-color": "#6482ad",
+          "fog-ground-blend": 0.65,
+          "atmosphere-blend": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0, 1,
+            5, 1,
+            9, 0.2,
+            12, 0
+          ]
         }
-        return this.playing;
       }
-    }
-
-    const synth = new BloodDragonSynth();
+    });
 
     /* =========================================================================
-       10. INTERACTION, HYPERDRIVE, VHS TIMER & OPTIONAL COUNTDOWN
+       2. BUILD WAYPOINT BUTTONS & LIVE TELEMETRY
        ========================================================================= */
-    let mouseX = 0, mouseY = 0;
-    let isHyperdrive = false;
-    let boostLevel = 0;
+    const wpNav = document.getElementById("waypoint-nav");
+    SCENES.forEach((scene, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "wp-btn" + (idx === 0 ? " active" : "");
+      btn.textContent = scene.label;
+      btn.addEventListener("click", () => jumpToScene(idx));
+      wpNav.appendChild(btn);
+    });
 
-    function setHyperdrive(active) {
-      isHyperdrive = active;
-      document.body.classList.toggle('hyperdrive', active);
-      document.getElementById('hyperdrive-btn').classList.toggle('active', active);
+    function setActiveWaypoint(idx) {
+      document.querySelectorAll(".wp-btn").forEach((b, i) => {
+        b.classList.toggle("active", i === idx);
+      });
+      document.getElementById("loc-title").textContent = SCENES[idx].title;
     }
 
-    window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches[0]) {
-        mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
-      }
-    }, { passive: true });
-
-    // Hold canvas, button, or SPACE key for Hyperdrive
-    const hyperBtn = document.getElementById('hyperdrive-btn');
-    ['mousedown', 'touchstart'].forEach(ev => {
-      hyperBtn.addEventListener(ev, (e) => { e.preventDefault(); setHyperdrive(true); });
-      container.addEventListener(ev, () => setHyperdrive(true));
-    });
-    ['mouseup', 'mouseleave', 'touchend'].forEach(ev => {
-      hyperBtn.addEventListener(ev, () => setHyperdrive(false));
-      window.addEventListener(ev, () => setHyperdrive(false));
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') { e.preventDefault(); setHyperdrive(true); }
-    });
-    window.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') setHyperdrive(false);
-    });
-
-    const audioBtn = document.getElementById('audio-btn');
-    audioBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const on = synth.toggle();
-      audioBtn.textContent = on ? '❚❚ SYNTH: ON' : '▶ SYNTH: OFF';
-      audioBtn.classList.toggle('active', on);
-    });
-
-    // VHS Tape Running Timer
-    const startTimeMs = performance.now();
-    const tapeEl = document.getElementById('tape-timer');
-    const speedEl = document.getElementById('speed-readout');
-
-    // Optional Countdown Logic
-    const targetDateMs = TEASER_CONFIG.launchDate ? new Date(TEASER_CONFIG.launchDate).getTime() : null;
-    if (targetDateMs && !Number.isNaN(targetDateMs)) {
-      document.getElementById('countdown-box').classList.add('visible');
+    function updateTelemetry() {
+      const c = map.getCenter();
+      const latStr = `${Math.abs(c.lat).toFixed(4)}° ${c.lat >= 0 ? "N" : "S"}`;
+      const lngStr = `${Math.abs(c.lng).toFixed(4)}° ${c.lng >= 0 ? "E" : "W"}`;
+      document.getElementById("meta-coords").textContent = `${latStr}, ${lngStr}`;
+      document.getElementById("meta-zoom").textContent = `ZOOM ${map.getZoom().toFixed(1)}`;
+      const hdg = ((Math.round(map.getBearing()) % 360) + 360) % 360;
+      document.getElementById("meta-hdg").textContent = `HDG ${String(hdg).padStart(3, "0")}°`;
     }
 
-    function updateHUDTimers(now) {
-      const elapsedSec = Math.floor((now - startTimeMs) / 1000);
-      const hh = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
-      const mm = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
-      const ss = String(elapsedSec % 60).padStart(2, '0');
-      tapeEl.textContent = `${hh}:${mm}:${ss}`;
-
-      const mph = (88.0 + boostLevel * 211.7).toFixed(1);
-      speedEl.textContent = `${mph} MPH`;
-
-      if (targetDateMs) {
-        const diff = Math.max(0, targetDateMs - Date.now());
-        document.getElementById('cd-d').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
-        document.getElementById('cd-h').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-        document.getElementById('cd-m').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-        document.getElementById('cd-s').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-      }
-    }
+    map.on("move", updateTelemetry);
 
     /* =========================================================================
-       11. MAIN 60FPS ANIMATION LOOP
+       3. ENDLESS CINEMATIC AUTOPILOT LOOP (FLY -> ORBIT -> NEXT LOCATION)
        ========================================================================= */
-    let lastTime = performance.now();
-    let worldScroll = 0;
+    let currentIdx = 0;
+    let autopilot = true;
+    let orbitRaf = null;
+    let tourId = 0;
 
-    function animate(now) {
-      requestAnimationFrame(animate);
-
-      const dt = Math.min(0.05, (now - lastTime) / 1000);
-      lastTime = now;
-      const elapsed = (now - startTimeMs) / 1000;
-
-      // Smooth Hyperdrive Acceleration
-      const targetBoost = isHyperdrive ? 1 : 0;
-      boostLevel += (targetBoost - boostLevel) * Math.min(1, dt * 6);
-      synth.boost = boostLevel;
-
-      const forwardSpeed = 24 + boostLevel * 62;
-      worldScroll += forwardSpeed * dt;
-
-      // Update Shaders
-      sunUniforms.uTime.value = elapsed;
-      sunUniforms.uBoost.value = boostLevel;
-      gridUniforms.uOffset.value = worldScroll;
-      gridUniforms.uBoost.value = boostLevel;
-
-      // Scroll Canyon Mountain Chunks Seamlessly
-      for (const chunk of canyonChunks) {
-        chunk.position.z += forwardSpeed * dt;
-        if (chunk.position.z > CANYON_LENGTH * 0.65) {
-          chunk.position.z -= CANYON_LENGTH * 2;
-        }
+    function stopOrbit() {
+      if (orbitRaf) {
+        cancelAnimationFrame(orbitRaf);
+        orbitRaf = null;
       }
-
-      // Scroll Japanese Torii Gates Toward Camera
-      const totalGateSpan = GATE_COUNT * GATE_SPACING;
-      for (const gate of toriiGates) {
-        gate.position.z += forwardSpeed * dt;
-        gate.userData.emblem.rotation.y += dt * (1.8 + boostLevel * 4.5);
-        gate.userData.emblem.rotation.x += dt * 0.9;
-        if (gate.position.z > 24) {
-          gate.position.z -= totalGateSpan;
-        }
-      }
-
-      // Animate Floating Math Polyhedra
-      for (const node of mathNodes) {
-        node.position.z += forwardSpeed * 0.65 * dt;
-        node.position.y = node.userData.baseY + Math.sin(elapsed * 1.8 + node.userData.phase) * 1.6;
-        node.rotation.x += node.userData.rotSpeed * (1 + boostLevel * 2);
-        node.rotation.y += node.userData.rotSpeed * 1.3;
-        if (node.position.z > 24) {
-          node.position.z = -190;
-        }
-      }
-
-      // Animate Drifting Cyber-Sakura Petals
-      const pArr = petalGeo.attributes.position.array;
-      for (let i = 0; i < petalCount; i++) {
-        const ix = i * 3;
-        pArr[ix] -= (2.2 + boostLevel * 4) * dt;
-        pArr[ix + 1] -= 1.8 * dt;
-        pArr[ix + 2] += forwardSpeed * 0.85 * dt;
-
-        if (pArr[ix + 2] > 24 || pArr[ix + 1] < 0) {
-          pArr[ix] = (Math.random() - 0.5) * 65 + 10;
-          pArr[ix + 1] = 16 + Math.random() * 16;
-          pArr[ix + 2] = -140 - Math.random() * 50;
-        }
-      }
-      petalGeo.attributes.position.needsUpdate = true;
-
-      // Blood Dragon Horizon Lasers
-      for (const beam of lasers) {
-        beam.position.z += (beam.userData.speed + boostLevel * 120) * dt;
-        if (beam.position.z > 40) {
-          beam.position.z = -240 - Math.random() * 140;
-          beam.position.x = (Math.random() - 0.5) * 95;
-          beam.position.y = 14 + Math.random() * 24;
-        }
-      }
-
-      // Dynamic Camera Sway, Banking & Warp FOV
-      const targetCamX = mouseX * 3.8;
-      const targetCamY = 4.2 - mouseY * 1.6 + Math.sin(elapsed * 2.2) * 0.16;
-      camera.position.x += (targetCamX - camera.position.x) * Math.min(1, dt * 4.5);
-      camera.position.y += (targetCamY - camera.position.y) * Math.min(1, dt * 4.5);
-      camera.rotation.z = -camera.position.x * 0.018;
-      camera.lookAt(camera.position.x * 0.35, 6.2, -90);
-
-      const targetFov = 68 + boostLevel * 22;
-      if (Math.abs(camera.fov - targetFov) > 0.05) {
-        camera.fov += (targetFov - camera.fov) * Math.min(1, dt * 6);
-        camera.updateProjectionMatrix();
-      }
-
-      // Pulse Lights
-      cyanPulseLight.intensity = 45 + Math.sin(elapsed * 4.5) * 15 + boostLevel * 35;
-      crimsonPulseLight.intensity = 60 + Math.cos(elapsed * 3.2) * 20 + boostLevel * 45;
-
-      updateHUDTimers(now);
-      renderer.render(scene, camera);
     }
 
-    requestAnimationFrame(animate);
+    function updateAutopilotUI() {
+      const btn = document.getElementById("autopilot-btn");
+      const label = document.getElementById("mode-label");
+      btn.textContent = autopilot ? "Autopilot: ON" : "Autopilot: PAUSED";
+      btn.classList.toggle("active", autopilot);
+      label.textContent = autopilot
+        ? "LIVE 3D EARTH // AUTOPILOT"
+        : "MANUAL CAMERA // DRAG TO EXPLORE";
+    }
 
-    // Responsive Resize Handler
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    function flyToScene(idx, activeTourId) {
+      if (!autopilot || activeTourId !== tourId) return;
+      stopOrbit();
+      currentIdx = idx;
+      const s = SCENES[idx];
+      setActiveWaypoint(idx);
+
+      map.flyTo({
+        center: s.center,
+        zoom: s.zoom,
+        pitch: s.pitch,
+        bearing: s.bearing,
+        speed: 0.42,
+        curve: 1.55,
+        essential: true
+      });
+
+      map.once("moveend", () => {
+        if (!autopilot || activeTourId !== tourId) return;
+        startCinematicOrbit(s.orbitSeconds, activeTourId);
+      });
+    }
+
+    function startCinematicOrbit(seconds, activeTourId) {
+      const startTime = performance.now();
+      let lastFrame = startTime;
+
+      function step(now) {
+        if (!autopilot || activeTourId !== tourId) return;
+        const dt = (now - lastFrame) / 1000;
+        lastFrame = now;
+
+        // Smooth 7.5 degrees/sec drone-style orbit around landmark
+        map.setBearing(map.getBearing() + dt * 7.5);
+
+        if ((now - startTime) / 1000 >= seconds) {
+          const nextIdx = (currentIdx + 1) % SCENES.length;
+          flyToScene(nextIdx, activeTourId);
+          return;
+        }
+        orbitRaf = requestAnimationFrame(step);
+      }
+
+      orbitRaf = requestAnimationFrame(step);
+    }
+
+    function jumpToScene(idx) {
+      tourId++;
+      autopilot = true;
+      updateAutopilotUI();
+      stopOrbit();
+      map.stop();
+      flyToScene(idx, tourId);
+    }
+
+    function pauseAutopilot() {
+      if (!autopilot) return;
+      autopilot = false;
+      tourId++;
+      stopOrbit();
+      map.stop();
+      updateAutopilotUI();
+    }
+
+    // Pause autopilot automatically when visitor grabs or zooms the 3D globe
+    map.on("dragstart", pauseAutopilot);
+    map.on("wheel", pauseAutopilot);
+
+    document.getElementById("autopilot-btn").addEventListener("click", () => {
+      if (autopilot) {
+        pauseAutopilot();
+      } else {
+        jumpToScene(currentIdx);
+      }
+    });
+
+    document.getElementById("explore-btn").addEventListener("click", (e) => {
+      const hidden = document.body.classList.toggle("explore-mode");
+      e.target.textContent = hidden ? "Show Title" : "Free Explore";
+      e.target.classList.toggle("active", hidden);
+    });
+
+    // Launch dive from space once map loads
+    map.on("load", () => {
+      updateTelemetry();
+      setTimeout(() => {
+        flyToScene(0, ++tourId);
+      }, 1100);
     });
   </script>
 </body>
