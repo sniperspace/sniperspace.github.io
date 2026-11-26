@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#140f0c" />
+  <meta name="theme-color" content="#0d1024" />
   <meta name="description" content="OUTMATH — Coming Soon | By Tetheris App Studios" />
   <title>OUTMATH — Coming Soon</title>
 
@@ -13,11 +13,10 @@
 
   <style>
     :root {
-      --text-primary: #faf6f0;
-      --text-muted: rgba(250, 246, 240, 0.76);
-      --glass-bg: rgba(16, 12, 10, 0.48);
-      --glass-border: rgba(255, 244, 230, 0.2);
-      --vermilion: #e04622;
+      --text-main: #fdfbff;
+      --text-soft: rgba(250, 246, 255, 0.78);
+      --glass-bg: rgba(14, 15, 32, 0.36);
+      --glass-border: rgba(255, 255, 255, 0.22);
     }
 
     * {
@@ -32,36 +31,34 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #140d09;
-      color: var(--text-primary);
+      background: #0c0e21;
+      color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    #scene-container {
+    #suzume-canvas {
       position: fixed;
       inset: 0;
-      z-index: 1;
       width: 100%;
       height: 100%;
-      cursor: grab;
-    }
-    #scene-container:active {
-      cursor: grabbing;
+      display: block;
+      z-index: 1;
+      cursor: pointer;
     }
 
-    /* Subtle 35mm Cinema Vignette */
+    /* Subtle Anamorphic Anime Film Vignette */
     .cinema-vignette {
       position: fixed;
       inset: 0;
       z-index: 2;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 48%, transparent 38%, rgba(10, 7, 5, 0.65) 100%),
-        linear-gradient(180deg, rgba(10, 7, 6, 0.42) 0%, transparent 20%, transparent 76%, rgba(10, 7, 6, 0.78) 100%);
+        radial-gradient(circle at 50% 45%, transparent 42%, rgba(8, 7, 22, 0.52) 100%),
+        linear-gradient(180deg, rgba(10, 10, 28, 0.32) 0%, transparent 18%, transparent 80%, rgba(8, 8, 22, 0.62) 100%);
     }
 
-    /* Minimalist Cinema HUD Overlay */
+    /* Minimalist Floating HUD */
     .hud {
       position: fixed;
       inset: 0;
@@ -81,7 +78,7 @@
       flex-wrap: wrap;
     }
 
-    .location-badge {
+    .realm-pill {
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -91,34 +88,39 @@
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      font-size: 0.74rem;
-      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--text-primary);
-      transition: opacity 0.4s ease;
+      transition: opacity 0.45s ease;
     }
 
-    .badge-dot {
+    .realm-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--vermilion);
-      box-shadow: 0 0 10px rgba(224, 70, 34, 0.95);
+      background: #ffd3a5;
+      box-shadow: 0 0 12px #ffd3a5;
+      animation: starPulse 2.4s ease-in-out infinite;
     }
 
-    .top-controls {
+    @keyframes starPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.8); }
+    }
+
+    .top-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       pointer-events: auto;
     }
 
-    .pill-btn {
+    .glass-btn {
       font-family: 'Inter', sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 500;
       letter-spacing: 0.06em;
-      color: var(--text-primary);
+      color: var(--text-main);
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 999px;
@@ -126,1108 +128,208 @@
       cursor: pointer;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      transition: background 0.2s ease, border-color 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
     }
 
-    .pill-btn:hover {
-      background: rgba(255, 245, 235, 0.18);
-      border-color: rgba(255, 245, 235, 0.45);
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
     }
 
-    .pill-btn.active {
-      background: rgba(250, 246, 240, 0.94);
-      color: #140f0c;
-      border-color: #faf6f0;
+    .glass-btn.active {
+      background: rgba(255, 255, 255, 0.92);
+      color: #101226;
+      border-color: #ffffff;
     }
 
-    /* Center Hero Title Lockup */
+    /* Center Hero Lockup */
     .hero-center {
       margin: auto;
       text-align: center;
       max-width: 780px;
       padding: 0 16px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(-6vh);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
     body.zen-mode .hero-center,
-    body.zen-mode .location-badge,
-    body.zen-mode .hud-bottom-meta {
+    body.zen-mode .realm-pill,
+    body.zen-mode .hud-hint {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-8vh);
     }
 
     .jp-kicker {
       font-family: 'Noto Serif JP', serif;
-      font-size: clamp(0.85rem, 1.9vw, 1.1rem);
+      font-size: clamp(0.82rem, 1.8vw, 1.05rem);
       font-weight: 400;
-      letter-spacing: 0.55em;
-      padding-left: 0.55em;
-      color: rgba(255, 234, 214, 0.95);
-      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
-      margin-bottom: 14px;
+      letter-spacing: 0.52em;
+      padding-left: 0.52em;
+      color: rgba(255, 240, 245, 0.94);
+      text-shadow: 0 2px 18px rgba(15, 10, 38, 0.75);
+      margin-bottom: 12px;
     }
 
     .game-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(3.1rem, 10.5vw, 7rem);
+      font-size: clamp(3rem, 10vw, 6.8rem);
       font-weight: 700;
       letter-spacing: 0.22em;
       padding-left: 0.22em;
       line-height: 1.02;
       color: #ffffff;
       text-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.8),
-        0 2px 12px rgba(0, 0, 0, 0.65);
-      margin-bottom: 18px;
+        0 6px 34px rgba(18, 12, 46, 0.65),
+        0 0 22px rgba(255, 215, 235, 0.35);
+      margin-bottom: 16px;
     }
 
     .coming-row {
       display: inline-flex;
       align-items: center;
       gap: 18px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
-    .line-sep {
+    .hairline {
       width: clamp(28px, 6vw, 72px);
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 240, 225, 0.78));
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85));
     }
-    .line-sep.right {
-      background: linear-gradient(90deg, rgba(255, 240, 225, 0.78), transparent);
+    .hairline.right {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), transparent);
     }
 
     .coming-text {
-      font-size: clamp(0.82rem, 1.8vw, 1.05rem);
+      font-size: clamp(0.8rem, 1.8vw, 1.02rem);
       font-weight: 500;
       letter-spacing: 0.48em;
       padding-left: 0.48em;
       text-transform: uppercase;
-      color: #fff6ee;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+      color: #ffffff;
+      text-shadow: 0 2px 14px rgba(15, 10, 35, 0.85);
     }
 
     .tagline {
-      font-size: clamp(0.88rem, 1.7vw, 1.02rem);
+      font-size: clamp(0.86rem, 1.6vw, 1rem);
       font-weight: 300;
-      color: var(--text-muted);
+      color: var(--text-soft);
       max-width: 480px;
       margin: 0 auto;
       line-height: 1.65;
-      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.95);
+      text-shadow: 0 2px 16px rgba(12, 10, 32, 0.9);
     }
 
-    /* Bottom Bar with Studio Credit & Atmosphere Controls */
+    /* Bottom Footer with Studio Credit */
     .hud-bottom {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: end;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .hud-bottom-meta {
-      font-size: 0.7rem;
-      letter-spacing: 0.13em;
+    .hud-hint {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(250, 246, 240, 0.66);
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
-      transition: opacity 0.4s ease;
+      color: rgba(255, 255, 255, 0.65);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85);
+      transition: opacity 0.45s ease;
     }
 
     .studio-credit {
       text-align: center;
-      font-size: clamp(0.74rem, 1.4vw, 0.84rem);
+      font-size: clamp(0.75rem, 1.4vw, 0.86rem);
       font-weight: 500;
-      letter-spacing: 0.22em;
-      padding-left: 0.22em;
+      letter-spacing: 0.24em;
+      padding-left: 0.24em;
       text-transform: uppercase;
-      color: rgba(255, 244, 232, 0.92);
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
-      padding-bottom: 6px;
+      color: rgba(255, 250, 255, 0.95);
+      text-shadow: 0 2px 16px rgba(10, 8, 28, 0.95);
     }
 
-    .mood-bar {
+    .progress-wrap {
       justify-self: end;
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      pointer-events: auto;
-      padding: 5px;
-      border-radius: 999px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      align-items: center;
+      gap: 10px;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
     }
 
-    .mood-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.73rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      background: transparent;
-      border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+    .door-progress-bar {
+      width: 76px;
+      height: 3px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.22);
+      overflow: hidden;
     }
 
-    .mood-btn:hover {
-      color: #ffffff;
+    .door-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a7d8ff, #ffd1dc);
+      border-radius: 99px;
     }
 
-    .mood-btn.active {
-      background: #faf6f0;
-      color: #140f0c;
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 820px) {
       .hud-bottom {
         grid-template-columns: 1fr;
         justify-items: center;
         text-align: center;
-        gap: 10px;
+        gap: 8px;
       }
-      .mood-bar {
+      .progress-wrap {
         justify-self: center;
+        order: 1;
+      }
+      .studio-credit {
+        order: 2;
+      }
+      .hud-hint {
+        order: 3;
       }
       .hud-top {
         justify-content: center;
       }
-      .hud-bottom-meta {
-        order: 3;
-      }
-      .studio-credit {
-        order: 2;
-        padding-bottom: 0;
-      }
-      .mood-bar {
-        order: 1;
+      .hero-center {
+        transform: translateY(-4vh);
       }
     }
   </style>
 </head>
 <body>
 
-  <div id="scene-container"></div>
+  <canvas id="suzume-canvas"></canvas>
   <div class="cinema-vignette"></div>
 
   <div class="hud">
     <header class="hud-top">
-      <div class="location-badge">
-        <span class="badge-dot"></span>
-        <span id="loc-badge-text">KYOTO // SENBON TORII PATH</span>
+      <div class="realm-pill">
+        <span class="realm-dot" id="realm-dot"></span>
+        <span id="realm-name">EVER-AFTER TWILIGHT // 常世</span>
       </div>
 
-      <div class="top-controls">
-        <button class="pill-btn" id="pause-btn">Pause Walk</button>
-        <button class="pill-btn" id="audio-btn">Sound: Off</button>
-        <button class="pill-btn" id="zen-btn">Hide Title</button>
+      <div class="top-actions">
+        <button class="glass-btn" id="next-door-btn">Next Door ➔</button>
+        <button class="glass-btn" id="audio-btn">Sound: Off</button>
+        <button class="glass-btn" id="zen-btn">Hide Title</button>
       </div>
     </header>
 
     <main class="hero-center">
-      <div class="jp-kicker" id="jp-kicker">京都・千本鳥居</div>
+      <div class="jp-kicker" id="jp-kicker">扉の向こう側へ</div>
       <h1 class="game-title" id="game-title">OUTMATH</h1>
       <div class="coming-row">
-        <span class="line-sep"></span>
+        <span class="hairline"></span>
         <span class="coming-text" id="coming-text">COMING SOON</span>
-        <span class="line-sep right"></span>
+        <span class="hairline right"></span>
       </div>
       <p class="tagline" id="tagline-text">
-        Every gate leads deeper. Calculate the path ahead.
+        Beyond every open door lies a new equation waiting to be solved.
       </p>
     </main>
 
-    <footer class="hud-bottom">
-      <div class="hud-bottom-meta">
-        MOVE TO LOOK • HOLD [SPACE] TO WALK FASTER
-      </div>
-
-      <div class="studio-credit" id="studio-credit">
-        By Tetheris App Studios
-      </div>
-
-      <div class="mood-bar" id="mood-bar">
-        <button class="mood-btn active" data-mood="golden">Golden Hour</button>
-        <button class="mood-btn" data-mood="morning">Misty Morning</button>
-        <button class="mood-btn" data-mood="night">Rainy Night</button>
-      </div>
-    </footer>
-  </div>
-
-  <script type="module">
-    /* =========================================================================
-       ✨ 1. TEASER CONFIG — EDIT YOUR TEXT HERE
-       ========================================================================= */
-    const TEASER_CONFIG = {
-      title: "OUTMATH",
-      jpKicker: "京都・千本鳥居",
-      status: "COMING SOON",
-      tagline: "Every gate leads deeper. Calculate the path ahead.",
-      locationBadge: "KYOTO // SENBON TORII PATH",
-      studioCredit: "By Tetheris App Studios"
-    };
-
-    document.title = `${TEASER_CONFIG.title} — ${TEASER_CONFIG.status}`;
-    document.getElementById("game-title").textContent = TEASER_CONFIG.title;
-    document.getElementById("jp-kicker").textContent = TEASER_CONFIG.jpKicker;
-    document.getElementById("coming-text").textContent = TEASER_CONFIG.status;
-    document.getElementById("tagline-text").textContent = TEASER_CONFIG.tagline;
-    document.getElementById("loc-badge-text").textContent = TEASER_CONFIG.locationBadge;
-    document.getElementById("studio-credit").textContent = TEASER_CONFIG.studioCredit;
-
-    /* =========================================================================
-       2. SHARED INTERACTION STATE & KYOTO AMBIENT AUDIO ENGINE
-       ========================================================================= */
-    const state = {
-      pointerX: 0,
-      pointerY: 0,
-      isPaused: false,
-      isFastWalk: false,
-      mood: "golden"
-    };
-
-    class KyotoAudioEngine {
-      constructor() {
-        this.ctx = null;
-        this.enabled = false;
-        this.masterGain = null;
-        this.windFilter = null;
-        this.chimeTimer = null;
-        this.isRain = false;
-      }
-
-      init() {
-        if (this.ctx) return;
-        const AC = window.AudioContext || window.webkitAudioContext;
-        this.ctx = new AC();
-
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.value = 0.0;
-        this.masterGain.connect(this.ctx.destination);
-
-        const bufSize = this.ctx.sampleRate * 3;
-        const buffer = this.ctx.createBuffer(1, bufSize, this.ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        let b0 = 0, b1 = 0, b2 = 0;
-        for (let i = 0; i < bufSize; i++) {
-          const white = Math.random() * 2 - 1;
-          b0 = 0.997 * b0 + white * 0.029;
-          b1 = 0.985 * b1 + white * 0.032;
-          b2 = 0.950 * b2 + white * 0.048;
-          data[i] = (b0 + b1 + b2 + white * 0.02) * 0.35;
-        }
-
-        const noise = this.ctx.createBufferSource();
-        noise.buffer = buffer;
-        noise.loop = true;
-
-        this.windFilter = this.ctx.createBiquadFilter();
-        this.windFilter.type = "bandpass";
-        this.windFilter.frequency.value = 420;
-        this.windFilter.Q.value = 0.9;
-
-        noise.connect(this.windFilter);
-        this.windFilter.connect(this.masterGain);
-        noise.start();
-      }
-
-      playFurinChime() {
-        if (!this.enabled || !this.ctx) return;
-        const now = this.ctx.currentTime;
-        const freqs = [523.25, 587.33, 659.25, 880.0, 1046.5];
-        const f = freqs[Math.floor(Math.random() * freqs.length)];
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(f, now);
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.045, now + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
-        osc.connect(gain);
-        gain.connect(this.masterGain);
-        osc.start(now);
-        osc.stop(now + 2.9);
-      }
-
-      setRainMode(rainOn) {
-        this.isRain = rainOn;
-        if (this.windFilter && this.ctx) {
-          this.windFilter.frequency.setTargetAtTime(rainOn ? 1150 : 420, this.ctx.currentTime, 0.8);
-          this.windFilter.Q.setTargetAtTime(rainOn ? 0.45 : 0.9, this.ctx.currentTime, 0.8);
-        }
-      }
-
-      toggle() {
-        this.init();
-        if (this.ctx.state === "suspended") this.ctx.resume();
-        this.enabled = !this.enabled;
-        this.masterGain.gain.setTargetAtTime(this.enabled ? 0.35 : 0.0, this.ctx.currentTime, 0.4);
-        if (this.enabled) {
-          this.setRainMode(this.isRain);
-          this.playFurinChime();
-          this.chimeTimer = setInterval(() => {
-            if (Math.random() > 0.35) this.playFurinChime();
-          }, 4200);
-        } else {
-          clearInterval(this.chimeTimer);
-        }
-        return this.enabled;
-      }
-    }
-
-    const ambientAudio = new KyotoAudioEngine();
-    const container = document.getElementById("scene-container");
-
-    window.addEventListener("mousemove", (e) => {
-      state.pointerX = (e.clientX / window.innerWidth - 0.5) * 2;
-      state.pointerY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    window.addEventListener("touchmove", (e) => {
-      if (e.touches[0]) {
-        state.pointerX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
-        state.pointerY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
-      }
-    }, { passive: true });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "Space") { e.preventDefault(); state.isFastWalk = true; }
-    });
-    window.addEventListener("keyup", (e) => {
-      if (e.code === "Space") state.isFastWalk = false;
-    });
-
-    container.addEventListener("pointerdown", () => { state.isFastWalk = true; });
-    window.addEventListener("pointerup", () => { state.isFastWalk = false; });
-
-    document.getElementById("pause-btn").addEventListener("click", (e) => {
-      state.isPaused = !state.isPaused;
-      e.target.textContent = state.isPaused ? "Resume Walk" : "Pause Walk";
-      e.target.classList.toggle("active", state.isPaused);
-    });
-
-    document.getElementById("audio-btn").addEventListener("click", (e) => {
-      const on = ambientAudio.toggle();
-      e.target.textContent = on ? "Sound: On" : "Sound: Off";
-      e.target.classList.toggle("active", on);
-    });
-
-    document.getElementById("zen-btn").addEventListener("click", (e) => {
-      const zen = document.body.classList.toggle("zen-mode");
-      e.target.textContent = zen ? "Show Title" : "Hide Title";
-      e.target.classList.toggle("active", zen);
-    });
-
-    let onMoodChange = () => {};
-    document.querySelectorAll(".mood-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        state.mood = btn.dataset.mood;
-        document.querySelectorAll(".mood-btn").forEach((b) => {
-          b.classList.toggle("active", b.dataset.mood === state.mood);
-        });
-        ambientAudio.setRainMode(state.mood === "night");
-        onMoodChange(state.mood);
-      });
-    });
-
-    /* =========================================================================
-       3. MULTI-CDN THREE.JS LOADER (ZERO SINGLE-POINT-OF-FAILURE)
-       ========================================================================= */
-    async function loadThreeJS() {
-      const cdnList = [
-        "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js",
-        "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-      ];
-      for (const url of cdnList) {
-        try {
-          const mod = await import(url);
-          if (mod && mod.WebGLRenderer) return mod;
-        } catch (err) {
-          console.warn("CDN fallback:", url);
-        }
-      }
-      throw new Error("Three.js CDNs unreachable");
-    }
-
-    /* =========================================================================
-       4. PHOTOREALISTIC 3D KYOTO TORII CORRIDOR (THREE.JS ENGINE)
-       ========================================================================= */
-    function startThreeScene(THREE) {
-      const isMobile = window.innerWidth < 768;
-
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x432b1f);
-      scene.fog = new THREE.FogExp2(0x523424, 0.032);
-
-      const camera = new THREE.PerspectiveCamera(
-        58,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        130
-      );
-      camera.position.set(0, 1.72, 4);
-
-      const renderer = new THREE.WebGLRenderer({
-        antialias: !isMobile,
-        powerPreference: "high-performance"
-      });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap || THREE.PCFShadowMap;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.2;
-      container.appendChild(renderer.domElement);
-
-      /* --- Sky Gradient Dome --- */
-      const skyUniforms = {
-        uTopColor: { value: new THREE.Color(0x3a2b3d) },
-        uHorizonColor: { value: new THREE.Color(0xe8995a) }
-      };
-      const skyMat = new THREE.ShaderMaterial({
-        uniforms: skyUniforms,
-        side: THREE.BackSide,
-        depthWrite: false,
-        vertexShader: `
-          varying vec3 vWorldPos;
-          void main() {
-            vec4 wp = modelMatrix * vec4(position, 1.0);
-            vWorldPos = wp.xyz;
-            gl_Position = projectionMatrix * viewMatrix * wp;
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 uTopColor;
-          uniform vec3 uHorizonColor;
-          varying vec3 vWorldPos;
-          void main() {
-            float h = normalize(vWorldPos).y;
-            float t = clamp(pow(max(h, 0.0), 0.55), 0.0, 1.0);
-            vec3 col = mix(uHorizonColor, uTopColor, t);
-            gl_FragColor = vec4(col, 1.0);
-          }
-        `
-      });
-      const skyDome = new THREE.Mesh(new THREE.SphereGeometry(95, 24, 16), skyMat);
-      scene.add(skyDome);
-
-      /* --- Procedural PBR Textures --- */
-      function makeVermilionWoodMaps(withKanji = false) {
-        const w = 512, h = 512;
-        const cCan = document.createElement("canvas");
-        cCan.width = w; cCan.height = h;
-        const ctx = cCan.getContext("2d");
-
-        const bCan = document.createElement("canvas");
-        bCan.width = w; bCan.height = h;
-        const bctx = bCan.getContext("2d");
-
-        const grad = ctx.createLinearGradient(0, 0, w, 0);
-        grad.addColorStop(0, "#c83817");
-        grad.addColorStop(0.5, "#e0481e");
-        grad.addColorStop(1, "#c43515");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
-
-        bctx.fillStyle = "#808080";
-        bctx.fillRect(0, 0, w, h);
-
-        for (let i = 0; i < 600; i++) {
-          const x = Math.random() * w;
-          const lw = 1 + Math.random() * 2.5;
-          const dark = Math.random() > 0.5;
-          ctx.fillStyle = dark
-            ? `rgba(60, 14, 4, ${0.06 + Math.random() * 0.09})`
-            : `rgba(255, 145, 95, ${0.05 + Math.random() * 0.06})`;
-          ctx.fillRect(x, 0, lw, h);
-          bctx.fillStyle = dark ? "rgba(40,40,40,0.22)" : "rgba(210,210,210,0.18)";
-          bctx.fillRect(x, 0, lw, h);
-        }
-
-        const weather = ctx.createLinearGradient(0, h * 0.72, 0, h);
-        weather.addColorStop(0, "rgba(22, 8, 4, 0)");
-        weather.addColorStop(1, "rgba(18, 6, 3, 0.42)");
-        ctx.fillStyle = weather;
-        ctx.fillRect(0, h * 0.72, w, h * 0.28);
-
-        if (withKanji) {
-          ctx.fillStyle = "rgba(18, 12, 10, 0.88)";
-          ctx.font = '600 40px "Noto Serif JP", serif';
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          const glyphs = ["奉", "納", "京", "都", "算", "術", "覚", "醒"];
-          for (let g = 0; g < glyphs.length; g++) {
-            ctx.fillText(glyphs[g], w * 0.5, 68 + g * 50);
-          }
-        }
-
-        const map = new THREE.CanvasTexture(cCan);
-        map.colorSpace = THREE.SRGBColorSpace;
-        map.wrapS = map.wrapT = THREE.RepeatWrapping;
-
-        const bumpMap = new THREE.CanvasTexture(bCan);
-        bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
-        return { map, bumpMap };
-      }
-
-      function makeFlagstoneMaps() {
-        const size = 512;
-        const cCan = document.createElement("canvas");
-        cCan.width = size; cCan.height = size;
-        const ctx = cCan.getContext("2d");
-
-        const rCan = document.createElement("canvas");
-        rCan.width = size; rCan.height = size;
-        const rctx = rCan.getContext("2d");
-
-        const bCan = document.createElement("canvas");
-        bCan.width = size; bCan.height = size;
-        const bctx = bCan.getContext("2d");
-
-        ctx.fillStyle = "#262c20";
-        ctx.fillRect(0, 0, size, size);
-        rctx.fillStyle = "#e6e6e6";
-        rctx.fillRect(0, 0, size, size);
-        bctx.fillStyle = "#181818";
-        bctx.fillRect(0, 0, size, size);
-
-        const rows = 6;
-        const rowH = size / rows;
-        for (let r = 0; r < rows; r++) {
-          const cols = 3 + (r % 2);
-          const colW = size / cols;
-          const offset = (r % 2) * (colW * 0.45);
-          for (let c = -1; c <= cols; c++) {
-            const sx = c * colW + offset + 5;
-            const sy = r * rowH + 5;
-            const sw = colW - 10;
-            const sh = rowH - 10;
-            const tone = 82 + Math.floor(Math.random() * 32);
-            ctx.fillStyle = `rgb(${tone}, ${tone + 1}, ${tone + 2})`;
-            ctx.fillRect(sx, sy, sw, sh);
-
-            for (let s = 0; s < 120; s++) {
-              const v = Math.random() > 0.5 ? 255 : 0;
-              ctx.fillStyle = `rgba(${v},${v},${v},0.06)`;
-              ctx.fillRect(sx + Math.random() * sw, sy + Math.random() * sh, 2, 2);
-            }
-
-            const damp = Math.random() > 0.45 ? 70 : 168;
-            rctx.fillStyle = `rgb(${damp},${damp},${damp})`;
-            rctx.fillRect(sx, sy, sw, sh);
-            bctx.fillStyle = "rgb(195,195,195)";
-            bctx.fillRect(sx, sy, sw, sh);
-          }
-        }
-
-        const leftMoss = ctx.createLinearGradient(0, 0, size * 0.2, 0);
-        leftMoss.addColorStop(0, "rgba(42, 74, 30, 0.85)");
-        leftMoss.addColorStop(1, "rgba(42, 74, 30, 0)");
-        ctx.fillStyle = leftMoss;
-        ctx.fillRect(0, 0, size * 0.2, size);
-
-        const rightMoss = ctx.createLinearGradient(size * 0.8, 0, size, 0);
-        rightMoss.addColorStop(0, "rgba(42, 74, 30, 0)");
-        rightMoss.addColorStop(1, "rgba(42, 74, 30, 0.85)");
-        ctx.fillStyle = rightMoss;
-        ctx.fillRect(size * 0.8, 0, size * 0.2, size);
-
-        const map = new THREE.CanvasTexture(cCan);
-        map.colorSpace = THREE.SRGBColorSpace;
-        map.wrapS = map.wrapT = THREE.RepeatWrapping;
-        map.repeat.set(1, 22);
-
-        const roughnessMap = new THREE.CanvasTexture(rCan);
-        roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
-        roughnessMap.repeat.set(1, 22);
-
-        const bumpMap = new THREE.CanvasTexture(bCan);
-        bumpMap.wrapS = bumpMap.wrapT = THREE.RepeatWrapping;
-        bumpMap.repeat.set(1, 22);
-
-        return { map, roughnessMap, bumpMap };
-      }
-
-      function makeGraniteTexture() {
-        const c = document.createElement("canvas");
-        c.width = 256; c.height = 256;
-        const ctx = c.getContext("2d");
-        ctx.fillStyle = "#686965";
-        ctx.fillRect(0, 0, 256, 256);
-        for (let i = 0; i < 2800; i++) {
-          const v = 58 + Math.floor(Math.random() * 88);
-          ctx.fillStyle = `rgb(${v},${v},${v - 2})`;
-          ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
-        }
-        for (let m = 0; m < 16; m++) {
-          ctx.fillStyle = "rgba(56, 84, 38, 0.26)";
-          ctx.beginPath();
-          ctx.arc(Math.random() * 256, Math.random() * 256, 8 + Math.random() * 16, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        const tex = new THREE.CanvasTexture(c);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-        return tex;
-      }
-
-      function makeBarkTexture() {
-        const c = document.createElement("canvas");
-        c.width = 256; c.height = 256;
-        const ctx = c.getContext("2d");
-        ctx.fillStyle = "#3c2c21";
-        ctx.fillRect(0, 0, 256, 256);
-        for (let i = 0; i < 360; i++) {
-          ctx.fillStyle = Math.random() > 0.5 ? "rgba(18,12,8,0.45)" : "rgba(95,70,50,0.28)";
-          ctx.fillRect(Math.random() * 256, 0, 2 + Math.random() * 4, 256);
-        }
-        const tex = new THREE.CanvasTexture(c);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-        return tex;
-      }
-
-      function makeSakuraPetalTexture() {
-        const c = document.createElement("canvas");
-        c.width = 64; c.height = 64;
-        const ctx = c.getContext("2d");
-        ctx.translate(32, 32);
-        const grad = ctx.createRadialGradient(0, 0, 2, 0, 0, 24);
-        grad.addColorStop(0, "rgba(255, 245, 248, 0.96)");
-        grad.addColorStop(0.65, "rgba(255, 198, 214, 0.9)");
-        grad.addColorStop(1, "rgba(244, 154, 178, 0)");
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.moveTo(0, -22);
-        ctx.bezierCurveTo(18, -14, 18, 14, 0, 22);
-        ctx.bezierCurveTo(-18, 14, -18, -14, 0, -22);
-        ctx.fill();
-        const tex = new THREE.CanvasTexture(c);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        return tex;
-      }
-
-      /* --- Lighting Rig --- */
-      const hemiLight = new THREE.HemisphereLight(0xffe4c7, 0x2c3824, 1.05);
-      scene.add(hemiLight);
-
-      const sunLight = new THREE.DirectionalLight(0xffbc78, 4.2);
-      sunLight.position.set(16, 16, -6);
-      sunLight.castShadow = true;
-      sunLight.shadow.mapSize.set(isMobile ? 1024 : 2048, isMobile ? 1024 : 2048);
-      sunLight.shadow.camera.near = 2;
-      sunLight.shadow.camera.far = 65;
-      sunLight.shadow.camera.left = -22;
-      sunLight.shadow.camera.right = 22;
-      sunLight.shadow.camera.top = 24;
-      sunLight.shadow.camera.bottom = -24;
-      sunLight.shadow.bias = -0.0005;
-      scene.add(sunLight);
-      scene.add(sunLight.target);
-      sunLight.target.position.set(0, 0, -14);
-
-      const corridorBounce = new THREE.PointLight(0xff844a, 3.2, 26, 1.5);
-      corridorBounce.position.set(0, 2.5, -2);
-      scene.add(corridorBounce);
-
-      const lanternPoolLights = [];
-      for (let i = 0; i < 4; i++) {
-        const pl = new THREE.PointLight(0xffaa55, 1.0, 13, 1.7);
-        pl.position.set(i % 2 === 0 ? -2.35 : 2.35, 1.75, -i * 8 - 3);
-        scene.add(pl);
-        lanternPoolLights.push(pl);
-      }
-
-      /* --- Shared Materials --- */
-      const woodPlain = makeVermilionWoodMaps(false);
-      const woodKanji = makeVermilionWoodMaps(true);
-      const stoneFloor = makeFlagstoneMaps();
-      const graniteTex = makeGraniteTexture();
-      const barkTex = makeBarkTexture();
-
-      const vermilionMat = new THREE.MeshStandardMaterial({
-        map: woodPlain.map,
-        bumpMap: woodPlain.bumpMap,
-        bumpScale: 0.015,
-        roughness: 0.4,
-        metalness: 0.04
-      });
-
-      const vermilionKanjiMat = new THREE.MeshStandardMaterial({
-        map: woodKanji.map,
-        bumpMap: woodKanji.bumpMap,
-        bumpScale: 0.018,
-        roughness: 0.42,
-        metalness: 0.04
-      });
-
-      const blackLacquerMat = new THREE.MeshStandardMaterial({
-        color: 0x181515,
-        roughness: 0.34,
-        metalness: 0.08
-      });
-
-      const goldTrimMat = new THREE.MeshStandardMaterial({
-        color: 0xd4a43f,
-        roughness: 0.32,
-        metalness: 0.72
-      });
-
-      const graniteMat = new THREE.MeshStandardMaterial({
-        map: graniteTex,
-        roughness: 0.84,
-        metalness: 0.02
-      });
-
-      const walkwayMat = new THREE.MeshStandardMaterial({
-        map: stoneFloor.map,
-        roughnessMap: stoneFloor.roughnessMap,
-        bumpMap: stoneFloor.bumpMap,
-        bumpScale: 0.04,
-        roughness: 0.74,
-        metalness: 0.05
-      });
-
-      const mossEarthMat = new THREE.MeshStandardMaterial({
-        color: 0x203019,
-        roughness: 0.96
-      });
-
-      const barkMat = new THREE.MeshStandardMaterial({
-        map: barkTex,
-        roughness: 0.92
-      });
-
-      const cedarFoliageMat = new THREE.MeshStandardMaterial({
-        color: 0x1a2e18,
-        roughness: 0.92
-      });
-
-      const bambooMat = new THREE.MeshStandardMaterial({
-        color: 0x426431,
-        roughness: 0.46
-      });
-
-      const lanternGlowMat = new THREE.MeshStandardMaterial({
-        color: 0xfff0d4,
-        emissive: 0xffa040,
-        emissiveIntensity: 1.5,
-        roughness: 0.8
-      });
-
-      /* --- Stone Walkway & Sloping Mountain Hillsides --- */
-      const walkway = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 110), walkwayMat);
-      walkway.rotation.x = -Math.PI / 2;
-      walkway.position.set(0, 0, -42);
-      walkway.receiveShadow = true;
-      scene.add(walkway);
-
-      const curbGeo = new THREE.BoxGeometry(0.34, 0.24, 110);
-      const leftCurb = new THREE.Mesh(curbGeo, graniteMat);
-      leftCurb.position.set(-2.32, 0.12, -42);
-      leftCurb.receiveShadow = true;
-      const rightCurb = new THREE.Mesh(curbGeo, graniteMat);
-      rightCurb.position.set(2.32, 0.12, -42);
-      rightCurb.receiveShadow = true;
-      scene.add(leftCurb, rightCurb);
-
-      const bankGeo = new THREE.PlaneGeometry(24, 110);
-      bankGeo.rotateX(-Math.PI / 2);
-
-      const leftBank = new THREE.Mesh(bankGeo, mossEarthMat);
-      leftBank.rotation.z = -0.26;
-      leftBank.position.set(-14.0, 3.1, -42);
-      leftBank.receiveShadow = true;
-
-      const rightBank = new THREE.Mesh(bankGeo, mossEarthMat);
-      rightBank.rotation.z = 0.26;
-      rightBank.position.set(14.0, 3.1, -42);
-      rightBank.receiveShadow = true;
-      scene.add(leftBank, rightBank);
-
-      /* --- Infinite Fushimi Inari Myojin Torii Corridor --- */
-      const sharedToriiGeos = {
-        pedestal: new THREE.CylinderGeometry(0.24, 0.28, 0.28, 8),
-        nemaki: new THREE.CylinderGeometry(0.185, 0.205, 0.72, 14),
-        pillar: new THREE.CylinderGeometry(0.155, 0.182, 3.55, 14),
-        nuki: new THREE.BoxGeometry(4.45, 0.22, 0.16),
-        kusabi: new THREE.BoxGeometry(0.38, 0.08, 0.22),
-        shimaki: new THREE.BoxGeometry(4.75, 0.18, 0.24),
-        kasagiCenter: new THREE.BoxGeometry(4.55, 0.2, 0.34),
-        kasagiTip: new THREE.BoxGeometry(0.85, 0.19, 0.33),
-        plaque: new THREE.BoxGeometry(0.42, 0.62, 0.12),
-        plaqueBorder: new THREE.BoxGeometry(0.46, 0.66, 0.08)
-      };
-
-      function createToriiGate(index) {
-        const gate = new THREE.Group();
-        const halfW = 1.68;
-        const pMat = index % 2 === 0 ? vermilionKanjiMat : vermilionMat;
-
-        for (const side of [-1, 1]) {
-          const x = side * halfW;
-          const ped = new THREE.Mesh(sharedToriiGeos.pedestal, graniteMat);
-          ped.position.set(x, 0.14, 0);
-          ped.castShadow = true;
-          ped.receiveShadow = true;
-          gate.add(ped);
-
-          const nemaki = new THREE.Mesh(sharedToriiGeos.nemaki, blackLacquerMat);
-          nemaki.position.set(x, 0.56, 0);
-          nemaki.castShadow = true;
-          nemaki.receiveShadow = true;
-          gate.add(nemaki);
-
-          const pillar = new THREE.Mesh(sharedToriiGeos.pillar, pMat);
-          pillar.position.set(x - side * 0.05, 2.38, 0);
-          pillar.rotation.z = side * 0.025;
-          pillar.rotation.y = side > 0 ? Math.PI : 0;
-          pillar.castShadow = true;
-          pillar.receiveShadow = true;
-          gate.add(pillar);
-
-          const kusabi = new THREE.Mesh(sharedToriiGeos.kusabi, blackLacquerMat);
-          kusabi.position.set(x - side * 0.07, 3.45, 0);
-          gate.add(kusabi);
-        }
-
-        const nuki = new THREE.Mesh(sharedToriiGeos.nuki, vermilionMat);
-        nuki.position.set(0, 3.45, 0);
-        nuki.castShadow = true;
-        nuki.receiveShadow = true;
-        gate.add(nuki);
-
-        const shimaki = new THREE.Mesh(sharedToriiGeos.shimaki, vermilionMat);
-        shimaki.position.set(0, 4.08, 0);
-        shimaki.castShadow = true;
-        gate.add(shimaki);
-
-        const kasagi = new THREE.Mesh(sharedToriiGeos.kasagiCenter, blackLacquerMat);
-        kasagi.position.set(0, 4.24, 0);
-        kasagi.castShadow = true;
-        gate.add(kasagi);
-
-        const leftTip = new THREE.Mesh(sharedToriiGeos.kasagiTip, blackLacquerMat);
-        leftTip.position.set(-2.55, 4.35, 0);
-        leftTip.rotation.z = -0.26;
-        leftTip.castShadow = true;
-        gate.add(leftTip);
-
-        const rightTip = new THREE.Mesh(sharedToriiGeos.kasagiTip, blackLacquerMat);
-        rightTip.position.set(2.55, 4.35, 0);
-        rightTip.rotation.z = 0.26;
-        rightTip.castShadow = true;
-        gate.add(rightTip);
-
-        const border = new THREE.Mesh(sharedToriiGeos.plaqueBorder, goldTrimMat);
-        border.position.set(0, 3.76, 0);
-        const plaque = new THREE.Mesh(sharedToriiGeos.plaque, blackLacquerMat);
-        plaque.position.set(0, 3.76, 0.01);
-        gate.add(border, plaque);
-
-        return gate;
-      }
-
-      const GATE_COUNT = 26;
-      const GATE_SPACING = 2.65;
-      const CORRIDOR_SPAN = GATE_COUNT * GATE_SPACING;
-      const toriiGates = [];
-
-      for (let i = 0; i < GATE_COUNT; i++) {
-        const gate = createToriiGate(i);
-        gate.position.z = 6 - i * GATE_SPACING;
-        scene.add(gate);
-        toriiGates.push(gate);
-      }
-
-      /* --- Stone Lanterns (Toro) --- */
-      const toroGeos = {
-        base: new THREE.BoxGeometry(0.56, 0.22, 0.56),
-        post: new THREE.CylinderGeometry(0.11, 0.14, 1.05, 8),
-        platform: new THREE.BoxGeometry(0.5, 0.14, 0.5),
-        firebox: new THREE.CylinderGeometry(0.17, 0.17, 0.34, 6),
-        roof: new THREE.ConeGeometry(0.48, 0.28, 6),
-        finial: new THREE.SphereGeometry(0.07, 8, 8)
-      };
-
-      const LANTERN_COUNT = 10;
-      const LANTERN_SPACING = CORRIDOR_SPAN / LANTERN_COUNT;
-      const stoneLanterns = [];
-      for (let i = 0; i < LANTERN_COUNT; i++) {
-        const toro = new THREE.Group();
-        const base = new THREE.Mesh(toroGeos.base, graniteMat); base.position.y = 0.11;
-        const post = new THREE.Mesh(toroGeos.post, graniteMat); post.position.y = 0.72;
-        const plat = new THREE.Mesh(toroGeos.platform, graniteMat); plat.position.y = 1.3;
-        const fire = new THREE.Mesh(toroGeos.firebox, lanternGlowMat); fire.position.y = 1.54;
-        const roof = new THREE.Mesh(toroGeos.roof, graniteMat); roof.position.y = 1.84;
-        const finial = new THREE.Mesh(toroGeos.finial, graniteMat); finial.position.y = 2.02;
-        toro.add(base, post, plat, fire, roof, finial);
-        const side = i % 2 === 0 ? -1 : 1;
-        toro.position.set(side * 2.48, 0.15, 2 - i * LANTERN_SPACING);
-        scene.add(toro);
-        stoneLanterns.push(toro);
-      }
-
-      /* --- Kyoto Cedar Trees & Bamboo --- */
-      const trunkGeo = new THREE.CylinderGeometry(0.24, 0.42, 13, 8);
-      const crownGeo1 = new THREE.ConeGeometry(2.6, 5.2, 7);
-      const crownGeo2 = new THREE.ConeGeometry(2.0, 4.4, 7);
-      const bambooGeo = new THREE.CylinderGeometry(0.045, 0.055, 11, 6);
-
-      const forestProps = [];
-      for (let i = 0; i < 42; i++) {
-        const side = i % 2 === 0 ? -1 : 1;
-        const isBamboo = i % 3 === 0;
-        const group = new THREE.Group();
-
-        if (isBamboo) {
-          for (let b = 0; b < 4; b++) {
-            const stalk = new THREE.Mesh(bambooGeo, bambooMat);
-            stalk.position.set((Math.random() - 0.5) * 0.9, 5.2, (Math.random() - 0.5) * 0.9);
-            stalk.rotation.z = (Math.random() - 0.5) * 0.08;
-            group.add(stalk);
-          }
-          group.userData = { isBamboo: true, phase: Math.random() * Math.PI * 2 };
-        } else {
-          const trunk = new THREE.Mesh(trunkGeo, barkMat); trunk.position.y = 6.2;
-          const c1 = new THREE.Mesh(crownGeo1, cedarFoliageMat); c1.position.y = 9.8;
-          const c2 = new THREE.Mesh(crownGeo2, cedarFoliageMat); c2.position.y = 12.6;
-          group.add(trunk, c1, c2);
-          const s = 0.8 + Math.random() * 0.55;
-          group.scale.set(s, s, s);
-          group.userData = { isBamboo: false, phase: 0 };
-        }
-
-        const dist = 3.5 + Math.random() * 8.5;
-        group.position.set(side * dist, (dist - 3) * 0.24, 6 - (i / 42) * CORRIDOR_SPAN);
-        scene.add(group);
-        forestProps.push(group);
-      }
-
-      /* --- Volumetric Sunbeams --- */
-      const rayShaderMat = new THREE.ShaderMaterial({
-        uniforms: {
-          uColor: { value: new THREE.Color(0xffd098) },
-          uOpacity: { value: 0.16 }
-        },
-        transparent: true,
-        depthWrite: false,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        vertexShader: `
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 uColor;
-          uniform float uOpacity;
-          varying vec2 vUv;
-          void main() {
-            float horiz = sin(vUv.x * 3.14159);
-            float vert = smoothstep(0.0, 0.35, vUv.y) * smoothstep(1.0, 0.2, vUv.y);
-            float alpha = pow(horiz, 1.8) * vert * uOpacity;
-            gl_FragColor = vec4(uColor, alpha);
-          }
-        `
-      });
-
-      const sunBeams = [];
-      const rayGeo = new THREE.PlaneGeometry(2.5, 8.8);
-      for (let i = 0; i < 8; i++) {
-        const beam = new THREE.Mesh(rayGeo, rayShaderMat);
-        beam.position.set(0.3, 2.7, -3 - i * 7.8);
-        beam.rotation.z = -0.52;
-        beam.rotation.y = 0.18;
-        scene.add(beam);
-        sunBeams.push(beam);
-      }
-
-      /* --- Sakura Petals & Rain --- */
-      const petalTex = makeSakuraPetalTexture();
-      const PETAL_COUNT = isMobile ? 160 : 280;
-      const petalPos = new Float32Array(PETAL_COUNT * 3);
-      const petalVel = [];
-      for (let i = 0; i < PETAL_COUNT; i++) {
-        petalPos[i * 3] = (Math.random() - 0.5) * 9;
-        petalPos[i * 3 + 1] = 0.3 + Math.random() * 5.2;
-        petalPos[i * 3 + 2] = 5 - Math.random() * 55;
-        petalVel.push({
-          vx: -0.25 - Math.random() * 0.3,
-          vy: -0.22 - Math.random() * 0.25,
-          sway: Math.random() * Math.PI * 2
-        });
-      }
-      const petalGeo = new THREE.BufferGeometry();
-      petalGeo.setAttribute("position", new THREE.BufferAttribute(petalPos, 3));
-      const sakuraSystem = new THREE.Points(
-        petalGeo,
-        new THREE.PointsMaterial({ map: petalTex, size: 0.18, transparent: true, opacity: 0.92, depthWrite: false })
-      );
-      scene.add(sakuraSystem);
-
-      const RAIN_COUNT = isMobile ? 350 : 650;
-      const rainPos = new Float32Array(RAIN_COUNT * 3);
-      for (let i = 0; i < RAIN_COUNT; i++) {
-        const side = Math.random() > 0.5 ? 1 : -1;
-        rainPos[i * 3] = side * (1.8 + Math.random() * 7.5);
-        rainPos[i * 3 + 1] = Math.random() * 10;
-        rainPos[i * 3 + 2] = 6 - Math.random() * 48;
-      }
-      const rainGeo = new THREE.BufferGeometry();
-      rainGeo.setAttribute("position", new THREE.BufferAttribute(rainPos, 3));
-      const rainMat = new THREE.PointsMaterial({ color: 0xb2d0ed, size: 0.08, transparent: true, opacity: 0, depthWrite: false });
-      scene.add(new THREE.Points(rainGeo, rainMat));
-
-      /* --- Mood Presets --- */
-      const MOODS = {
-        golden: {
-          bg: new THREE.Color(0x432b1f),
-          skyTop: new THREE.Color(0x3a2b3d),
-          skyHor: new THREE.Color(0xe8995a),
-          fog: new THREE.Color(0x523424),
-          fogDensity: 0.032,
-          sunColor: new THREE.Color(0xffbc78),
-          sunIntensity: 4.2,
-          sunPos: new THREE.Vector3(16, 15, -6),
-          hemiSky: new THREE.Color(0xffe4c7),
-          hemiGround: new THREE.Color(0x2c3824),
-          hemiIntensity: 1.05,
-          rayColor: new THREE.Color(0xffd098),
-          rayOpacity: 0.16,
-          lanternIntensity: 0.9,
-          lanternEmissive: 1.4,
-          walkwayRoughness: 0.74,
-          rainOpacity: 0.0,
-          exposure: 1.2
-        },
-        morning: {
-          bg: new THREE.Color(0x95abb5),
-          skyTop: new THREE.Color(0x7090a6),
-          skyHor: new THREE.Color(0xdbe8ee),
-          fog: new THREE.Color(0xa6bac4),
-          fogDensity: 0.04,
-          sunColor: new THREE.Color(0xf4f9ff),
-          sunIntensity: 3.0,
-          sunPos: new THREE.Vector3(12, 22, -8),
-          hemiSky: new THREE.Color(0xe5f1fa),
-          hemiGround: new THREE.Color(0x32422b),
-          hemiIntensity: 1.3,
-          rayColor: new THREE.Color(0xe6f4ff),
-          rayOpacity: 0.11,
-          lanternIntensity: 0.2,
-          lanternEmissive: 0.4,
-          walkwayRoughness: 0.62,
-          rainOpacity: 0.0,
-          exposure: 1.12
-        },
-        night: {
-          bg: new THREE.Color(0x0b1220),
-          skyTop: new THREE.Color(0x060a14),
-          skyHor: new THREE.Color(0x1
+    <footer class="hud-bottom
