@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0d1024" />
+  <meta name="theme-color" content="#0d1429" />
   <meta name="description" content="OUTMATH — Coming Soon | By Tetheris App Studios" />
   <title>OUTMATH — Coming Soon</title>
 
@@ -13,10 +13,10 @@
 
   <style>
     :root {
-      --text-main: #fdfbff;
-      --text-soft: rgba(250, 246, 255, 0.78);
-      --glass-bg: rgba(14, 15, 32, 0.36);
-      --glass-border: rgba(255, 255, 255, 0.22);
+      --text-main: #ffffff;
+      --text-soft: rgba(255, 250, 255, 0.84);
+      --glass-bg: rgba(12, 16, 32, 0.36);
+      --glass-border: rgba(255, 255, 255, 0.24);
     }
 
     * {
@@ -31,13 +31,13 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #0c0e21;
+      background: #0a1024;
       color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
-    #suzume-canvas {
+    #anime-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
@@ -47,18 +47,18 @@
       cursor: pointer;
     }
 
-    /* Subtle Anamorphic Anime Film Vignette */
+    /* Subtle Anamorphic Film Vignette */
     .cinema-vignette {
       position: fixed;
       inset: 0;
       z-index: 2;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 45%, transparent 42%, rgba(8, 7, 22, 0.52) 100%),
-        linear-gradient(180deg, rgba(10, 10, 28, 0.32) 0%, transparent 18%, transparent 80%, rgba(8, 8, 22, 0.62) 100%);
+        radial-gradient(circle at 50% 45%, transparent 45%, rgba(8, 10, 24, 0.44) 100%),
+        linear-gradient(180deg, rgba(8, 12, 26, 0.28) 0%, transparent 18%, transparent 80%, rgba(7, 10, 22, 0.56) 100%);
     }
 
-    /* Minimalist Floating HUD */
+    /* Floating Minimalist HUD */
     .hud {
       position: fixed;
       inset: 0;
@@ -89,6 +89,7 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       font-size: 0.72rem;
+      font-weight: 500;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       transition: opacity 0.45s ease;
@@ -98,12 +99,12 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #ffd3a5;
-      box-shadow: 0 0 12px #ffd3a5;
-      animation: starPulse 2.4s ease-in-out infinite;
+      background: #9ce0ff;
+      box-shadow: 0 0 12px #9ce0ff;
+      animation: dotPulse 2.4s ease-in-out infinite;
     }
 
-    @keyframes starPulse {
+    @keyframes dotPulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.45; transform: scale(0.8); }
     }
@@ -132,23 +133,24 @@
     }
 
     .glass-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.55);
     }
 
     .glass-btn.active {
-      background: rgba(255, 255, 255, 0.92);
-      color: #101226;
+      background: rgba(255, 255, 255, 0.94);
+      color: #0e1326;
       border-color: #ffffff;
     }
 
-    /* Center Hero Lockup */
+    /* Center Hero Lockup with Soft Legibility Halo */
     .hero-center {
       margin: auto;
       text-align: center;
       max-width: 780px;
-      padding: 0 16px;
+      padding: 28px 24px;
       transform: translateY(-6vh);
+      background: radial-gradient(ellipse at center, rgba(10, 14, 32, 0.34) 0%, rgba(10, 14, 32, 0) 70%);
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
 
@@ -161,26 +163,26 @@
 
     .jp-kicker {
       font-family: 'Noto Serif JP', serif;
-      font-size: clamp(0.82rem, 1.8vw, 1.05rem);
+      font-size: clamp(0.82rem, 1.8vw, 1.06rem);
       font-weight: 400;
-      letter-spacing: 0.52em;
-      padding-left: 0.52em;
-      color: rgba(255, 240, 245, 0.94);
-      text-shadow: 0 2px 18px rgba(15, 10, 38, 0.75);
+      letter-spacing: 0.55em;
+      padding-left: 0.55em;
+      color: rgba(255, 248, 252, 0.96);
+      text-shadow: 0 2px 18px rgba(8, 12, 34, 0.72);
       margin-bottom: 12px;
     }
 
     .game-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(3rem, 10vw, 6.8rem);
+      font-size: clamp(3rem, 10vw, 6.9rem);
       font-weight: 700;
       letter-spacing: 0.22em;
       padding-left: 0.22em;
       line-height: 1.02;
       color: #ffffff;
       text-shadow:
-        0 6px 34px rgba(18, 12, 46, 0.65),
-        0 0 22px rgba(255, 215, 235, 0.35);
+        0 8px 36px rgba(8, 12, 36, 0.62),
+        0 2px 10px rgba(8, 12, 36, 0.45);
       margin-bottom: 16px;
     }
 
@@ -194,10 +196,10 @@
     .hairline {
       width: clamp(28px, 6vw, 72px);
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85));
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.88));
     }
     .hairline.right {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), transparent);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.88), transparent);
     }
 
     .coming-text {
@@ -207,20 +209,20 @@
       padding-left: 0.48em;
       text-transform: uppercase;
       color: #ffffff;
-      text-shadow: 0 2px 14px rgba(15, 10, 35, 0.85);
+      text-shadow: 0 2px 14px rgba(8, 12, 34, 0.8);
     }
 
     .tagline {
       font-size: clamp(0.86rem, 1.6vw, 1rem);
       font-weight: 300;
       color: var(--text-soft);
-      max-width: 480px;
+      max-width: 490px;
       margin: 0 auto;
       line-height: 1.65;
-      text-shadow: 0 2px 16px rgba(12, 10, 32, 0.9);
+      text-shadow: 0 2px 16px rgba(8, 12, 34, 0.85);
     }
 
-    /* Bottom Footer with Studio Credit */
+    /* Bottom Footer with Studio Credit & Realm Switcher */
     .hud-bottom {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -232,56 +234,85 @@
       font-size: 0.68rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.65);
+      color: rgba(255, 255, 255, 0.72);
       text-shadow: 0 1px 10px rgba(0, 0, 0, 0.85);
       transition: opacity 0.45s ease;
     }
 
     .studio-credit {
       text-align: center;
-      font-size: clamp(0.75rem, 1.4vw, 0.86rem);
+      font-size: clamp(0.76rem, 1.4vw, 0.88rem);
       font-weight: 500;
       letter-spacing: 0.24em;
       padding-left: 0.24em;
       text-transform: uppercase;
-      color: rgba(255, 250, 255, 0.95);
-      text-shadow: 0 2px 16px rgba(10, 8, 28, 0.95);
+      color: #ffffff;
+      text-shadow: 0 2px 16px rgba(6, 10, 28, 0.95);
     }
 
-    .progress-wrap {
+    .realm-nav {
       justify-self: end;
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.72);
+      pointer-events: auto;
+    }
+
+    .realm-dots {
+      display: flex;
+      gap: 7px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .rdot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.35);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .rdot:hover {
+      background: rgba(255, 255, 255, 0.75);
+      transform: scale(1.2);
+    }
+
+    .rdot.active {
+      background: #ffffff;
+      box-shadow: 0 0 10px #ffffff;
+      transform: scale(1.25);
     }
 
     .door-progress-bar {
-      width: 76px;
+      width: 68px;
       height: 3px;
       border-radius: 99px;
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.24);
       overflow: hidden;
     }
 
     .door-progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #a7d8ff, #ffd1dc);
+      background: linear-gradient(90deg, #a8e6ff, #ffe0b5);
       border-radius: 99px;
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 840px) {
       .hud-bottom {
         grid-template-columns: 1fr;
         justify-items: center;
         text-align: center;
         gap: 8px;
       }
-      .progress-wrap {
+      .realm-nav {
         justify-self: center;
         order: 1;
       }
@@ -302,14 +333,14 @@
 </head>
 <body>
 
-  <canvas id="suzume-canvas"></canvas>
+  <canvas id="anime-canvas"></canvas>
   <div class="cinema-vignette"></div>
 
   <div class="hud">
     <header class="hud-top">
       <div class="realm-pill">
         <span class="realm-dot" id="realm-dot"></span>
-        <span id="realm-name">EVER-AFTER TWILIGHT // 常世</span>
+        <span id="realm-name">KYUSHU SUMMER SKY // 夏空</span>
       </div>
 
       <div class="top-actions">
@@ -320,7 +351,7 @@
     </header>
 
     <main class="hero-center">
-      <div class="jp-kicker" id="jp-kicker">扉の向こう側へ</div>
+      <div class="jp-kicker" id="jp-kicker">廃墟の扉・常世へ</div>
       <h1 class="game-title" id="game-title">OUTMATH</h1>
       <div class="coming-row">
         <span class="hairline"></span>
@@ -335,8 +366,8 @@
     <footer class="hud-bottom">
       <div class="hud-hint">TAP WATER FOR RIPPLES • AUTOMATED ENDLESS JOURNEY</div>
       <div class="studio-credit" id="studio-credit">By Tetheris App Studios</div>
-      <div class="progress-wrap">
-        <span>THRESHOLD</span>
+      <div class="realm-nav">
+        <div class="realm-dots" id="realm-dots"></div>
         <div class="door-progress-bar">
           <div class="door-progress-fill" id="progress-fill"></div>
         </div>
@@ -346,11 +377,11 @@
 
   <script>
     /* =========================================================================
-       ✨ 1. TEASER TEXT CONFIGURATION — EDIT YOUR TEXT HERE
+       ✨ 1. TEASER CONFIGURATION — CUSTOMIZE YOUR GAME TEXT HERE
        ========================================================================= */
     const TEASER_CONFIG = {
       title: "OUTMATH",
-      jpKicker: "扉の向こう側へ",
+      jpKicker: "廃墟の扉・常世へ",
       status: "COMING SOON",
       tagline: "Beyond every open door lies a new equation waiting to be solved.",
       studioCredit: "By Tetheris App Studios"
@@ -364,95 +395,164 @@
     document.getElementById("studio-credit").textContent = TEASER_CONFIG.studioCredit;
 
     /* =========================================================================
-       2. MAKOTO SHINKAI / SUZUME SKY REALMS (AUTOMATED ENDLESS CYCLE)
+       2. DETERMINISTIC PRNG (CONSISTENT PAINTERLY ART ON EVERY FRAME)
+       ========================================================================= */
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a |= 0; a = (a + 0x6d2b79f5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    /* =========================================================================
+       3. 4 MAKOTO SHINKAI / SUZUME ANIME REALM PALETTES
        ========================================================================= */
     const REALMS = [
       {
-        name: "EVER-AFTER TWILIGHT // 常世",
-        dot: "#ff9bb8",
-        skyStops: ["#07091f", "#1a1847", "#5a2768", "#c84b7c", "#ff9e7d"],
-        waterTint: "rgba(18, 14, 48, 0.36)",
-        sunColor: "#ffe1bd",
-        sunGlow: "rgba(255, 130, 145, 0.55)",
-        cloudDark: "rgba(38, 22, 68, 0.72)",
-        cloudMid: "rgba(130, 58, 114, 0.62)",
-        cloudRim: "rgba(255, 198, 178, 0.88)",
-        mountainFar: "#251c4d",
-        mountainNear: "#151232",
-        starAlpha: 0.95,
-        auroraAlpha: 0.45,
-        emberColor: "#ffd0a6",
-        doorTint: "#f7eff2",
-        doorShadow: "#5b486b"
+        id: "summer",
+        name: "KYUSHU SUMMER SKY // 夏空",
+        dot: "#7dd3fc",
+        skyStops: ["#0b3896", "#1a62c9", "#4ca0e8", "#9fd9fa", "#e6f7ff"],
+        hazeColor: "rgba(210, 240, 255, 0.42)",
+        sunPos: { x: 0.64, y: 0.34 },
+        sunCore: "#ffffff",
+        sunHalo: "rgba(255, 246, 214, 0.65)",
+        flareColor: "rgba(180, 232, 255, 0.22)",
+        cloudBase: [95, 126, 178],
+        cloudMid: [212, 228, 248],
+        cloudBright: [255, 253, 248],
+        mtnFar: "#5a8ec9",
+        mtnMid: "#36658c",
+        mtnNear: "#1e4548",
+        foliage: ["#102e26", "#1d5239", "#3c8549", "#9be06e", "#eaffb8"],
+        ruinLight: "#c8cbc2",
+        ruinShadow: "#5b6e78",
+        mossColor: "#2e5e32",
+        waterTint: "rgba(28, 86, 140, 0.28)",
+        waterGlint: "rgba(255, 252, 235, 0.85)",
+        doorFace: "#f7f6f0",
+        doorEdge: "#86949c",
+        doorWeather: "rgba(92, 108, 96, 0.38)",
+        starAlpha: 0.0,
+        auroraAlpha: 0.0,
+        moteColor: "#fff8d6",
+        birdColor: "rgba(22, 42, 68, 0.72)",
+        fgSilhouette: "#0d261f",
+        fgRim: "#9be06e"
       },
       {
-        name: "KYUSHU GOLDEN SUNSET // 夕暮れ",
-        dot: "#ffd27d",
-        skyStops: ["#152b59", "#37568a", "#9c5f7c", "#e8846b", "#ffda8e"],
-        waterTint: "rgba(32, 24, 52, 0.3)",
-        sunColor: "#fff4cf",
-        sunGlow: "rgba(255, 185, 105, 0.62)",
-        cloudDark: "rgba(62, 54, 96, 0.65)",
-        cloudMid: "rgba(196, 108, 112, 0.6)",
-        cloudRim: "rgba(255, 236, 184, 0.94)",
-        mountainFar: "#483a66",
-        mountainNear: "#26213d",
-        starAlpha: 0.35,
-        auroraAlpha: 0.12,
-        emberColor: "#ffe49e",
-        doorTint: "#fff9f0",
-        doorShadow: "#7a5e63"
-      },
-      {
-        name: "STARLIT BLUE HOUR // 逢魔時",
-        dot: "#90e0ff",
-        skyStops: ["#040a1d", "#0b1e47", "#18417a", "#3d7fb3", "#9ad9f2"],
-        waterTint: "rgba(6, 20, 46, 0.34)",
-        sunColor: "#e6fbff",
-        sunGlow: "rgba(120, 215, 255, 0.48)",
-        cloudDark: "rgba(16, 36, 74, 0.72)",
-        cloudMid: "rgba(44, 94, 145, 0.55)",
-        cloudRim: "rgba(198, 242, 255, 0.88)",
-        mountainFar: "#142f59",
-        mountainNear: "#0b1a36",
-        starAlpha: 1.0,
-        auroraAlpha: 0.35,
-        emberColor: "#a8ecff",
-        doorTint: "#eef8ff",
-        doorShadow: "#355378"
-      },
-      {
-        name: "ABANDONED ONSEN DAWN // 夜明け",
-        dot: "#ffc2d8",
-        skyStops: ["#1b224f", "#4b4b87", "#9e6b9c", "#eb9eb2", "#ffe5cf"],
-        waterTint: "rgba(28, 22, 54, 0.28)",
-        sunColor: "#fff8eb",
-        sunGlow: "rgba(255, 188, 208, 0.56)",
-        cloudDark: "rgba(66, 56, 102, 0.6)",
-        cloudMid: "rgba(176, 114, 148, 0.56)",
-        cloudRim: "rgba(255, 234, 228, 0.94)",
-        mountainFar: "#4d4675",
-        mountainNear: "#282447",
+        id: "sunset",
+        name: "KATAWARE-DOKI SUNSET // 黄昏",
+        dot: "#ffb76b",
+        skyStops: ["#182559", "#4d4282", "#b3587c", "#f08a62", "#ffe096"],
+        hazeColor: "rgba(255, 188, 138, 0.38)",
+        sunPos: { x: 0.5, y: 0.56 },
+        sunCore: "#fff8df",
+        sunHalo: "rgba(255, 165, 92, 0.72)",
+        flareColor: "rgba(255, 180, 120, 0.28)",
+        cloudBase: [74, 52, 102],
+        cloudMid: [204, 104, 114],
+        cloudBright: [255, 235, 182],
+        mtnFar: "#614473",
+        mtnMid: "#3e2e57",
+        mtnNear: "#231c36",
+        foliage: ["#17152b", "#2a2740", "#4d444a", "#b87654", "#ffd694"],
+        ruinLight: "#c9a599",
+        ruinShadow: "#4a3b52",
+        mossColor: "#333d2e",
+        waterTint: "rgba(44, 26, 62, 0.28)",
+        waterGlint: "rgba(255, 224, 158, 0.9)",
+        doorFace: "#fff3e6",
+        doorEdge: "#7c5f6e",
+        doorWeather: "rgba(90, 62, 70, 0.42)",
         starAlpha: 0.45,
-        auroraAlpha: 0.18,
-        emberColor: "#ffd6e6",
-        doorTint: "#fff7fa",
-        doorShadow: "#6d5c7a"
+        auroraAlpha: 0.14,
+        moteColor: "#ffdca0",
+        birdColor: "rgba(38, 22, 48, 0.78)",
+        fgSilhouette: "#141124",
+        fgRim: "#ffb370"
+      },
+      {
+        id: "tokoyo",
+        name: "EVER-AFTER TWILIGHT // 常世",
+        dot: "#ff8cb8",
+        skyStops: ["#06081c", "#191547", "#5c246b", "#c9447b", "#ff9a76"],
+        hazeColor: "rgba(218, 92, 148, 0.28)",
+        sunPos: { x: 0.5, y: 0.58 },
+        sunCore: "#ffe6d4",
+        sunHalo: "rgba(255, 104, 148, 0.62)",
+        flareColor: "rgba(255, 120, 180, 0.24)",
+        cloudBase: [32, 18, 62],
+        cloudMid: [128, 48, 106],
+        cloudBright: [255, 184, 174],
+        mtnFar: "#2a1a52",
+        mtnMid: "#1a1338",
+        mtnNear: "#100c26",
+        foliage: ["#0b091e", "#1a1538", "#3b234f", "#8a426a", "#ffa6a6"],
+        ruinLight: "#8e7b9e",
+        ruinShadow: "#2a2042",
+        mossColor: "#242442",
+        waterTint: "rgba(18, 10, 44, 0.34)",
+        waterGlint: "rgba(255, 198, 188, 0.85)",
+        doorFace: "#f5e8f0",
+        doorEdge: "#56426e",
+        doorWeather: "rgba(56, 40, 78, 0.45)",
+        starAlpha: 1.0,
+        auroraAlpha: 0.52,
+        moteColor: "#ffc4a8",
+        birdColor: "rgba(255, 196, 210, 0.55)",
+        fgSilhouette: "#09071a",
+        fgRim: "#ff88a8"
+      },
+      {
+        id: "dawn",
+        name: "STARLIT BLUE HOUR // 夜明け",
+        dot: "#a5e4ff",
+        skyStops: ["#050d26", "#11295c", "#2d5a94", "#7da8cc", "#f5d7e0"],
+        hazeColor: "rgba(185, 222, 245, 0.34)",
+        sunPos: { x: 0.36, y: 0.52 },
+        sunCore: "#fff5f7",
+        sunHalo: "rgba(175, 220, 255, 0.56)",
+        flareColor: "rgba(170, 225, 255, 0.22)",
+        cloudBase: [24, 46, 86],
+        cloudMid: [86, 126, 172],
+        cloudBright: [248, 236, 242],
+        mtnFar: "#284b7a",
+        mtnMid: "#1a3357",
+        mtnNear: "#102138",
+        foliage: ["#0a1829", "#142e3d", "#24545e", "#5b9496", "#c9f0ed"],
+        ruinLight: "#a6bac9",
+        ruinShadow: "#354b63",
+        mossColor: "#1f4542",
+        waterTint: "rgba(10, 28, 56, 0.3)",
+        waterGlint: "rgba(225, 246, 255, 0.85)",
+        doorFace: "#eef5fa",
+        doorEdge: "#4c6782",
+        doorWeather: "rgba(54, 78, 96, 0.4)",
+        starAlpha: 0.85,
+        auroraAlpha: 0.22,
+        moteColor: "#c2f0ff",
+        birdColor: "rgba(18, 34, 58, 0.72)",
+        fgSilhouette: "#091524",
+        fgRim: "#96e0ec"
       }
     ];
 
     /* =========================================================================
-       3. SUZUME-INSPIRED GENERATIVE PIANO & BREEZE AUDIO (WEB AUDIO API)
+       4. SUZUME-INSPIRED GENERATIVE PIANO & COASTAL WIND AUDIO ENGINE
        ========================================================================= */
-    class SuzumeSoundscape {
+    class SuzumeAudio {
       constructor() {
         this.ctx = null;
         this.enabled = false;
         this.master = null;
-        this.noteTimer = null;
+        this.timer = null;
         this.step = 0;
-        // Emotional Japanese pentatonic / Add9 melody notes (Hz)
-        this.melody = [
+        // Emotional Japanese pentatonic / Sus2 progression
+        this.notes = [
           293.66, 329.63, 440.00, 523.25, 587.33, 440.00, 392.00, 329.63,
           261.63, 329.63, 392.00, 493.88, 523.25, 392.00, 329.63, 293.66
         ];
@@ -462,43 +562,40 @@
         if (this.ctx) return;
         const AC = window.AudioContext || window.webkitAudioContext;
         this.ctx = new AC();
-
         this.master = this.ctx.createGain();
         this.master.gain.value = 0;
         this.master.connect(this.ctx.destination);
 
-        // Soft coastal mountain breeze
+        // Soft breeze over flooded ruins
         const len = this.ctx.sampleRate * 3;
         const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
         const data = buf.getChannelData(0);
         let last = 0;
         for (let i = 0; i < len; i++) {
-          const white = Math.random() * 2 - 1;
-          last = (last + 0.02 * white) / 1.02;
-          data[i] = last * 1.4;
+          const w = Math.random() * 2 - 1;
+          last = (last + 0.018 * w) / 1.018;
+          data[i] = last * 1.45;
         }
         const wind = this.ctx.createBufferSource();
         wind.buffer = buf;
         wind.loop = true;
 
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = "bandpass";
-        filter.frequency.value = 340;
-        filter.Q.value = 0.7;
+        const bp = this.ctx.createBiquadFilter();
+        bp.type = "bandpass";
+        bp.frequency.value = 320;
+        bp.Q.value = 0.75;
 
-        const windGain = this.ctx.createGain();
-        windGain.gain.value = 0.22;
-
-        wind.connect(filter);
-        filter.connect(windGain);
-        windGain.connect(this.master);
+        const wg = this.ctx.createGain();
+        wg.gain.value = 0.2;
+        wind.connect(bp);
+        bp.connect(wg);
+        wg.connect(this.master);
         wind.start();
       }
 
-      playPianoNote(freq, vol = 0.08, dur = 3.2) {
+      playPiano(freq, vol = 0.075, dur = 3.4) {
         if (!this.enabled || !this.ctx) return;
         const now = this.ctx.currentTime;
-
         const osc1 = this.ctx.createOscillator();
         const osc2 = this.ctx.createOscillator();
         const lp = this.ctx.createBiquadFilter();
@@ -510,11 +607,11 @@
         osc2.frequency.setValueAtTime(freq * 2, now);
 
         lp.type = "lowpass";
-        lp.frequency.setValueAtTime(1400, now);
-        lp.frequency.exponentialRampToValueAtTime(320, now + dur);
+        lp.frequency.setValueAtTime(1550, now);
+        lp.frequency.exponentialRampToValueAtTime(300, now + dur);
 
         gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(vol, now + 0.035);
+        gain.gain.linearRampToValueAtTime(vol, now + 0.03);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
 
         osc1.connect(lp);
@@ -530,104 +627,402 @@
 
       playDoorChime() {
         if (!this.enabled || !this.ctx) return;
-        [587.33, 880.0, 1174.66].forEach((f, idx) => {
-          setTimeout(() => this.playPianoNote(f, 0.055, 3.8), idx * 140);
+        [587.33, 880.0, 1174.66].forEach((f, i) => {
+          setTimeout(() => this.playPiano(f, 0.05, 4.0), i * 150);
         });
+      }
+
+      playWaterDrop() {
+        if (!this.enabled || !this.ctx) return;
+        const f = [659.25, 783.99, 880.0, 1046.5][Math.floor(Math.random() * 4)];
+        this.playPiano(f, 0.035, 1.4);
       }
 
       toggle() {
         this.init();
         if (this.ctx.state === "suspended") this.ctx.resume();
         this.enabled = !this.enabled;
-        this.master.gain.setTargetAtTime(this.enabled ? 0.55 : 0.0, this.ctx.currentTime, 0.4);
+        this.master.gain.setTargetAtTime(this.enabled ? 0.58 : 0, this.ctx.currentTime, 0.35);
 
         if (this.enabled) {
-          this.playPianoNote(this.melody[this.step % this.melody.length], 0.08, 3.4);
+          this.playPiano(this.notes[this.step % this.notes.length], 0.075, 3.5);
           this.step++;
-          this.noteTimer = setInterval(() => {
-            const note = this.melody[this.step % this.melody.length];
-            this.playPianoNote(note, 0.075, 3.4);
-            if (this.step % 4 === 0) {
-              this.playPianoNote(note / 2, 0.06, 4.2);
-            }
+          this.timer = setInterval(() => {
+            const n = this.notes[this.step % this.notes.length];
+            this.playPiano(n, 0.072, 3.5);
+            if (this.step % 4 === 0) this.playPiano(n / 2, 0.055, 4.4);
             this.step++;
-          }, 950);
+          }, 960);
         } else {
-          clearInterval(this.noteTimer);
+          clearInterval(this.timer);
         }
         return this.enabled;
       }
     }
 
-    const audio = new SuzumeSoundscape();
+    const audio = new SuzumeAudio();
 
     /* =========================================================================
-       4. CANVAS ENGINE SETUP & PROCEDURAL ANIME WORLD ELEMENTS
+       5. OFFSCREEN PAINTERLY MATTE-ART GENERATORS (CLOUDS, TREES, RUINS, GRAIN)
        ========================================================================= */
-    const canvas = document.getElementById("suzume-canvas");
+    function rgbStr(arr, alpha) {
+      return `rgba(${arr[0]}, ${arr[1]}, ${arr[2]}, ${alpha})`;
+    }
+
+    // 5A. Volumetric Makoto Shinkai Cumulonimbus Cloud Matte Painting
+    function paintCloudLayer(realm, seed) {
+      const cw = 960, ch = 460;
+      const can = document.createElement("canvas");
+      can.width = cw; can.height = ch;
+      const g = can.getContext("2d");
+      const rand = mulberry32(seed);
+
+      // High-altitude windswept cirrus wisps
+      g.save();
+      for (let i = 0; i < 16; i++) {
+        const cx = rand() * cw;
+        const cy = 28 + rand() * 140;
+        const len = 110 + rand() * 220;
+        const grad = g.createLinearGradient(cx - len / 2, cy, cx + len / 2, cy);
+        grad.addColorStop(0, "rgba(255,255,255,0)");
+        grad.addColorStop(0.5, rgbStr(realm.cloudBright, 0.14 + rand() * 0.14));
+        grad.addColorStop(1, "rgba(255,255,255,0)");
+        g.strokeStyle = grad;
+        g.lineWidth = 2 + rand() * 5;
+        g.beginPath();
+        g.moveTo(cx - len / 2, cy + (rand() - 0.5) * 14);
+        g.quadraticCurveTo(cx, cy - 12 - rand() * 18, cx + len / 2, cy + (rand() - 0.5) * 10);
+        g.stroke();
+      }
+      g.restore();
+
+      // Sun direction offset for directional rim-lighting
+      const sunX = realm.sunPos.x * cw;
+      const sunY = realm.sunPos.y * ch;
+
+      // Towering anime thunderhead clusters flanking left, right & distant horizon
+      const clusters = [
+        { cx: cw * 0.16, baseY: ch * 0.86, width: 320, height: 270, lobes: 58 },
+        { cx: cw * 0.84, baseY: ch * 0.85, width: 340, height: 295, lobes: 62 },
+        { cx: cw * 0.42, baseY: ch * 0.90, width: 220, height: 155, lobes: 34 },
+        { cx: cw * 0.62, baseY: ch * 0.91, width: 210, height: 145, lobes: 32 }
+      ];
+
+      for (const cl of clusters) {
+        // Generate organic cauliflower puffs inside a towering dome envelope
+        const puffs = [];
+        for (let i = 0; i < cl.lobes; i++) {
+          const u = rand(); // vertical rise 0 (base) -> 1 (crown)
+          const spread = (1 - u * 0.65) * cl.width * 0.55;
+          const px = cl.cx + (rand() - 0.5) * 2 * spread;
+          const py = cl.baseY - Math.pow(u, 0.85) * cl.height;
+          const pr = (24 + rand() * 44) * (1.15 - u * 0.42);
+          puffs.push({ x: px, y: py, r: pr, u });
+        }
+        // Sort bottom-to-top so sunlit upper crowns billow naturally over shaded bases
+        puffs.sort((a, b) => b.y - a.y);
+
+        for (const p of puffs) {
+          const dx = sunX - p.x;
+          const dy = sunY - p.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const nx = dx / dist;
+          const ny = dy / dist;
+
+          // Pass 1: Cool deep shadowed cloud underbelly
+          const shGrad = g.createRadialGradient(
+            p.x - nx * p.r * 0.25, p.y + p.r * 0.22, p.r * 0.1,
+            p.x, p.y, p.r * 1.15
+          );
+          shGrad.addColorStop(0, rgbStr(realm.cloudBase, 0.72));
+          shGrad.addColorStop(0.75, rgbStr(realm.cloudBase, 0.42));
+          shGrad.addColorStop(1, rgbStr(realm.cloudBase, 0));
+          g.fillStyle = shGrad;
+          g.beginPath();
+          g.arc(p.x, p.y + p.r * 0.08, p.r * 1.12, 0, Math.PI * 2);
+          g.fill();
+
+          // Pass 2: Soft painted midtone body
+          const midGrad = g.createRadialGradient(
+            p.x + nx * p.r * 0.18, p.y - p.r * 0.14, p.r * 0.08,
+            p.x, p.y, p.r
+          );
+          midGrad.addColorStop(0, rgbStr(realm.cloudMid, 0.82));
+          midGrad.addColorStop(0.72, rgbStr(realm.cloudMid, 0.48));
+          midGrad.addColorStop(1, rgbStr(realm.cloudMid, 0));
+          g.fillStyle = midGrad;
+          g.beginPath();
+          g.arc(p.x + nx * p.r * 0.08, p.y - p.r * 0.05, p.r * 0.96, 0, Math.PI * 2);
+          g.fill();
+
+          // Pass 3: Crisp luminous sunlit cauliflower crest (Shinkai signature!)
+          const rimStrength = 0.45 + p.u * 0.55;
+          const hiX = p.x + nx * p.r * 0.26;
+          const hiY = p.y + ny * p.r * 0.18 - p.r * 0.2;
+          const hiGrad = g.createRadialGradient(hiX, hiY, p.r * 0.04, hiX, hiY, p.r * 0.78);
+          hiGrad.addColorStop(0, rgbStr(realm.cloudBright, 0.95 * rimStrength));
+          hiGrad.addColorStop(0.58, rgbStr(realm.cloudBright, 0.52 * rimStrength));
+          hiGrad.addColorStop(1, rgbStr(realm.cloudBright, 0));
+          g.fillStyle = hiGrad;
+          g.beginPath();
+          g.arc(hiX, hiY, p.r * 0.78, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Soft horizon atmospheric mist fade along cloud bottoms
+      g.globalCompositeOperation = "destination-out";
+      const fade = g.createLinearGradient(0, ch * 0.84, 0, ch);
+      fade.addColorStop(0, "rgba(0,0,0,0)");
+      fade.addColorStop(1, "rgba(0,0,0,1)");
+      g.fillStyle = fade;
+      g.fillRect(0, ch * 0.84, cw, ch * 0.16);
+
+      return can;
+    }
+
+    // 5B. Painterly Multi-Tone Japanese Tree Sprite Generator (Branching + Leaf Clusters)
+    function paintJapaneseTree(realm, seed, isCedar = false) {
+      const tw = 260, th = 310;
+      const can = document.createElement("canvas");
+      can.width = tw; can.height = th;
+      const g = can.getContext("2d");
+      const rand = mulberry32(seed);
+      const pal = realm.foliage; // [deepShadow, darkMid, richMid, sunlit, rimGlow]
+
+      const leafAnchors = [];
+
+      // Recursive natural branch painter
+      function drawBranch(x, y, len, angle, width, depth) {
+        const nx = x + Math.cos(angle) * len;
+        const ny = y + Math.sin(angle) * len;
+
+        g.strokeStyle = pal[0];
+        g.lineWidth = width;
+        g.lineCap = "round";
+        g.beginPath();
+        g.moveTo(x, y);
+        const mx = (x + nx) * 0.5 + (rand() - 0.5) * len * 0.16;
+        const my = (y + ny) * 0.5 + (rand() - 0.5) * len * 0.12;
+        g.quadraticCurveTo(mx, my, nx, ny);
+        g.stroke();
+
+        if (depth <= 2) {
+          leafAnchors.push({ x: nx, y: ny, r: 20 + rand() * 24 });
+        }
+
+        if (depth > 0) {
+          const splits = isCedar ? 2 : (depth > 2 ? 2 : 3);
+          for (let s = 0; s < splits; s++) {
+            const spread = isCedar ? 0.42 : 0.62;
+            const nextAngle = angle + (s - (splits - 1) / 2) * spread + (rand() - 0.5) * 0.28;
+            drawBranch(nx, ny, len * (0.64 + rand() * 0.14), nextAngle, Math.max(1.2, width * 0.65), depth - 1);
+          }
+        }
+      }
+
+      if (isCedar) {
+        // Tall Japanese Sugi (Cedar) with layered conical foliage boughs
+        drawBranch(tw * 0.5, th - 8, 95, -Math.PI / 2 + (rand() - 0.5) * 0.06, 12, 3);
+        for (let tier = 0; tier < 14; tier++) {
+          const frac = tier / 13;
+          const y = th * 0.82 - frac * (th * 0.72);
+          const halfSpan = (1 - frac * 0.84) * 76 + 10;
+          const count = Math.max(2, Math.round((1 - frac * 0.7) * 6));
+          for (let k = 0; k < count; k++) {
+            leafAnchors.push({
+              x: tw * 0.5 + (rand() - 0.5) * 2 * halfSpan,
+              y: y + (rand() - 0.5) * 14,
+              r: 14 + (1 - frac) * 16
+            });
+          }
+        }
+      } else {
+        // Broad gnarled Japanese Maple / Zelkova canopy
+        drawBranch(tw * 0.5, th - 6, 76, -Math.PI / 2 + (rand() - 0.5) * 0.12, 14, 4);
+      }
+
+      // Paint dense organic leaf clusters in 4 cel-shaded anime lighting passes
+      // Pass 1: Deep indigo-green shadow base
+      for (const a of leafAnchors) {
+        for (let k = 0; k < 10; k++) {
+          const lx = a.x + (rand() - 0.5) * a.r * 1.45;
+          const ly = a.y + (rand() - 0.4) * a.r * 1.1;
+          const lr = 5 + rand() * 9;
+          g.fillStyle = pal[0];
+          g.beginPath();
+          g.ellipse(lx, ly + 4, lr * 1.2, lr * 0.85, rand() * Math.PI, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Pass 2: Rich dark-mid foliage volume
+      for (const a of leafAnchors) {
+        for (let k = 0; k < 9; k++) {
+          const lx = a.x + (rand() - 0.5) * a.r * 1.35;
+          const ly = a.y + (rand() - 0.52) * a.r * 1.05;
+          const lr = 4.5 + rand() * 8;
+          g.fillStyle = pal[1];
+          g.beginPath();
+          g.ellipse(lx, ly, lr * 1.15, lr * 0.8, rand() * Math.PI, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Pass 3: Sunlit upper foliage brushwork
+      for (const a of leafAnchors) {
+        if (a.y > th * 0.72) continue;
+        for (let k = 0; k < 7; k++) {
+          const lx = a.x + (rand() - 0.45) * a.r * 1.2;
+          const ly = a.y - rand() * a.r * 0.65;
+          const lr = 3.5 + rand() * 6.5;
+          g.fillStyle = rand() > 0.38 ? pal[2] : pal[3];
+          g.beginPath();
+          g.ellipse(lx, ly, lr * 1.1, lr * 0.72, rand() * Math.PI, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Pass 4: Dappled sunlit rim-light leaf sparkles (Komorebi!)
+      for (const a of leafAnchors) {
+        if (a.y > th * 0.6) continue;
+        for (let k = 0; k < 4; k++) {
+          const lx = a.x + (rand() - 0.4) * a.r * 1.1;
+          const ly = a.y - a.r * 0.35 - rand() * a.r * 0.45;
+          g.fillStyle = pal[4];
+          g.globalAlpha = 0.78;
+          g.beginPath();
+          g.arc(lx, ly, 1.8 + rand() * 2.8, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+      g.globalAlpha = 1;
+
+      return can;
+    }
+
+    // 5C. Subtle 35mm Anime Film Grain Tile
+    const grainCanvas = document.createElement("canvas");
+    grainCanvas.width = 128; grainCanvas.height = 128;
+    const gctx = grainCanvas.getContext("2d");
+    const gImg = gctx.createImageData(128, 128);
+    for (let i = 0; i < gImg.data.length; i += 4) {
+      const v = Math.random() * 255;
+      gImg.data[i] = v;
+      gImg.data[i + 1] = v;
+      gImg.data[i + 2] = v;
+      gImg.data[i + 3] = 16;
+    }
+    gctx.putImageData(gImg, 0, 0);
+
+    // Lazy Asset Cache per Realm (Built once, rendered at 60fps forever)
+    const realmAssets = new Map();
+    function getRealmAssets(idx) {
+      if (realmAssets.has(idx)) return realmAssets.get(idx);
+      const r = REALMS[idx];
+      const assets = {
+        clouds: paintCloudLayer(r, 1001 + idx * 97),
+        trees: [
+          paintJapaneseTree(r, 2001 + idx * 31, false),
+          paintJapaneseTree(r, 2017 + idx * 31, true),
+          paintJapaneseTree(r, 2039 + idx * 31, false),
+          paintJapaneseTree(r, 2063 + idx * 31, true)
+        ]
+      };
+      realmAssets.set(idx, assets);
+      return assets;
+    }
+
+    // Pre-build initial realm & next realm immediately
+    getRealmAssets(0);
+    getRealmAssets(1);
+
+    /* =========================================================================
+       6. CANVAS BUFFERS, SCENE STATE & AMBIENT ENTITIES
+       ========================================================================= */
+    const canvas = document.getElementById("anime-canvas");
     const ctx = canvas.getContext("2d");
 
-    let W = 0, H = 0, DPR = 1;
-    let pointerX = 0, pointerY = 0;
-    let smoothPX = 0, smoothPY = 0;
+    // Offscreen buffer for Upper World (enables true wave-displaced water reflection!)
+    const upperBuf = document.createElement("canvas");
+    const uctx = upperBuf.getContext("2d");
 
-    // Automated Endless Journey State
+    let W = 0, H = 0, DPR = 1, grainPattern = null;
+    let pointerX = 0, pointerY = 0, smoothPX = 0, smoothPY = 0;
+
     let realmIdx = 0;
-    let cycleProgress = 0.08; // 0 -> 1 per door passage
-    const CYCLE_DURATION_SEC = 18.0;
+    let cycleProgress = 0.08;
+    const CYCLE_DURATION = 19.0;
     let speedBoost = 1.0;
-    let doorChimePlayed = false;
+    let doorChimeFired = false;
 
     const realmNameEl = document.getElementById("realm-name");
     const realmDotEl = document.getElementById("realm-dot");
     const progressFillEl = document.getElementById("progress-fill");
+    const dotsWrap = document.getElementById("realm-dots");
 
-    function updateRealmHUD() {
+    // Build clickable realm indicator dots
+    REALMS.forEach((r, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "rdot" + (idx === 0 ? " active" : "");
+      btn.title = r.name;
+      btn.addEventListener("click", () => {
+        if (idx === realmIdx) return;
+        realmIdx = idx;
+        cycleProgress = 0.06;
+        doorChimeFired = false;
+        getRealmAssets(realmIdx);
+        getRealmAssets((realmIdx + 1) % REALMS.length);
+        updateHUD();
+        audio.playDoorChime();
+      });
+      dotsWrap.appendChild(btn);
+    });
+
+    function updateHUD() {
       const r = REALMS[realmIdx];
       realmNameEl.textContent = r.name;
       realmDotEl.style.background = r.dot;
       realmDotEl.style.boxShadow = `0 0 12px ${r.dot}`;
+      dotsWrap.querySelectorAll(".rdot").forEach((d, i) => d.classList.toggle("active", i === realmIdx));
     }
-    updateRealmHUD();
+    updateHUD();
 
-    // Persistent Scene Objects
-    const stars = Array.from({ length: 160 }, () => ({
+    // Stars, Birds, Spirit Motes, Approaching Onsen Ruins, Water Ripples
+    const stars = Array.from({ length: 170 }, () => ({
       x: Math.random(),
-      y: Math.random() * 0.58,
-      r: 0.6 + Math.random() * 1.6,
+      y: Math.random() * 0.56,
+      r: 0.6 + Math.random() * 1.5,
       phase: Math.random() * Math.PI * 2,
-      speed: 1.2 + Math.random() * 2.5
+      speed: 1.3 + Math.random() * 2.4
     }));
 
-    const clouds = Array.from({ length: 11 }, (_, i) => {
-      const puffs = Array.from({ length: 6 }, (_, p) => ({
-        ox: (p - 2.5) * (28 + Math.random() * 22),
-        oy: (Math.random() - 0.5) * 26 - Math.abs(p - 2.5) * -4,
-        r: 28 + Math.random() * 34
-      }));
-      return {
-        x: (i / 11) + Math.random() * 0.1,
-        y: 0.16 + Math.random() * 0.34,
-        scale: 0.75 + Math.random() * 1.15,
-        speed: 0.0025 + Math.random() * 0.004,
-        puffs
-      };
-    });
+    const birds = Array.from({ length: 6 }, (_, i) => ({
+      x: 0.15 + i * 0.045 + Math.random() * 0.02,
+      y: 0.24 + (i % 3) * 0.035,
+      speed: 0.018 + Math.random() * 0.008,
+      wingPhase: i * 1.1,
+      size: 4 + (i % 3) * 1.6
+    }));
 
-    const embers = Array.from({ length: 65 }, () => ({
+    const motes = Array.from({ length: 58 }, () => ({
       x: Math.random(),
-      y: 0.25 + Math.random() * 0.75,
-      r: 1.1 + Math.random() * 2.4,
-      vy: -0.015 - Math.random() * 0.03,
-      vx: (Math.random() - 0.5) * 0.01,
-      phase: Math.random() * Math.PI * 2
+      y: Math.random(),
+      r: 1.0 + Math.random() * 2.2,
+      vy: -0.014 - Math.random() * 0.026,
+      vx: (Math.random() - 0.5) * 0.012,
+      phase: Math.random() * Math.PI * 2,
+      isGlyph: Math.random() < 0.16
     }));
+    const subtleMathRunes = ["∑", "π", "∞", "Δ", "∫", "θ"];
 
-    const ruinPosts = Array.from({ length: 12 }, (_, i) => ({
+    const corridorRuins = Array.from({ length: 10 }, (_, i) => ({
       side: i % 2 === 0 ? -1 : 1,
-      z: 0.12 + (i / 12) * 0.95,
-      heightFactor: 0.7 + Math.random() * 0.5,
-      tilt: (Math.random() - 0.5) * 0.08
+      z: 0.14 + (i / 10) * 0.92,
+      treeIdx: i % 4,
+      hasArch: i % 2 === 0,
+      hasTree: true,
+      vineSeed: i * 17
     }));
 
     const shootingStars = [];
@@ -636,10 +1031,10 @@
     function spawnRipple(xNorm, yNorm) {
       ripples.push({
         x: xNorm,
-        y: Math.max(0.64, Math.min(0.96, yNorm)),
-        radius: 2,
-        maxRadius: 65 + Math.random() * 65,
-        alpha: 0.75
+        y: Math.max(0.65, Math.min(0.96, yNorm)),
+        radius: 3,
+        maxRadius: 72 + Math.random() * 70,
+        alpha: 0.78
       });
     }
 
@@ -650,294 +1045,544 @@
       canvas.width = Math.floor(W * DPR);
       canvas.height = Math.floor(H * DPR);
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+      // Upper buffer at crisp logical resolution for fast wave reflection blitting
+      upperBuf.width = Math.max(1, Math.floor(W));
+      upperBuf.height = Math.max(1, Math.floor(H));
+      grainPattern = ctx.createPattern(grainCanvas, "repeat");
     }
     resize();
     window.addEventListener("resize", resize);
 
     /* =========================================================================
-       5. PAINTERLY MAKOTO SHINKAI DRAWING HELPERS
+       7. PAINTERLY WORLD RENDERING FUNCTIONS
        ========================================================================= */
-    function drawSkyBackdrop(targetCtx, w, h, horizonY, realm, time, px, py) {
-      // Multi-stop anime sky gradient
-      const skyGrad = targetCtx.createLinearGradient(0, 0, 0, horizonY);
-      const stops = realm.skyStops;
-      stops.forEach((col, i) => skyGrad.addColorStop(i / (stops.length - 1), col));
-      targetCtx.fillStyle = skyGrad;
-      targetCtx.fillRect(0, 0, w, horizonY + 2);
+    function drawUpperWorld(g, w, h, horizonY, realm, assets, t, px, py) {
+      // 1. Deep Shinkai Sky Gradient
+      const sky = g.createLinearGradient(0, 0, 0, horizonY);
+      realm.skyStops.forEach((col, i) => sky.addColorStop(i / (realm.skyStops.length - 1), col));
+      g.fillStyle = sky;
+      g.fillRect(0, 0, w, horizonY + 4);
 
-      // Ethereal Ever-After Aurora Ribbon
-      if (realm.auroraAlpha > 0.05) {
-        targetCtx.save();
-        targetCtx.globalAlpha = realm.auroraAlpha;
-        const aurGrad = targetCtx.createLinearGradient(0, horizonY * 0.15, w, horizonY * 0.65);
-        aurGrad.addColorStop(0, "rgba(110, 170, 255, 0)");
-        aurGrad.addColorStop(0.35, "rgba(180, 120, 255, 0.35)");
-        aurGrad.addColorStop(0.65, "rgba(255, 110, 165, 0.35)");
-        aurGrad.addColorStop(1, "rgba(255, 200, 140, 0)");
-        targetCtx.fillStyle = aurGrad;
-        targetCtx.beginPath();
-        targetCtx.moveTo(0, horizonY * 0.55);
-        for (let x = 0; x <= w; x += Math.max(24, w / 20)) {
-          const wave = Math.sin(x * 0.004 + time * 0.45) * 28 + Math.cos(x * 0.009 - time * 0.3) * 14;
-          targetCtx.lineTo(x, horizonY * 0.36 + wave);
+      // 2. Ever-After Starry Aurora Ribbon (Twilight / Dawn)
+      if (realm.auroraAlpha > 0.04) {
+        g.save();
+        g.globalAlpha = realm.auroraAlpha;
+        const aur = g.createLinearGradient(0, horizonY * 0.12, w, horizonY * 0.65);
+        aur.addColorStop(0, "rgba(120, 175, 255, 0)");
+        aur.addColorStop(0.32, "rgba(186, 118, 255, 0.38)");
+        aur.addColorStop(0.68, "rgba(255, 115, 168, 0.36)");
+        aur.addColorStop(1, "rgba(255, 210, 148, 0)");
+        g.fillStyle = aur;
+        g.beginPath();
+        g.moveTo(0, horizonY * 0.56);
+        for (let x = 0; x <= w; x += Math.max(24, w / 22)) {
+          const wave = Math.sin(x * 0.0042 + t * 0.42) * 26 + Math.cos(x * 0.008 - t * 0.3) * 14;
+          g.lineTo(x, horizonY * 0.35 + wave);
         }
-        targetCtx.lineTo(w, horizonY * 0.72);
-        targetCtx.lineTo(0, horizonY * 0.72);
-        targetCtx.closePath();
-        targetCtx.fill();
-        targetCtx.restore();
+        g.lineTo(w, horizonY * 0.72);
+        g.lineTo(0, horizonY * 0.72);
+        g.closePath();
+        g.fill();
+        g.restore();
       }
 
-      // Twinkling Starfield
-      if (realm.starAlpha > 0.05) {
+      // 3. Twinkling Stars & Comets
+      if (realm.starAlpha > 0.04) {
         for (const s of stars) {
-          const twinkle = 0.35 + 0.65 * Math.abs(Math.sin(time * s.speed + s.phase));
-          targetCtx.fillStyle = `rgba(255, 250, 255, ${twinkle * realm.starAlpha})`;
-          const sx = ((s.x * w - px * 16) % w + w) % w;
-          const sy = s.y * horizonY - py * 8;
-          targetCtx.beginPath();
-          targetCtx.arc(sx, sy, s.r, 0, Math.PI * 2);
-          targetCtx.fill();
+          const tw = 0.35 + 0.65 * Math.abs(Math.sin(t * s.speed + s.phase));
+          g.fillStyle = `rgba(255, 252, 255, ${tw * realm.starAlpha})`;
+          const sx = ((s.x * w - px * 14) % w + w) % w;
+          const sy = s.y * horizonY - py * 6;
+          g.beginPath();
+          g.arc(sx, sy, s.r, 0, Math.PI * 2);
+          g.fill();
         }
       }
 
-      // Glowing Horizon Sun / Celestial Bloom
-      const sunX = w * 0.5 - px * 22;
-      const sunY = horizonY - h * 0.03 - py * 6;
-      const sunRadius = Math.min(w, h) * 0.36;
-      const glow = targetCtx.createRadialGradient(sunX, sunY, 4, sunX, sunY, sunRadius);
-      glow.addColorStop(0, realm.sunColor);
-      glow.addColorStop(0.24, realm.sunGlow);
-      glow.addColorStop(1, "rgba(255, 255, 255, 0)");
-      targetCtx.fillStyle = glow;
-      targetCtx.fillRect(0, 0, w, horizonY + 4);
-
-      // Soft Crepuscular Shinkai God Rays
-      targetCtx.save();
-      targetCtx.globalCompositeOperation = "screen";
-      for (let i = -3; i <= 3; i++) {
-        const angle = -Math.PI / 2 + i * 0.24 + Math.sin(time * 0.25 + i) * 0.03;
-        const rayLen = Math.max(w, h) * 0.75;
-        const rayGrad = targetCtx.createLinearGradient(
-          sunX, sunY,
-          sunX + Math.cos(angle) * rayLen,
-          sunY + Math.sin(angle) * rayLen
-        );
-        rayGrad.addColorStop(0, "rgba(255, 240, 225, 0.14)");
-        rayGrad.addColorStop(1, "rgba(255, 240, 225, 0)");
-        targetCtx.fillStyle = rayGrad;
-        targetCtx.beginPath();
-        targetCtx.moveTo(sunX, sunY);
-        targetCtx.lineTo(sunX + Math.cos(angle - 0.055) * rayLen, sunY + Math.sin(angle - 0.055) * rayLen);
-        targetCtx.lineTo(sunX + Math.cos(angle + 0.055) * rayLen, sunY + Math.sin(angle + 0.055) * rayLen);
-        targetCtx.closePath();
-        targetCtx.fill();
-      }
-      targetCtx.restore();
-
-      // Volumetric Backlit Cumulonimbus Clouds (Makoto Shinkai Style)
-      for (const cl of clouds) {
-        const cx = (((cl.x + time * cl.speed) % 1.35) - 0.175) * w - px * 32;
-        const cy = cl.y * horizonY - py * 12;
-        const sc = cl.scale * (Math.min(w, h) / 760);
-
-        // Bright sunlit top rim
-        targetCtx.fillStyle = realm.cloudRim;
-        for (const p of cl.puffs) {
-          targetCtx.beginPath();
-          targetCtx.arc(cx + p.ox * sc, cy + (p.oy - 5) * sc, p.r * sc, 0, Math.PI * 2);
-          targetCtx.fill();
-        }
-        // Mid warm tint
-        targetCtx.fillStyle = realm.cloudMid;
-        for (const p of cl.puffs) {
-          targetCtx.beginPath();
-          targetCtx.arc(cx + p.ox * sc, cy + (p.oy + 2) * sc, p.r * sc * 0.94, 0, Math.PI * 2);
-          targetCtx.fill();
-        }
-        // Cool shadowed belly
-        targetCtx.fillStyle = realm.cloudDark;
-        for (const p of cl.puffs) {
-          targetCtx.beginPath();
-          targetCtx.arc(cx + p.ox * sc, cy + (p.oy + 11) * sc, p.r * sc * 0.85, 0, Math.PI * 2);
-          targetCtx.fill();
-        }
-      }
-
-      // Shooting Stars / Comets
       for (const st of shootingStars) {
         const sx = st.x * w;
         const sy = st.y * horizonY;
         const tail = st.len * (w / 1200);
-        const sg = targetCtx.createLinearGradient(sx, sy, sx - tail, sy - tail * 0.42);
-        sg.addColorStop(0, `rgba(255, 252, 240, ${st.life})`);
-        sg.addColorStop(0.35, `rgba(170, 225, 255, ${st.life * 0.65})`);
-        sg.addColorStop(1, "rgba(255, 255, 255, 0)");
-        targetCtx.strokeStyle = sg;
-        targetCtx.lineWidth = 2.2;
-        targetCtx.beginPath();
-        targetCtx.moveTo(sx, sy);
-        targetCtx.lineTo(sx - tail, sy - tail * 0.42);
-        targetCtx.stroke();
+        const sg = g.createLinearGradient(sx, sy, sx - tail, sy - tail * 0.42);
+        sg.addColorStop(0, `rgba(255, 254, 245, ${st.life})`);
+        sg.addColorStop(0.4, `rgba(175, 228, 255, ${st.life * 0.6})`);
+        sg.addColorStop(1, "rgba(255,255,255,0)");
+        g.strokeStyle = sg;
+        g.lineWidth = 2;
+        g.beginPath();
+        g.moveTo(sx, sy);
+        g.lineTo(sx - tail, sy - tail * 0.42);
+        g.stroke();
       }
 
-      // Distant Misty Mountain Ranges (Kyushu Coast Silhouette)
-      targetCtx.fillStyle = realm.mountainFar;
-      targetCtx.beginPath();
-      targetCtx.moveTo(0, horizonY);
-      for (let x = 0; x <= w; x += Math.max(16, w / 42)) {
-        const n = (x + px * 35) / w;
-        const elev =
-          Math.sin(n * Math.PI * 2.2 + 0.5) * 28 +
-          Math.cos(n * Math.PI * 5.4) * 12 +
-          34;
-        // Dip gently in the center to frame the white door
-        const centerValley = 1 - Math.exp(-Math.pow((x / w - 0.5) * 4.2, 2)) * 0.65;
-        targetCtx.lineTo(x, horizonY - elev * centerValley * (h / 780));
-      }
-      targetCtx.lineTo(w, horizonY);
-      targetCtx.closePath();
-      targetCtx.fill();
+      // 4. Sun Bloom & Crepuscular Light Shafts
+      const sunX = realm.sunPos.x * w - px * 22;
+      const sunY = realm.sunPos.y * horizonY - py * 8;
+      const haloR = Math.min(w, h) * 0.42;
+      const sunGrad = g.createRadialGradient(sunX, sunY, 3, sunX, sunY, haloR);
+      sunGrad.addColorStop(0, realm.sunCore);
+      sunGrad.addColorStop(0.22, realm.sunHalo);
+      sunGrad.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = sunGrad;
+      g.fillRect(0, 0, w, horizonY + 4);
 
-      // Nearer dark mountain ridge
-      targetCtx.fillStyle = realm.mountainNear;
-      targetCtx.beginPath();
-      targetCtx.moveTo(0, horizonY);
-      for (let x = 0; x <= w; x += Math.max(16, w / 36)) {
-        const n = (x + px * 50) / w;
-        const elev = Math.sin(n * Math.PI * 3.1 + 1.8) * 18 + 20;
-        const valley = 1 - Math.exp(-Math.pow((x / w - 0.5) * 3.5, 2)) * 0.85;
-        targetCtx.lineTo(x, horizonY - elev * valley * (h / 780));
+      // 5. Pre-Painted Volumetric Shinkai Cumulonimbus Clouds (Slow Drift)
+      const cloudDrift = ((t * 6) % (w * 0.35)) - w * 0.175;
+      const cloudW = Math.max(w * 1.24, 900);
+      const cloudH = horizonY * 0.95;
+      const cloudX = (w - cloudW) * 0.5 + cloudDrift * 0.18 - px * 26;
+      const cloudY = horizonY - cloudH * 0.94 - py * 10;
+      g.drawImage(assets.clouds, cloudX, cloudY, cloudW, cloudH);
+
+      // Soft crepuscular shafts piercing through the clouds
+      g.save();
+      g.globalCompositeOperation = "screen";
+      for (let i = -3; i <= 3; i++) {
+        const ang = Math.PI * 0.5 + i * 0.22 + Math.sin(t * 0.25 + i) * 0.025;
+        const len = Math.max(w, h) * 0.72;
+        const rg = g.createLinearGradient(sunX, sunY, sunX + Math.cos(ang) * len, sunY + Math.sin(ang) * len);
+        rg.addColorStop(0, "rgba(255, 246, 230, 0.13)");
+        rg.addColorStop(1, "rgba(255, 246, 230, 0)");
+        g.fillStyle = rg;
+        g.beginPath();
+        g.moveTo(sunX, sunY);
+        g.lineTo(sunX + Math.cos(ang - 0.05) * len, sunY + Math.sin(ang - 0.05) * len);
+        g.lineTo(sunX + Math.cos(ang + 0.05) * len, sunY + Math.sin(ang + 0.05) * len);
+        g.closePath();
+        g.fill();
       }
-      targetCtx.lineTo(w, horizonY);
-      targetCtx.closePath();
-      targetCtx.fill();
+      g.restore();
+
+      // 6. Distant Gliding Swallows Across the Clouds
+      g.strokeStyle = realm.birdColor;
+      g.lineWidth = 1.6;
+      g.lineCap = "round";
+      for (const b of birds) {
+        const bx = ((b.x + t * b.speed) % 1.2 - 0.1) * w - px * 24;
+        const by = b.y * horizonY + Math.sin(t * 2.2 + b.wingPhase) * 6;
+        const flap = Math.sin(t * 6.5 + b.wingPhase) * b.size * 0.65;
+        g.beginPath();
+        g.moveTo(bx - b.size, by - flap);
+        g.quadraticCurveTo(bx - b.size * 0.4, by - b.size * 0.35, bx, by);
+        g.quadraticCurveTo(bx + b.size * 0.4, by - b.size * 0.35, bx + b.size, by - flap);
+        g.stroke();
+      }
+
+      // 7. Three Layered Kyushu Mountain Ridges with Atmospheric Haze
+      const drawRidge = (color, baseElev, amp1, amp2, freq1, seedOff, parallax, valleyDepth) => {
+        g.fillStyle = color;
+        g.beginPath();
+        g.moveTo(0, horizonY + 2);
+        const step = Math.max(12, w / 55);
+        for (let x = 0; x <= w + step; x += step) {
+          const u = (x + px * parallax) / w;
+          const elev =
+            baseElev +
+            Math.sin(u * Math.PI * freq1 + seedOff) * amp1 +
+            Math.cos(u * Math.PI * (freq1 * 2.3) - seedOff) * amp2 +
+            Math.sin(u * Math.PI * 9.5 + seedOff) * 4;
+          const valley = 1 - Math.exp(-Math.pow((x / w - 0.5) * 3.4, 2)) * valleyDepth;
+          g.lineTo(x, horizonY - Math.max(2, elev * valley * (h / 800)));
+        }
+        g.lineTo(w, horizonY + 2);
+        g.closePath();
+        g.fill();
+      };
+
+      drawRidge(realm.mtnFar, 62, 34, 14, 2.2, 0.7, 28, 0.58);
+      // Atmospheric valley mist between far & mid mountains
+      const haze = g.createLinearGradient(0, horizonY - 80, 0, horizonY);
+      haze.addColorStop(0, "rgba(255,255,255,0)");
+      haze.addColorStop(1, realm.hazeColor);
+      g.fillStyle = haze;
+      g.fillRect(0, horizonY - 80, w, 82);
+
+      drawRidge(realm.mtnMid, 42, 24, 10, 2.8, 2.1, 42, 0.72);
+      drawRidge(realm.mtnNear, 28, 16, 7, 3.6, 4.0, 56, 0.88);
+
+      // 8. Iconic Japanese Roadside Utility Poles & Drooping Power Lines (Left/Right Hills)
+      g.save();
+      g.strokeStyle = realm.mtnNear;
+      g.fillStyle = realm.mtnNear;
+      const polePositions = [0.08, 0.21, 0.79, 0.92];
+      const poleTops = [];
+      for (const pf of polePositions) {
+        const pxPos = pf * w - px * 58;
+        const pH = (42 + (pf < 0.5 ? (0.3 - pf) * 40 : (pf - 0.7) * 40)) * (h / 800);
+        const topY = horizonY - pH;
+        g.lineWidth = 2.4;
+        g.beginPath();
+        g.moveTo(pxPos, horizonY + 2);
+        g.lineTo(pxPos, topY);
+        g.stroke();
+        // Crossbars
+        g.lineWidth = 1.8;
+        g.beginPath();
+        g.moveTo(pxPos - 9, topY + 6);
+        g.lineTo(pxPos + 9, topY + 6);
+        g.moveTo(pxPos - 7, topY + 13);
+        g.lineTo(pxPos + 7, topY + 13);
+        g.stroke();
+        poleTops.push({ x: pxPos, y: topY + 6 });
+      }
+      // Catenary power wires linking poles
+      g.lineWidth = 0.85;
+      g.globalAlpha = 0.65;
+      const drawWire = (a, b, sag) => {
+        g.beginPath();
+        g.moveTo(a.x, a.y);
+        g.quadraticCurveTo((a.x + b.x) * 0.5, Math.max(a.y, b.y) + sag, b.x, b.y);
+        g.stroke();
+      };
+      drawWire({ x: -10, y: poleTops[0].y + 8 }, poleTops[0], 12);
+      drawWire(poleTops[0], poleTops[1], 14);
+      drawWire(poleTops[2], poleTops[3], 14);
+      drawWire(poleTops[3], { x: w + 10, y: poleTops[3].y + 8 }, 12);
+      g.restore();
+
+      // 9. Midground Overgrown Japanese Tree Line & Abandoned Onsen Concrete Pavilion
+      const treePlacements = [
+        { x: 0.04, scale: 1.05, idx: 0 },
+        { x: 0.13, scale: 0.88, idx: 1 },
+        { x: 0.22, scale: 0.68, idx: 2 },
+        { x: 0.30, scale: 0.46, idx: 3 },
+        { x: 0.70, scale: 0.48, idx: 1 },
+        { x: 0.78, scale: 0.72, idx: 0 },
+        { x: 0.87, scale: 0.92, idx: 3 },
+        { x: 0.96, scale: 1.08, idx: 2 }
+      ];
+      for (let i = 0; i < treePlacements.length; i++) {
+        const tp = treePlacements[i];
+        const sprite = assets.trees[tp.idx];
+        const sway = Math.sin(t * 1.15 + i * 1.3) * 0.018;
+        const tw = sprite.width * tp.scale * (h / 820);
+        const th = sprite.height * tp.scale * (h / 820);
+        const tx = tp.x * w - px * (64 + tp.scale * 22);
+        const ty = horizonY + 8;
+
+        g.save();
+        g.translate(tx, ty);
+        g.rotate(sway);
+        g.drawImage(sprite, -tw * 0.5, -th * 0.92, tw, th);
+        g.restore();
+      }
+
+      // Iconic Flooded Circular Onsen Ruin Wall & Broken Columns (Left & Right Midground)
+      const drawOnsenRuin = (xNorm, flip) => {
+        const rx = xNorm * w - px * 68;
+        const ry = horizonY + 4;
+        const rw = 105 * (h / 800);
+        const rh = 64 * (h / 800);
+
+        g.save();
+        g.translate(rx, ry);
+        g.scale(flip, 1);
+
+        // Weathered sunlit concrete wall with broken jagged top
+        g.fillStyle = realm.ruinShadow;
+        g.beginPath();
+        g.moveTo(-rw * 0.5, 0);
+        g.lineTo(-rw * 0.5, -rh * 0.92);
+        g.lineTo(-rw * 0.25, -rh);
+        g.lineTo(0, -rh * 0.82);
+        g.lineTo(rw * 0.22, -rh * 0.88);
+        g.lineTo(rw * 0.48, -rh * 0.55);
+        g.lineTo(rw * 0.5, 0);
+        g.closePath();
+        g.fill();
+
+        // Sunlit inner face
+        g.fillStyle = realm.ruinLight;
+        g.fillRect(-rw * 0.44, -rh * 0.86, rw * 0.14, rh * 0.86);
+        g.fillRect(rw * 0.16, -rh * 0.8, rw * 0.12, rh * 0.8);
+
+        // Arched empty window cutout showing glowing sky behind
+        g.fillStyle = realm.hazeColor;
+        g.beginPath();
+        g.arc(-rw * 0.06, -rh * 0.38, rw * 0.16, Math.PI, 0);
+        g.lineTo(rw * 0.1, 0);
+        g.lineTo(-rw * 0.22, 0);
+        g.closePath();
+        g.fill();
+
+        // Creeping dark moss & hanging ivy vines
+        g.fillStyle = realm.mossColor;
+        g.fillRect(-rw * 0.5, -rh * 0.18, rw, rh * 0.18);
+        g.strokeStyle = realm.mossColor;
+        g.lineWidth = 2;
+        for (let v = 0; v < 4; v++) {
+          const vx = -rw * 0.32 + v * rw * 0.2;
+          const vLen = rh * (0.28 + (v % 2) * 0.18);
+          const vSway = Math.sin(t * 1.6 + v) * 4;
+          g.beginPath();
+          g.moveTo(vx, -rh * 0.82);
+          g.quadraticCurveTo(vx + vSway, -rh * 0.82 + vLen * 0.6, vx + vSway * 1.3, -rh * 0.82 + vLen);
+          g.stroke();
+        }
+        g.restore();
+      };
+
+      drawOnsenRuin(0.24, 1);
+      drawOnsenRuin(0.76, -1);
     }
 
-    function drawSuzumeDoor(targetCtx, cx, baseY, doorW, doorH, openFrac, realm, nextRealm, time, isReflection) {
-      const frameThick = Math.max(3, doorW * 0.085);
-      const innerW = doorW - frameThick * 2;
-      const innerH = doorH - frameThick;
+    // Painterly Weathered White Suzume Door (with live clipped Next-Realm Sky Portal)
+    function drawSuzumeDoor(g, cx, baseY, doorW, doorH, openFrac, realm, nextRealm, nextAssets, t, isReflection) {
+      const frameT = Math.max(3, doorW * 0.082);
+      const innerW = doorW - frameT * 2;
+      const innerH = doorH - frameT;
       const topY = baseY - doorH;
-      const leftX = cx - doorW / 2;
+      const leftX = cx - doorW * 0.5;
 
-      targetCtx.save();
+      g.save();
 
-      // 1. Stone Threshold / Shallow Submerged Step
+      // 1. Weathered submerged stone threshold step
       if (!isReflection) {
-        targetCtx.fillStyle = "rgba(38, 36, 52, 0.88)";
-        targetCtx.fillRect(leftX - doorW * 0.18, baseY - frameThick * 0.45, doorW * 1.36, frameThick * 0.9);
+        g.fillStyle = realm.ruinShadow;
+        g.fillRect(leftX - doorW * 0.22, baseY - frameT * 0.45, doorW * 1.44, frameT * 0.95);
+        g.fillStyle = realm.ruinLight;
+        g.fillRect(leftX - doorW * 0.2, baseY - frameT * 0.45, doorW * 1.4, Math.max(1.5, frameT * 0.25));
       }
 
-      // 2. Portal Interior (Shows the NEXT Realm's Starry Ever-After Sky!)
-      targetCtx.save();
-      targetCtx.beginPath();
-      targetCtx.rect(leftX + frameThick, topY + frameThick, innerW, innerH);
-      targetCtx.clip();
+      // 2. Live Clipped Portal Showing the NEXT Realm's Painted Sky & Clouds!
+      g.save();
+      g.beginPath();
+      g.rect(leftX + frameT, topY + frameT, innerW, innerH);
+      g.clip();
 
-      const pGrad = targetCtx.createLinearGradient(0, topY, 0, baseY);
-      nextRealm.skyStops.forEach((col, i) => pGrad.addColorStop(i / (nextRealm.skyStops.length - 1), col));
-      targetCtx.fillStyle = pGrad;
-      targetCtx.fillRect(leftX + frameThick, topY + frameThick, innerW, innerH);
+      const pSky = g.createLinearGradient(0, topY, 0, baseY);
+      nextRealm.skyStops.forEach((col, i) => pSky.addColorStop(i / (nextRealm.skyStops.length - 1), col));
+      g.fillStyle = pSky;
+      g.fillRect(leftX + frameT, topY + frameT, innerW, innerH);
 
-      // Swirling cosmic starlight inside the open doorway
-      const pGlow = targetCtx.createRadialGradient(
-        cx, topY + doorH * 0.52, 2,
-        cx, topY + doorH * 0.52, doorH * 0.85
+      // Paint next realm's miniature clouds inside the doorway
+      g.drawImage(
+        nextAssets.clouds,
+        leftX - innerW * 0.4,
+        topY + innerH * 0.1,
+        innerW * 1.8,
+        innerH * 0.78
       );
-      pGlow.addColorStop(0, "rgba(255, 248, 238, 0.95)");
-      pGlow.addColorStop(0.35, nextRealm.sunGlow);
-      pGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
-      targetCtx.fillStyle = pGlow;
-      targetCtx.fillRect(leftX + frameThick, topY + frameThick, innerW, innerH);
 
-      // Portal stars
-      for (let i = 0; i < 24; i++) {
-        const px = leftX + frameThick + ((i * 73.1 + time * 10) % 100) / 100 * innerW;
-        const py = topY + frameThick + ((i * 39.7) % 100) / 100 * innerH;
-        const a = 0.4 + 0.6 * Math.abs(Math.sin(time * 2.5 + i));
-        targetCtx.fillStyle = `rgba(255, 255, 255, ${a})`;
-        targetCtx.fillRect(px, py, Math.max(1.2, doorW * 0.015), Math.max(1.2, doorW * 0.015));
+      // Luminous Ever-After portal light radiating from inside
+      const pGlow = g.createRadialGradient(cx, topY + doorH * 0.5, 2, cx, topY + doorH * 0.5, doorH * 0.85);
+      pGlow.addColorStop(0, "rgba(255, 250, 242, 0.9)");
+      pGlow.addColorStop(0.38, nextRealm.sunHalo);
+      pGlow.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = pGlow;
+      g.fillRect(leftX + frameT, topY + frameT, innerW, innerH);
+
+      // Drifting stars / spirit motes inside the portal
+      for (let i = 0; i < 20; i++) {
+        const sx = leftX + frameT + (((i * 61.3 + t * 8) % 100) / 100) * innerW;
+        const sy = topY + frameT + (((i * 43.7 - t * 6) % 100 + 100) % 100 / 100) * innerH;
+        const a = 0.45 + 0.55 * Math.abs(Math.sin(t * 2.6 + i));
+        g.fillStyle = `rgba(255, 255, 255, ${a})`;
+        g.beginPath();
+        g.arc(sx, sy, Math.max(1, doorW * 0.012), 0, Math.PI * 2);
+        g.fill();
       }
-      targetCtx.restore();
+      g.restore();
 
-      // 3. Outer Glowing Halo as the Door Opens
-      if (openFrac > 0.05 && !isReflection) {
-        targetCtx.save();
-        targetCtx.globalCompositeOperation = "screen";
-        const halo = targetCtx.createRadialGradient(
-          cx, topY + doorH * 0.5, doorW * 0.15,
-          cx, topY + doorH * 0.5, doorH * 1.15
-        );
-        halo.addColorStop(0, `rgba(255, 244, 232, ${0.42 * openFrac})`);
-        halo.addColorStop(0.5, nextRealm.sunGlow.replace(/[\d.]+\)$/, `${0.28 * openFrac})`));
-        halo.addColorStop(1, "rgba(255, 255, 255, 0)");
-        targetCtx.fillStyle = halo;
-        targetCtx.fillRect(cx - doorH * 1.2, topY - doorH * 0.5, doorH * 2.4, doorH * 2);
-        targetCtx.restore();
+      // 3. Soft Radiant Light Spill as the Door Opens
+      if (openFrac > 0.03 && !isReflection) {
+        g.save();
+        g.globalCompositeOperation = "screen";
+        const spill = g.createRadialGradient(cx, topY + doorH * 0.5, doorW * 0.1, cx, topY + doorH * 0.5, doorH * 1.15);
+        spill.addColorStop(0, `rgba(255, 248, 238, ${0.44 * openFrac})`);
+        spill.addColorStop(0.55, `rgba(255, 220, 235, ${0.18 * openFrac})`);
+        spill.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = spill;
+        g.fillRect(cx - doorH * 1.2, topY - doorH * 0.5, doorH * 2.4, doorH * 2.1);
+        g.restore();
       }
 
-      // 4. Swinging White Weathered Wooden Door Leaf (3D Foreshortening)
-      const angle = openFrac * (Math.PI * 0.48); // swings inward/outward smoothly
+      // 4. Swinging 3D Foreshortened White Wooden Door Leaf
+      const angle = openFrac * (Math.PI * 0.49);
       const leafW = Math.cos(angle) * innerW;
-      const perspectiveDrop = Math.sin(angle) * doorH * 0.06;
-      const hingeX = leftX + frameThick;
+      const dropY = Math.sin(angle) * doorH * 0.065;
+      const hingeX = leftX + frameT;
 
-      if (leafW > 1) {
-        targetCtx.fillStyle = realm.doorTint;
-        targetCtx.beginPath();
-        targetCtx.moveTo(hingeX, topY + frameThick);
-        targetCtx.lineTo(hingeX + leafW, topY + frameThick - perspectiveDrop);
-        targetCtx.lineTo(hingeX + leafW, baseY + perspectiveDrop * 0.6);
-        targetCtx.lineTo(hingeX, baseY);
-        targetCtx.closePath();
-        targetCtx.fill();
+      if (leafW > 1.2) {
+        g.fillStyle = realm.doorFace;
+        g.beginPath();
+        g.moveTo(hingeX, topY + frameT);
+        g.lineTo(hingeX + leafW, topY + frameT - dropY);
+        g.lineTo(hingeX + leafW, baseY + dropY * 0.55);
+        g.lineTo(hingeX, baseY);
+        g.closePath();
+        g.fill();
 
-        // Recessed classic Suzume wooden door panels
-        targetCtx.strokeStyle = realm.doorShadow;
-        targetCtx.lineWidth = Math.max(1, doorW * 0.016);
+        // Subtle weathered damp stain near bottom of door
+        const wGrad = g.createLinearGradient(0, baseY - innerH * 0.25, 0, baseY);
+        wGrad.addColorStop(0, "rgba(0,0,0,0)");
+        wGrad.addColorStop(1, realm.doorWeather);
+        g.fillStyle = wGrad;
+        g.fill();
+
+        // Architectural door panels & upper 4-pane window mullions
         const padX = leafW * 0.14;
-        const padY = innerH * 0.08;
-        const panelW = leafW - padX * 2;
-        if (panelW > 2) {
-          // Upper glazed/recessed panel
-          targetCtx.fillStyle = "rgba(180, 210, 235, 0.25)";
-          targetCtx.fillRect(hingeX + padX, topY + frameThick + padY, panelW, innerH * 0.36);
-          targetCtx.strokeRect(hingeX + padX, topY + frameThick + padY, panelW, innerH * 0.36);
+        const panW = leafW - padX * 2;
+        if (panW > 3) {
+          g.strokeStyle = realm.doorEdge;
+          g.lineWidth = Math.max(1, doorW * 0.014);
 
-          // Lower wooden panel
-          targetCtx.strokeRect(hingeX + padX, topY + frameThick + innerH * 0.54, panelW, innerH * 0.34);
+          // Upper glass window frame
+          const winY = topY + frameT + innerH * 0.08;
+          const winH = innerH * 0.36;
+          g.fillStyle = "rgba(170, 210, 240, 0.26)";
+          g.fillRect(hingeX + padX, winY, panW, winH);
+          g.strokeRect(hingeX + padX, winY, panW, winH);
+          // Window crossbars
+          g.beginPath();
+          g.moveTo(hingeX + padX + panW * 0.5, winY);
+          g.lineTo(hingeX + padX + panW * 0.5, winY + winH);
+          g.moveTo(hingeX + padX, winY + winH * 0.5);
+          g.lineTo(hingeX + padX + panW, winY + winH * 0.5);
+          g.stroke();
+
+          // Lower beveled wood panel
+          g.strokeRect(hingeX + padX, topY + frameT + innerH * 0.54, panW, innerH * 0.34);
         }
 
-        // Brass doorknob
-        targetCtx.fillStyle = "#e2ba64";
-        targetCtx.beginPath();
-        targetCtx.arc(
-          hingeX + leafW * 0.86,
-          topY + frameThick + innerH * 0.5,
-          Math.max(1.5, doorW * 0.028),
-          0,
-          Math.PI * 2
-        );
-        targetCtx.fill();
+        // Brass doorknob + subtle glowing keyhole before opening
+        const knobX = hingeX + leafW * 0.86;
+        const knobY = topY + frameT + innerH * 0.51;
+        g.fillStyle = "#e5be6a";
+        g.beginPath();
+        g.arc(knobX, knobY, Math.max(1.5, doorW * 0.026), 0, Math.PI * 2);
+        g.fill();
+
+        if (openFrac < 0.2 && !isReflection) {
+          g.fillStyle = "rgba(255, 242, 185, 0.85)";
+          g.beginPath();
+          g.arc(knobX, knobY + doorH * 0.035, Math.max(1.2, doorW * 0.015), 0, Math.PI * 2);
+          g.fill();
+        }
       }
 
-      // 5. Outer Wooden Door Frame (Always crisp white with subtle depth shadow)
-      targetCtx.fillStyle = realm.doorShadow;
-      targetCtx.fillRect(leftX - 2, topY - 2, doorW + 4, frameThick + 3);
-      targetCtx.fillStyle = realm.doorTint;
-      // Top lintel
-      targetCtx.fillRect(leftX - frameThick * 0.35, topY, doorW + frameThick * 0.7, frameThick);
-      // Left jamb
-      targetCtx.fillRect(leftX, topY, frameThick, doorH);
-      // Right jamb
-      targetCtx.fillRect(leftX + doorW - frameThick, topY, frameThick, doorH);
+      // 5. Thick 3D Weathered White Wooden Door Frame
+      g.fillStyle = realm.doorEdge;
+      g.fillRect(leftX - 2, topY - 2, doorW + 4, frameT + 3);
+      g.fillStyle = realm.doorFace;
+      g.fillRect(leftX - frameT * 0.4, topY, doorW + frameT * 0.8, frameT);
+      g.fillRect(leftX, topY, frameT, doorH);
+      g.fillRect(leftX + doorW - frameT, topY, frameT, doorH);
 
-      targetCtx.restore();
+      g.restore();
+    }
+
+    // Anamorphic Makoto Shinkai Hexagonal Lens Flare
+    function drawShinkaiLensFlare(g, sunX, sunY, w, h, realm) {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const dx = cx - sunX;
+      const dy = cy - sunY;
+
+      g.save();
+      g.globalCompositeOperation = "screen";
+
+      // Soft horizontal anamorphic streak across sun
+      const streak = g.createLinearGradient(sunX - w * 0.28, sunY, sunX + w * 0.28, sunY);
+      streak.addColorStop(0, "rgba(255,255,255,0)");
+      streak.addColorStop(0.5, realm.flareColor);
+      streak.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = streak;
+      g.fillRect(sunX - w * 0.28, sunY - 2.5, w * 0.56, 5);
+
+      // Subtle translucent hexagonal bokeh rings along camera optical axis
+      const rings = [
+        { t: 0.35, r: 22, a: 0.14 },
+        { t: 0.68, r: 38, a: 0.1 },
+        { t: 1.25, r: 16, a: 0.16 },
+        { t: 1.62, r: 52, a: 0.08 }
+      ];
+      for (const ring of rings) {
+        const rx = sunX + dx * ring.t;
+        const ry = sunY + dy * ring.t;
+        g.fillStyle = realm.flareColor;
+        g.globalAlpha = ring.a;
+        g.beginPath();
+        for (let s = 0; s < 6; s++) {
+          const ang = (s * Math.PI) / 3;
+          const vx = rx + Math.cos(ang) * ring.r;
+          const vy = ry + Math.sin(ang) * ring.r;
+          if (s === 0) g.moveTo(vx, vy);
+          else g.lineTo(vx, vy);
+        }
+        g.closePath();
+        g.fill();
+      }
+      g.restore();
+    }
+
+    // Lush Foreground Overhanging Japanese Maple Branches & Swaying Summer Grass
+    function drawForegroundFraming(g, w, h, t, px, realm) {
+      g.save();
+
+      // Top-left & Top-right Overhanging Leafy Branches
+      for (const side of [-1, 1]) {
+        const originX = side < 0 ? -15 : w + 15;
+        const originY = -10;
+        const sway = Math.sin(t * 1.35 + side) * 10 + px * 14;
+
+        g.strokeStyle = realm.fgSilhouette;
+        g.lineWidth = 6;
+        g.lineCap = "round";
+        g.beginPath();
+        g.moveTo(originX, originY);
+        g.quadraticCurveTo(
+          originX - side * 90,
+          55,
+          originX - side * 195 + sway,
+          105 + Math.sin(t * 1.1) * 5
+        );
+        g.stroke();
+
+        // Backlit foliage leaves along overhanging branch
+        for (let l = 0; l < 18; l++) {
+          const u = 0.15 + (l / 18) * 0.85;
+          const lx = originX - side * (u * 205) + sway * u + Math.sin(l * 2.7) * 26;
+          const ly = u * 112 + Math.cos(l * 3.1) * 24;
+          const lr = 10 + (l % 4) * 5;
+
+          g.fillStyle = l % 4 === 0 ? realm.fgRim : realm.fgSilhouette;
+          g.globalAlpha = l % 4 === 0 ? 0.55 : 0.88;
+          g.beginPath();
+          g.ellipse(lx, ly, lr * 1.35, lr * 0.55, side * (0.4 + (l % 5) * 0.25), 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Bottom-left & Bottom-right Swaying Wild Grass & Tiny Wildflowers
+      g.globalAlpha = 0.92;
+      for (const side of [-1, 1]) {
+        for (let b = 0; b < 15; b++) {
+          const bx = side < 0 ? b * 14 - 8 : w - b * 14 + 8;
+          const bh = 48 + (b % 5) * 24 + (15 - b) * 3.2;
+          const sway = Math.sin(t * 1.85 + b * 0.65) * 15 + px * 14;
+          g.strokeStyle = b % 5 === 0 ? realm.fgRim : realm.fgSilhouette;
+          g.lineWidth = 2.4 - (b % 3) * 0.45;
+          g.beginPath();
+          g.moveTo(bx, h + 6);
+          g.quadraticCurveTo(bx + sway * 0.55, h - bh * 0.55, bx + sway, h - bh);
+          g.stroke();
+
+          // Tiny delicate sunlit white wildflower buds on select tall stems
+          if (b % 4 === 1) {
+            g.fillStyle = "rgba(255, 250, 240, 0.85)";
+            g.beginPath();
+            g.arc(bx + sway, h - bh, 2.3, 0, Math.PI * 2);
+            g.fill();
+          }
+        }
+      }
+      g.restore();
     }
 
     /* =========================================================================
-       6. MAIN 60FPS ENDLESS AUTOMATED ANIMATION LOOP
+       8. MAIN 60FPS ANIMATION LOOP
        ========================================================================= */
     let lastTime = performance.now();
 
@@ -947,41 +1592,41 @@
       lastTime = now;
       const t = now * 0.001;
 
-      // Smooth pointer parallax
-      smoothPX += (pointerX - smoothPX) * Math.min(1, dt * 3.2);
-      smoothPY += (pointerY - smoothPY) * Math.min(1, dt * 3.2);
-
-      // Decay manual "Next Door" boost smoothly
-      speedBoost += (1.0 - speedBoost) * Math.min(1, dt * 1.8);
+      smoothPX += (pointerX - smoothPX) * Math.min(1, dt * 3.0);
+      smoothPY += (pointerY - smoothPY) * Math.min(1, dt * 3.0);
+      speedBoost += (1.0 - speedBoost) * Math.min(1, dt * 1.7);
 
       // Advance automated endless cycle
-      cycleProgress += (dt / CYCLE_DURATION_SEC) * speedBoost;
+      cycleProgress += (dt / CYCLE_DURATION) * speedBoost;
 
-      // Trigger ethereal chime when the door swings wide
-      if (cycleProgress > 0.56 && !doorChimePlayed) {
+      if (cycleProgress > 0.55 && !doorChimeFired) {
         audio.playDoorChime();
-        doorChimePlayed = true;
+        doorChimeFired = true;
       }
 
-      // Crossed the threshold -> Transition seamlessly to the next realm!
       if (cycleProgress >= 1.0) {
         cycleProgress = 0.0;
         realmIdx = (realmIdx + 1) % REALMS.length;
-        doorChimePlayed = false;
-        updateRealmHUD();
+        doorChimeFired = false;
+        getRealmAssets((realmIdx + 1) % REALMS.length);
+        updateHUD();
       }
 
       progressFillEl.style.width = `${Math.round(cycleProgress * 100)}%`;
 
       const realm = REALMS[realmIdx];
-      const nextRealm = REALMS[(realmIdx + 1) % REALMS.length];
-      const horizonY = H * 0.64 - smoothPY * 14;
+      const nextIdx = (realmIdx + 1) % REALMS.length;
+      const nextRealm = REALMS[nextIdx];
+      const assets = getRealmAssets(realmIdx);
+      const nextAssets = getRealmAssets(nextIdx);
 
-      // Occasional slow anime shooting star
-      if (Math.random() < 0.008 && shootingStars.length < 2) {
+      const horizonY = Math.floor(H * 0.635 - smoothPY * 14);
+
+      // Shooting stars (twilight/dawn)
+      if (realm.starAlpha > 0.3 && Math.random() < 0.009 && shootingStars.length < 2) {
         shootingStars.push({
-          x: 0.25 + Math.random() * 0.65,
-          y: 0.08 + Math.random() * 0.32,
+          x: 0.2 + Math.random() * 0.65,
+          y: 0.07 + Math.random() * 0.32,
           vx: 0.16 + Math.random() * 0.1,
           vy: 0.07 + Math.random() * 0.04,
           len: 95 + Math.random() * 75,
@@ -996,114 +1641,153 @@
         if (s.life <= 0) shootingStars.splice(i, 1);
       }
 
-      // Automatic gentle water ripples
-      if (Math.random() < 0.025 && ripples.length < 10) {
-        spawnRipple(0.15 + Math.random() * 0.7, 0.66 + Math.random() * 0.28);
+      // Gentle ambient ripples on the flooded lake
+      if (Math.random() < 0.022 && ripples.length < 9) {
+        spawnRipple(0.14 + Math.random() * 0.72, 0.66 + Math.random() * 0.28);
       }
 
-      // Compute Door Perspective Scale & Swing Opening
-      // Exponential approach mimics real camera dolly speed
-      const easeApproach = Math.pow(cycleProgress, 2.35);
-      const minDoorH = Math.min(W, H) * 0.11;
-      const maxDoorH = Math.max(W, H) * 1.95;
-      const doorH = minDoorH + easeApproach * (maxDoorH - minDoorH);
-      const doorW = doorH * 0.54;
-      const doorX = W * 0.5 - smoothPX * (26 + easeApproach * 40);
-      const doorBaseY = horizonY + (H * 0.025) + easeApproach * (H * 0.42);
+      // Compute Door Perspective Dolly & Swing
+      const approach = Math.pow(cycleProgress, 2.35);
+      const minDoorH = Math.min(W, H) * 0.115;
+      const maxDoorH = Math.max(W, H) * 2.0;
+      const doorH = minDoorH + approach * (maxDoorH - minDoorH);
+      const doorW = doorH * 0.53;
+      const doorX = W * 0.5 - smoothPX * (26 + approach * 44);
+      const doorBaseY = horizonY + H * 0.028 + approach * (H * 0.42);
       const openFrac = Math.max(0, Math.min(1, (cycleProgress - 0.52) / 0.28));
 
-      /* --- PASS 1: DRAW UPPER SKY WORLD --- */
-      drawSkyBackdrop(ctx, W, H, horizonY, realm, t, smoothPX, smoothPY);
+      /* --- PASS 1: RENDER ENTIRE UPPER WORLD TO OFFSCREEN BUFFER --- */
+      drawUpperWorld(uctx, W, H, horizonY, realm, assets, t, smoothPX, smoothPY);
 
-      /* --- PASS 2: DRAW MIRRORED SHALLOW WATER REFLECTION --- */
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, horizonY, W, H - horizonY);
-      ctx.clip();
+      // Copy upper world to main canvas
+      ctx.drawImage(upperBuf, 0, 0, W, horizonY + 2, 0, 0, W, horizonY + 2);
 
-      // Reflect sky upside-down
-      ctx.save();
-      ctx.translate(0, horizonY * 2);
-      ctx.scale(1, -1);
-      drawSkyBackdrop(ctx, W, H, horizonY, realm, t, smoothPX, smoothPY);
-      // Reflected Door in the water
+      /* --- PASS 2: TRUE SCANLINE-DISPLACED SHIMMERING MIRROR WATER --- */
+      const waterH = Math.max(1, H - horizonY);
+      const sliceStep = W > 900 ? 3 : 2;
+      for (let wy = 0; wy < waterH; wy += sliceStep) {
+        const depth = wy / waterH;
+        const srcY = Math.max(0, Math.min(horizonY - sliceStep, Math.floor(horizonY - wy * 0.92)));
+        const srcH = Math.min(sliceStep + 1, upperBuf.height - srcY);
+        if (srcH <= 0) continue;
+
+        const waveShift =
+          Math.sin(depth * 26 - t * 2.8) * (1.2 + depth * 7.5) +
+          Math.cos(depth * 52 + t * 1.9) * (0.6 + depth * 2.5);
+
+        ctx.drawImage(
+          upperBuf,
+          0, srcY, upperBuf.width, srcH,
+          waveShift, horizonY + wy, W, sliceStep + 1
+        );
+      }
+
+      // Water tint & Fresnel depth gradient
+      const waterGrad = ctx.createLinearGradient(0, horizonY, 0, H);
+      waterGrad.addColorStop(0, "rgba(255, 255, 255, 0.08)");
+      waterGrad.addColorStop(0.25, realm.waterTint);
+      waterGrad.addColorStop(1, "rgba(6, 10, 24, 0.52)");
+      ctx.fillStyle = waterGrad;
+      ctx.fillRect(0, horizonY, W, waterH);
+
+      // Reflected Door directly beneath the threshold with water shimmer
       if (cycleProgress < 0.92) {
-        ctx.globalAlpha = 0.62;
-        drawSuzumeDoor(ctx, doorX, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, t, true);
-      }
-      ctx.restore();
-
-      // Cool water depth tint
-      ctx.fillStyle = realm.waterTint;
-      ctx.fillRect(0, horizonY, W, H - horizonY);
-
-      // Shimmering horizontal water wave glints
-      const sunCenterX = W * 0.5 - smoothPX * 22;
-      for (let i = 0; i < 38; i++) {
-        const depth = i / 38;
-        const wy = horizonY + Math.pow(depth, 1.65) * (H - horizonY);
-        const shimmerW = (18 + depth * 145) * (0.7 + 0.3 * Math.sin(t * 2.2 + i * 1.4));
-        const shift = Math.sin(t * 1.8 + i * 0.9) * (6 + depth * 18);
-        ctx.fillStyle = `rgba(255, 245, 238, ${0.06 + (1 - depth) * 0.16})`;
-        ctx.fillRect(sunCenterX - shimmerW / 2 + shift, wy, shimmerW, 1 + depth * 1.8);
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, horizonY, W, waterH);
+        ctx.clip();
+        ctx.translate(0, doorBaseY * 2);
+        ctx.scale(1, -0.88);
+        ctx.globalAlpha = 0.44;
+        drawSuzumeDoor(ctx, doorX + Math.sin(t * 2.6) * 2.2, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, nextAssets, t, true);
+        ctx.restore();
       }
 
-      // Expanding Elliptical Water Ripples
+      // Sunpath sparkling water glints
+      const sunScreenX = realm.sunPos.x * W - smoothPX * 22;
+      for (let i = 0; i < 34; i++) {
+        const d = i / 34;
+        const gy = horizonY + Math.pow(d, 1.65) * waterH;
+        const gw = (16 + d * 135) * (0.65 + 0.35 * Math.sin(t * 2.4 + i * 1.5));
+        const shift = Math.sin(t * 2.0 + i * 1.1) * (5 + d * 16);
+        ctx.fillStyle = realm.waterGlint;
+        ctx.globalAlpha = 0.08 + (1 - d) * 0.22;
+        ctx.fillRect(sunScreenX - gw * 0.5 + shift, gy, gw, 1 + d * 1.8);
+      }
+      ctx.globalAlpha = 1;
+
+      // Interactive Expanding Water Ripples
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rp = ripples[i];
-        rp.radius += dt * 42;
-        rp.alpha -= dt * 0.36;
+        rp.radius += dt * 44;
+        rp.alpha -= dt * 0.34;
         if (rp.alpha <= 0 || rp.radius > rp.maxRadius) {
           ripples.splice(i, 1);
           continue;
         }
-        ctx.strokeStyle = `rgba(255, 248, 255, ${rp.alpha * 0.55})`;
-        ctx.lineWidth = 1.3;
+        ctx.strokeStyle = `rgba(255, 252, 255, ${rp.alpha * 0.58})`;
+        ctx.lineWidth = 1.4;
         ctx.beginPath();
-        ctx.ellipse(rp.x * W, rp.y * H, rp.radius, rp.radius * 0.24, 0, 0, Math.PI * 2);
+        ctx.ellipse(rp.x * W, rp.y * H, rp.radius, rp.radius * 0.22, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
-      ctx.restore();
 
-      /* --- PASS 3: GLIDING RUIN POSTS ALONG THE WATER CORRIDOR --- */
-      for (const post of ruinPosts) {
-        post.z -= dt * 0.095 * speedBoost;
-        if (post.z < 0.04) post.z += 0.96;
+      /* --- PASS 3: GLIDING FLOODED RUIN COLUMNS & OVERGROWN TREES --- */
+      corridorRuins.sort((a, b) => b.z - a.z);
+      for (const cr of corridorRuins) {
+        cr.z -= dt * 0.085 * speedBoost;
+        if (cr.z < 0.05) cr.z += 0.95;
 
-        const persp = 0.1 / post.z;
-        const px = W * 0.5 + post.side * (W * 0.19 * persp) - smoothPX * (25 * persp);
-        const py = horizonY + (H * 0.08 * persp);
-        const pw = Math.max(2, 6 * persp);
-        const ph = 38 * post.heightFactor * persp;
-        const alpha = Math.min(0.82, (1 - post.z) * 1.4);
+        const persp = 0.11 / cr.z;
+        const rx = W * 0.5 + cr.side * (W * 0.24 * persp) - smoothPX * (26 * persp);
+        const ry = horizonY + H * 0.085 * persp;
+        const alpha = Math.min(0.95, (1 - cr.z) * 1.55);
 
-        if (px > -80 && px < W + 80 && py < H + 120) {
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.translate(px, py);
-          ctx.rotate(post.tilt);
-          // Weathered dark ruin post
-          ctx.fillStyle = realm.mountainNear;
-          ctx.fillRect(-pw / 2, -ph, pw, ph);
-          // Soft water reflection of post
-          ctx.globalAlpha = alpha * 0.35;
-          ctx.fillRect(-pw / 2, 0, pw, ph * 0.65);
-          ctx.restore();
+        if (rx < -240 || rx > W + 240 || ry > H + 200) continue;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // Approaching mossy concrete ruin pillar submerged in shallow water
+        const colW = Math.max(4, 14 * persp);
+        const colH = 52 * persp;
+        ctx.fillStyle = realm.ruinShadow;
+        ctx.fillRect(rx - colW * 0.5, ry - colH, colW, colH);
+        ctx.fillStyle = realm.ruinLight;
+        ctx.fillRect(rx - colW * 0.5, ry - colH, colW * 0.34, colH);
+        // Mossy base at waterline
+        ctx.fillStyle = realm.mossColor;
+        ctx.fillRect(rx - colW * 0.55, ry - colH * 0.22, colW * 1.1, colH * 0.24);
+        // Water reflection of pillar
+        ctx.globalAlpha = alpha * 0.3;
+        ctx.fillStyle = realm.ruinShadow;
+        ctx.fillRect(rx - colW * 0.5, ry, colW, colH * 0.55);
+
+        // Overgrown painterly Japanese tree beside ruin column
+        if (cr.hasTree && cr.z > 0.14) {
+          const sprite = assets.trees[cr.treeIdx];
+          const ts = 0.42 * persp * (H / 800);
+          const tw = sprite.width * ts;
+          const th = sprite.height * ts;
+          ctx.globalAlpha = alpha * 0.92;
+          ctx.drawImage(sprite, rx + cr.side * colW * 1.4 - tw * 0.5, ry - th * 0.92, tw, th);
         }
+
+        ctx.restore();
       }
 
-      /* --- PASS 4: THE ICONIC STANDING WHITE SUZUME DOOR --- */
-      drawSuzumeDoor(ctx, doorX, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, t, false);
+      /* --- PASS 4: HERO STANDING WHITE SUZUME DOOR --- */
+      drawSuzumeDoor(ctx, doorX, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, nextAssets, t, false);
 
-      // Subtle glowing ripple right around the door base in the water
-      if (cycleProgress < 0.85) {
-        ctx.strokeStyle = "rgba(255, 248, 240, 0.32)";
-        ctx.lineWidth = 1.2;
+      // Gentle circular waterline ring around the door threshold
+      if (cycleProgress < 0.86) {
+        ctx.strokeStyle = "rgba(255, 250, 245, 0.36)";
+        ctx.lineWidth = 1.25;
         ctx.beginPath();
         ctx.ellipse(
           doorX,
           doorBaseY + 2,
-          doorW * (0.72 + Math.sin(t * 2) * 0.05),
+          doorW * (0.76 + Math.sin(t * 2.1) * 0.045),
           Math.max(2, doorW * 0.1),
           0,
           0,
@@ -1112,54 +1796,56 @@
         ctx.stroke();
       }
 
-      /* --- PASS 5: FLOATING EVER-AFTER SPIRIT MOTES / EMBERS --- */
+      /* --- PASS 5: FLOATING SPIRIT MOTES, POLLEN & SUBTLE OUTMATH RUNES --- */
       ctx.save();
       ctx.globalCompositeOperation = "screen";
-      for (const e of embers) {
-        e.y += e.vy * dt * (0.7 + speedBoost * 0.3);
-        e.x += (e.vx + Math.sin(t * 1.5 + e.phase) * 0.008) * dt;
-        if (e.y < 0.05) { e.y = 0.98; e.x = Math.random(); }
-        if (e.x < 0) e.x = 1;
-        if (e.x > 1) e.x = 0;
+      for (let i = 0; i < motes.length; i++) {
+        const m = motes[i];
+        m.y += m.vy * dt * (0.7 + speedBoost * 0.3);
+        m.x += (m.vx + Math.sin(t * 1.4 + m.phase) * 0.008) * dt;
+        if (m.y < 0.04) { m.y = 0.98; m.x = Math.random(); }
+        if (m.x < 0) m.x = 1;
+        if (m.x > 1) m.x = 0;
 
-        const ex = e.x * W - smoothPX * 45;
-        const ey = e.y * H - smoothPY * 20;
-        const pulse = 0.4 + 0.6 * Math.abs(Math.sin(t * 2.4 + e.phase));
+        const mx = m.x * W - smoothPX * 48;
+        const my = m.y * H - smoothPY * 20;
+        const pulse = 0.35 + 0.65 * Math.abs(Math.sin(t * 2.3 + m.phase));
 
-        ctx.fillStyle = realm.emberColor;
-        ctx.globalAlpha = pulse * 0.85;
-        ctx.beginPath();
-        ctx.arc(ex, ey, e.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-
-      /* --- PASS 6: SWAYING FOREGROUND REEDS IN BOTTOM CORNERS --- */
-      ctx.save();
-      ctx.strokeStyle = "rgba(10, 10, 24, 0.78)";
-      ctx.lineCap = "round";
-      for (let side of [-1, 1]) {
-        for (let b = 0; b < 9; b++) {
-          const bx = side < 0 ? (b * 16 - 10) : (W - b * 16 + 10);
-          const bh = 55 + (b % 4) * 26;
-          const sway = Math.sin(t * 1.6 + b * 0.7) * 14 + smoothPX * 10;
-          ctx.lineWidth = 2.2 - (b % 3) * 0.4;
+        ctx.fillStyle = realm.moteColor;
+        if (m.isGlyph && openFrac > 0.15) {
+          ctx.globalAlpha = pulse * 0.34 * openFrac;
+          ctx.font = '300 13px "Cinzel", serif';
+          ctx.fillText(subtleMathRunes[i % subtleMathRunes.length], mx, my);
+        } else {
+          ctx.globalAlpha = pulse * 0.85;
           ctx.beginPath();
-          ctx.moveTo(bx, H + 6);
-          ctx.quadraticCurveTo(bx + sway * 0.5, H - bh * 0.55, bx + sway, H - bh);
-          ctx.stroke();
+          ctx.arc(mx, my, m.r, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
       ctx.restore();
 
-      /* --- PASS 7: DREAMY LIGHT BLOOM WHEN PASSING THROUGH THE DOOR --- */
+      /* --- PASS 6: ANAMORPHIC LENS FLARE & FOREGROUND BRANCHES/GRASS --- */
+      drawShinkaiLensFlare(ctx, sunScreenX, realm.sunPos.y * horizonY - smoothPY * 8, W, H, realm);
+      drawForegroundFraming(ctx, W, H, t, smoothPX, realm);
+
+      /* --- PASS 7: SUBTLE 35MM FILM GRAIN OVERLAY --- */
+      if (grainPattern) {
+        ctx.save();
+        ctx.globalAlpha = 0.42;
+        ctx.fillStyle = grainPattern;
+        ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+      }
+
+      /* --- PASS 8: DREAMY THRESHOLD BLOOM WHEN PASSING THROUGH THE DOOR --- */
       if (cycleProgress > 0.86) {
         const flash = (cycleProgress - 0.86) / 0.14;
-        ctx.fillStyle = `rgba(255, 246, 242, ${Math.pow(flash, 1.6) * 0.88})`;
+        ctx.fillStyle = `rgba(255, 250, 245, ${Math.pow(flash, 1.55) * 0.9})`;
         ctx.fillRect(0, 0, W, H);
       } else if (cycleProgress < 0.08) {
-        const fadeOut = 1 - (cycleProgress / 0.08);
-        ctx.fillStyle = `rgba(255, 246, 242, ${Math.pow(fadeOut, 1.5) * 0.88})`;
+        const fade = 1 - cycleProgress / 0.08;
+        ctx.fillStyle = `rgba(255, 250, 245, ${Math.pow(fade, 1.5) * 0.9})`;
         ctx.fillRect(0, 0, W, H);
       }
     }
@@ -1167,7 +1853,7 @@
     requestAnimationFrame(render);
 
     /* =========================================================================
-       7. INTERACTIVE CONTROLS
+       9. INTERACTIVE CONTROLS
        ========================================================================= */
     window.addEventListener("mousemove", (e) => {
       pointerX = (e.clientX / W - 0.5) * 2;
@@ -1183,6 +1869,7 @@
 
     canvas.addEventListener("pointerdown", (e) => {
       spawnRipple(e.clientX / W, e.clientY / H);
+      audio.playWaterDrop();
     });
 
     document.getElementById("next-door-btn").addEventListener("click", () => {
