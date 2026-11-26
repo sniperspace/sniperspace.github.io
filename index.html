@@ -332,4 +332,875 @@
       </p>
     </main>
 
-    <footer class="hud-bottom
+    <footer class="hud-bottom">
+      <div class="hud-hint">TAP WATER FOR RIPPLES • AUTOMATED ENDLESS JOURNEY</div>
+      <div class="studio-credit" id="studio-credit">By Tetheris App Studios</div>
+      <div class="progress-wrap">
+        <span>THRESHOLD</span>
+        <div class="door-progress-bar">
+          <div class="door-progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /* =========================================================================
+       ✨ 1. TEASER TEXT CONFIGURATION — EDIT YOUR TEXT HERE
+       ========================================================================= */
+    const TEASER_CONFIG = {
+      title: "OUTMATH",
+      jpKicker: "扉の向こう側へ",
+      status: "COMING SOON",
+      tagline: "Beyond every open door lies a new equation waiting to be solved.",
+      studioCredit: "By Tetheris App Studios"
+    };
+
+    document.title = `${TEASER_CONFIG.title} — ${TEASER_CONFIG.status}`;
+    document.getElementById("game-title").textContent = TEASER_CONFIG.title;
+    document.getElementById("jp-kicker").textContent = TEASER_CONFIG.jpKicker;
+    document.getElementById("coming-text").textContent = TEASER_CONFIG.status;
+    document.getElementById("tagline-text").textContent = TEASER_CONFIG.tagline;
+    document.getElementById("studio-credit").textContent = TEASER_CONFIG.studioCredit;
+
+    /* =========================================================================
+       2. MAKOTO SHINKAI / SUZUME SKY REALMS (AUTOMATED ENDLESS CYCLE)
+       ========================================================================= */
+    const REALMS = [
+      {
+        name: "EVER-AFTER TWILIGHT // 常世",
+        dot: "#ff9bb8",
+        skyStops: ["#07091f", "#1a1847", "#5a2768", "#c84b7c", "#ff9e7d"],
+        waterTint: "rgba(18, 14, 48, 0.36)",
+        sunColor: "#ffe1bd",
+        sunGlow: "rgba(255, 130, 145, 0.55)",
+        cloudDark: "rgba(38, 22, 68, 0.72)",
+        cloudMid: "rgba(130, 58, 114, 0.62)",
+        cloudRim: "rgba(255, 198, 178, 0.88)",
+        mountainFar: "#251c4d",
+        mountainNear: "#151232",
+        starAlpha: 0.95,
+        auroraAlpha: 0.45,
+        emberColor: "#ffd0a6",
+        doorTint: "#f7eff2",
+        doorShadow: "#5b486b"
+      },
+      {
+        name: "KYUSHU GOLDEN SUNSET // 夕暮れ",
+        dot: "#ffd27d",
+        skyStops: ["#152b59", "#37568a", "#9c5f7c", "#e8846b", "#ffda8e"],
+        waterTint: "rgba(32, 24, 52, 0.3)",
+        sunColor: "#fff4cf",
+        sunGlow: "rgba(255, 185, 105, 0.62)",
+        cloudDark: "rgba(62, 54, 96, 0.65)",
+        cloudMid: "rgba(196, 108, 112, 0.6)",
+        cloudRim: "rgba(255, 236, 184, 0.94)",
+        mountainFar: "#483a66",
+        mountainNear: "#26213d",
+        starAlpha: 0.35,
+        auroraAlpha: 0.12,
+        emberColor: "#ffe49e",
+        doorTint: "#fff9f0",
+        doorShadow: "#7a5e63"
+      },
+      {
+        name: "STARLIT BLUE HOUR // 逢魔時",
+        dot: "#90e0ff",
+        skyStops: ["#040a1d", "#0b1e47", "#18417a", "#3d7fb3", "#9ad9f2"],
+        waterTint: "rgba(6, 20, 46, 0.34)",
+        sunColor: "#e6fbff",
+        sunGlow: "rgba(120, 215, 255, 0.48)",
+        cloudDark: "rgba(16, 36, 74, 0.72)",
+        cloudMid: "rgba(44, 94, 145, 0.55)",
+        cloudRim: "rgba(198, 242, 255, 0.88)",
+        mountainFar: "#142f59",
+        mountainNear: "#0b1a36",
+        starAlpha: 1.0,
+        auroraAlpha: 0.35,
+        emberColor: "#a8ecff",
+        doorTint: "#eef8ff",
+        doorShadow: "#355378"
+      },
+      {
+        name: "ABANDONED ONSEN DAWN // 夜明け",
+        dot: "#ffc2d8",
+        skyStops: ["#1b224f", "#4b4b87", "#9e6b9c", "#eb9eb2", "#ffe5cf"],
+        waterTint: "rgba(28, 22, 54, 0.28)",
+        sunColor: "#fff8eb",
+        sunGlow: "rgba(255, 188, 208, 0.56)",
+        cloudDark: "rgba(66, 56, 102, 0.6)",
+        cloudMid: "rgba(176, 114, 148, 0.56)",
+        cloudRim: "rgba(255, 234, 228, 0.94)",
+        mountainFar: "#4d4675",
+        mountainNear: "#282447",
+        starAlpha: 0.45,
+        auroraAlpha: 0.18,
+        emberColor: "#ffd6e6",
+        doorTint: "#fff7fa",
+        doorShadow: "#6d5c7a"
+      }
+    ];
+
+    /* =========================================================================
+       3. SUZUME-INSPIRED GENERATIVE PIANO & BREEZE AUDIO (WEB AUDIO API)
+       ========================================================================= */
+    class SuzumeSoundscape {
+      constructor() {
+        this.ctx = null;
+        this.enabled = false;
+        this.master = null;
+        this.noteTimer = null;
+        this.step = 0;
+        // Emotional Japanese pentatonic / Add9 melody notes (Hz)
+        this.melody = [
+          293.66, 329.63, 440.00, 523.25, 587.33, 440.00, 392.00, 329.63,
+          261.63, 329.63, 392.00, 493.88, 523.25, 392.00, 329.63, 293.66
+        ];
+      }
+
+      init() {
+        if (this.ctx) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AC();
+
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0;
+        this.master.connect(this.ctx.destination);
+
+        // Soft coastal mountain breeze
+        const len = this.ctx.sampleRate * 3;
+        const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < len; i++) {
+          const white = Math.random() * 2 - 1;
+          last = (last + 0.02 * white) / 1.02;
+          data[i] = last * 1.4;
+        }
+        const wind = this.ctx.createBufferSource();
+        wind.buffer = buf;
+        wind.loop = true;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = 340;
+        filter.Q.value = 0.7;
+
+        const windGain = this.ctx.createGain();
+        windGain.gain.value = 0.22;
+
+        wind.connect(filter);
+        filter.connect(windGain);
+        windGain.connect(this.master);
+        wind.start();
+      }
+
+      playPianoNote(freq, vol = 0.08, dur = 3.2) {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const lp = this.ctx.createBiquadFilter();
+        const gain = this.ctx.createGain();
+
+        osc1.type = "triangle";
+        osc2.type = "sine";
+        osc1.frequency.setValueAtTime(freq, now);
+        osc2.frequency.setValueAtTime(freq * 2, now);
+
+        lp.type = "lowpass";
+        lp.frequency.setValueAtTime(1400, now);
+        lp.frequency.exponentialRampToValueAtTime(320, now + dur);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(vol, now + 0.035);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        osc1.connect(lp);
+        osc2.connect(lp);
+        lp.connect(gain);
+        gain.connect(this.master);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + dur + 0.05);
+        osc2.stop(now + dur + 0.05);
+      }
+
+      playDoorChime() {
+        if (!this.enabled || !this.ctx) return;
+        [587.33, 880.0, 1174.66].forEach((f, idx) => {
+          setTimeout(() => this.playPianoNote(f, 0.055, 3.8), idx * 140);
+        });
+      }
+
+      toggle() {
+        this.init();
+        if (this.ctx.state === "suspended") this.ctx.resume();
+        this.enabled = !this.enabled;
+        this.master.gain.setTargetAtTime(this.enabled ? 0.55 : 0.0, this.ctx.currentTime, 0.4);
+
+        if (this.enabled) {
+          this.playPianoNote(this.melody[this.step % this.melody.length], 0.08, 3.4);
+          this.step++;
+          this.noteTimer = setInterval(() => {
+            const note = this.melody[this.step % this.melody.length];
+            this.playPianoNote(note, 0.075, 3.4);
+            if (this.step % 4 === 0) {
+              this.playPianoNote(note / 2, 0.06, 4.2);
+            }
+            this.step++;
+          }, 950);
+        } else {
+          clearInterval(this.noteTimer);
+        }
+        return this.enabled;
+      }
+    }
+
+    const audio = new SuzumeSoundscape();
+
+    /* =========================================================================
+       4. CANVAS ENGINE SETUP & PROCEDURAL ANIME WORLD ELEMENTS
+       ========================================================================= */
+    const canvas = document.getElementById("suzume-canvas");
+    const ctx = canvas.getContext("2d");
+
+    let W = 0, H = 0, DPR = 1;
+    let pointerX = 0, pointerY = 0;
+    let smoothPX = 0, smoothPY = 0;
+
+    // Automated Endless Journey State
+    let realmIdx = 0;
+    let cycleProgress = 0.08; // 0 -> 1 per door passage
+    const CYCLE_DURATION_SEC = 18.0;
+    let speedBoost = 1.0;
+    let doorChimePlayed = false;
+
+    const realmNameEl = document.getElementById("realm-name");
+    const realmDotEl = document.getElementById("realm-dot");
+    const progressFillEl = document.getElementById("progress-fill");
+
+    function updateRealmHUD() {
+      const r = REALMS[realmIdx];
+      realmNameEl.textContent = r.name;
+      realmDotEl.style.background = r.dot;
+      realmDotEl.style.boxShadow = `0 0 12px ${r.dot}`;
+    }
+    updateRealmHUD();
+
+    // Persistent Scene Objects
+    const stars = Array.from({ length: 160 }, () => ({
+      x: Math.random(),
+      y: Math.random() * 0.58,
+      r: 0.6 + Math.random() * 1.6,
+      phase: Math.random() * Math.PI * 2,
+      speed: 1.2 + Math.random() * 2.5
+    }));
+
+    const clouds = Array.from({ length: 11 }, (_, i) => {
+      const puffs = Array.from({ length: 6 }, (_, p) => ({
+        ox: (p - 2.5) * (28 + Math.random() * 22),
+        oy: (Math.random() - 0.5) * 26 - Math.abs(p - 2.5) * -4,
+        r: 28 + Math.random() * 34
+      }));
+      return {
+        x: (i / 11) + Math.random() * 0.1,
+        y: 0.16 + Math.random() * 0.34,
+        scale: 0.75 + Math.random() * 1.15,
+        speed: 0.0025 + Math.random() * 0.004,
+        puffs
+      };
+    });
+
+    const embers = Array.from({ length: 65 }, () => ({
+      x: Math.random(),
+      y: 0.25 + Math.random() * 0.75,
+      r: 1.1 + Math.random() * 2.4,
+      vy: -0.015 - Math.random() * 0.03,
+      vx: (Math.random() - 0.5) * 0.01,
+      phase: Math.random() * Math.PI * 2
+    }));
+
+    const ruinPosts = Array.from({ length: 12 }, (_, i) => ({
+      side: i % 2 === 0 ? -1 : 1,
+      z: 0.12 + (i / 12) * 0.95,
+      heightFactor: 0.7 + Math.random() * 0.5,
+      tilt: (Math.random() - 0.5) * 0.08
+    }));
+
+    const shootingStars = [];
+    const ripples = [];
+
+    function spawnRipple(xNorm, yNorm) {
+      ripples.push({
+        x: xNorm,
+        y: Math.max(0.64, Math.min(0.96, yNorm)),
+        radius: 2,
+        maxRadius: 65 + Math.random() * 65,
+        alpha: 0.75
+      });
+    }
+
+    function resize() {
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    /* =========================================================================
+       5. PAINTERLY MAKOTO SHINKAI DRAWING HELPERS
+       ========================================================================= */
+    function drawSkyBackdrop(targetCtx, w, h, horizonY, realm, time, px, py) {
+      // Multi-stop anime sky gradient
+      const skyGrad = targetCtx.createLinearGradient(0, 0, 0, horizonY);
+      const stops = realm.skyStops;
+      stops.forEach((col, i) => skyGrad.addColorStop(i / (stops.length - 1), col));
+      targetCtx.fillStyle = skyGrad;
+      targetCtx.fillRect(0, 0, w, horizonY + 2);
+
+      // Ethereal Ever-After Aurora Ribbon
+      if (realm.auroraAlpha > 0.05) {
+        targetCtx.save();
+        targetCtx.globalAlpha = realm.auroraAlpha;
+        const aurGrad = targetCtx.createLinearGradient(0, horizonY * 0.15, w, horizonY * 0.65);
+        aurGrad.addColorStop(0, "rgba(110, 170, 255, 0)");
+        aurGrad.addColorStop(0.35, "rgba(180, 120, 255, 0.35)");
+        aurGrad.addColorStop(0.65, "rgba(255, 110, 165, 0.35)");
+        aurGrad.addColorStop(1, "rgba(255, 200, 140, 0)");
+        targetCtx.fillStyle = aurGrad;
+        targetCtx.beginPath();
+        targetCtx.moveTo(0, horizonY * 0.55);
+        for (let x = 0; x <= w; x += Math.max(24, w / 20)) {
+          const wave = Math.sin(x * 0.004 + time * 0.45) * 28 + Math.cos(x * 0.009 - time * 0.3) * 14;
+          targetCtx.lineTo(x, horizonY * 0.36 + wave);
+        }
+        targetCtx.lineTo(w, horizonY * 0.72);
+        targetCtx.lineTo(0, horizonY * 0.72);
+        targetCtx.closePath();
+        targetCtx.fill();
+        targetCtx.restore();
+      }
+
+      // Twinkling Starfield
+      if (realm.starAlpha > 0.05) {
+        for (const s of stars) {
+          const twinkle = 0.35 + 0.65 * Math.abs(Math.sin(time * s.speed + s.phase));
+          targetCtx.fillStyle = `rgba(255, 250, 255, ${twinkle * realm.starAlpha})`;
+          const sx = ((s.x * w - px * 16) % w + w) % w;
+          const sy = s.y * horizonY - py * 8;
+          targetCtx.beginPath();
+          targetCtx.arc(sx, sy, s.r, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+      }
+
+      // Glowing Horizon Sun / Celestial Bloom
+      const sunX = w * 0.5 - px * 22;
+      const sunY = horizonY - h * 0.03 - py * 6;
+      const sunRadius = Math.min(w, h) * 0.36;
+      const glow = targetCtx.createRadialGradient(sunX, sunY, 4, sunX, sunY, sunRadius);
+      glow.addColorStop(0, realm.sunColor);
+      glow.addColorStop(0.24, realm.sunGlow);
+      glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+      targetCtx.fillStyle = glow;
+      targetCtx.fillRect(0, 0, w, horizonY + 4);
+
+      // Soft Crepuscular Shinkai God Rays
+      targetCtx.save();
+      targetCtx.globalCompositeOperation = "screen";
+      for (let i = -3; i <= 3; i++) {
+        const angle = -Math.PI / 2 + i * 0.24 + Math.sin(time * 0.25 + i) * 0.03;
+        const rayLen = Math.max(w, h) * 0.75;
+        const rayGrad = targetCtx.createLinearGradient(
+          sunX, sunY,
+          sunX + Math.cos(angle) * rayLen,
+          sunY + Math.sin(angle) * rayLen
+        );
+        rayGrad.addColorStop(0, "rgba(255, 240, 225, 0.14)");
+        rayGrad.addColorStop(1, "rgba(255, 240, 225, 0)");
+        targetCtx.fillStyle = rayGrad;
+        targetCtx.beginPath();
+        targetCtx.moveTo(sunX, sunY);
+        targetCtx.lineTo(sunX + Math.cos(angle - 0.055) * rayLen, sunY + Math.sin(angle - 0.055) * rayLen);
+        targetCtx.lineTo(sunX + Math.cos(angle + 0.055) * rayLen, sunY + Math.sin(angle + 0.055) * rayLen);
+        targetCtx.closePath();
+        targetCtx.fill();
+      }
+      targetCtx.restore();
+
+      // Volumetric Backlit Cumulonimbus Clouds (Makoto Shinkai Style)
+      for (const cl of clouds) {
+        const cx = (((cl.x + time * cl.speed) % 1.35) - 0.175) * w - px * 32;
+        const cy = cl.y * horizonY - py * 12;
+        const sc = cl.scale * (Math.min(w, h) / 760);
+
+        // Bright sunlit top rim
+        targetCtx.fillStyle = realm.cloudRim;
+        for (const p of cl.puffs) {
+          targetCtx.beginPath();
+          targetCtx.arc(cx + p.ox * sc, cy + (p.oy - 5) * sc, p.r * sc, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+        // Mid warm tint
+        targetCtx.fillStyle = realm.cloudMid;
+        for (const p of cl.puffs) {
+          targetCtx.beginPath();
+          targetCtx.arc(cx + p.ox * sc, cy + (p.oy + 2) * sc, p.r * sc * 0.94, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+        // Cool shadowed belly
+        targetCtx.fillStyle = realm.cloudDark;
+        for (const p of cl.puffs) {
+          targetCtx.beginPath();
+          targetCtx.arc(cx + p.ox * sc, cy + (p.oy + 11) * sc, p.r * sc * 0.85, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+      }
+
+      // Shooting Stars / Comets
+      for (const st of shootingStars) {
+        const sx = st.x * w;
+        const sy = st.y * horizonY;
+        const tail = st.len * (w / 1200);
+        const sg = targetCtx.createLinearGradient(sx, sy, sx - tail, sy - tail * 0.42);
+        sg.addColorStop(0, `rgba(255, 252, 240, ${st.life})`);
+        sg.addColorStop(0.35, `rgba(170, 225, 255, ${st.life * 0.65})`);
+        sg.addColorStop(1, "rgba(255, 255, 255, 0)");
+        targetCtx.strokeStyle = sg;
+        targetCtx.lineWidth = 2.2;
+        targetCtx.beginPath();
+        targetCtx.moveTo(sx, sy);
+        targetCtx.lineTo(sx - tail, sy - tail * 0.42);
+        targetCtx.stroke();
+      }
+
+      // Distant Misty Mountain Ranges (Kyushu Coast Silhouette)
+      targetCtx.fillStyle = realm.mountainFar;
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, horizonY);
+      for (let x = 0; x <= w; x += Math.max(16, w / 42)) {
+        const n = (x + px * 35) / w;
+        const elev =
+          Math.sin(n * Math.PI * 2.2 + 0.5) * 28 +
+          Math.cos(n * Math.PI * 5.4) * 12 +
+          34;
+        // Dip gently in the center to frame the white door
+        const centerValley = 1 - Math.exp(-Math.pow((x / w - 0.5) * 4.2, 2)) * 0.65;
+        targetCtx.lineTo(x, horizonY - elev * centerValley * (h / 780));
+      }
+      targetCtx.lineTo(w, horizonY);
+      targetCtx.closePath();
+      targetCtx.fill();
+
+      // Nearer dark mountain ridge
+      targetCtx.fillStyle = realm.mountainNear;
+      targetCtx.beginPath();
+      targetCtx.moveTo(0, horizonY);
+      for (let x = 0; x <= w; x += Math.max(16, w / 36)) {
+        const n = (x + px * 50) / w;
+        const elev = Math.sin(n * Math.PI * 3.1 + 1.8) * 18 + 20;
+        const valley = 1 - Math.exp(-Math.pow((x / w - 0.5) * 3.5, 2)) * 0.85;
+        targetCtx.lineTo(x, horizonY - elev * valley * (h / 780));
+      }
+      targetCtx.lineTo(w, horizonY);
+      targetCtx.closePath();
+      targetCtx.fill();
+    }
+
+    function drawSuzumeDoor(targetCtx, cx, baseY, doorW, doorH, openFrac, realm, nextRealm, time, isReflection) {
+      const frameThick = Math.max(3, doorW * 0.085);
+      const innerW = doorW - frameThick * 2;
+      const innerH = doorH - frameThick;
+      const topY = baseY - doorH;
+      const leftX = cx - doorW / 2;
+
+      targetCtx.save();
+
+      // 1. Stone Threshold / Shallow Submerged Step
+      if (!isReflection) {
+        targetCtx.fillStyle = "rgba(38, 36, 52, 0.88)";
+        targetCtx.fillRect(leftX - doorW * 0.18, baseY - frameThick * 0.45, doorW * 1.36, frameThick * 0.9);
+      }
+
+      // 2. Portal Interior (Shows the NEXT Realm's Starry Ever-After Sky!)
+      targetCtx.save();
+      targetCtx.beginPath();
+      targetCtx.rect(leftX + frameThick, topY + frameThick, innerW, innerH);
+      targetCtx.clip();
+
+      const pGrad = targetCtx.createLinearGradient(0, topY, 0, baseY);
+      nextRealm.skyStops.forEach((col, i) => pGrad.addColorStop(i / (nextRealm.skyStops.length - 1), col));
+      targetCtx.fillStyle = pGrad;
+      targetCtx.fillRect(leftX + frameThick, topY + frameThick, innerW, innerH);
+
+      // Swirling cosmic starlight inside the open doorway
+      const pGlow = targetCtx.createRadialGradient(
+        cx, topY + doorH * 0.52, 2,
+        cx, topY + doorH * 0.52, doorH * 0.85
+      );
+      pGlow.addColorStop(0, "rgba(255, 248, 238, 0.95)");
+      pGlow.addColorStop(0.35, nextRealm.sunGlow);
+      pGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
+      targetCtx.fillStyle = pGlow;
+      targetCtx.fillRect(leftX + frameThick, topY + frameThick, innerW, innerH);
+
+      // Portal stars
+      for (let i = 0; i < 24; i++) {
+        const px = leftX + frameThick + ((i * 73.1 + time * 10) % 100) / 100 * innerW;
+        const py = topY + frameThick + ((i * 39.7) % 100) / 100 * innerH;
+        const a = 0.4 + 0.6 * Math.abs(Math.sin(time * 2.5 + i));
+        targetCtx.fillStyle = `rgba(255, 255, 255, ${a})`;
+        targetCtx.fillRect(px, py, Math.max(1.2, doorW * 0.015), Math.max(1.2, doorW * 0.015));
+      }
+      targetCtx.restore();
+
+      // 3. Outer Glowing Halo as the Door Opens
+      if (openFrac > 0.05 && !isReflection) {
+        targetCtx.save();
+        targetCtx.globalCompositeOperation = "screen";
+        const halo = targetCtx.createRadialGradient(
+          cx, topY + doorH * 0.5, doorW * 0.15,
+          cx, topY + doorH * 0.5, doorH * 1.15
+        );
+        halo.addColorStop(0, `rgba(255, 244, 232, ${0.42 * openFrac})`);
+        halo.addColorStop(0.5, nextRealm.sunGlow.replace(/[\d.]+\)$/, `${0.28 * openFrac})`));
+        halo.addColorStop(1, "rgba(255, 255, 255, 0)");
+        targetCtx.fillStyle = halo;
+        targetCtx.fillRect(cx - doorH * 1.2, topY - doorH * 0.5, doorH * 2.4, doorH * 2);
+        targetCtx.restore();
+      }
+
+      // 4. Swinging White Weathered Wooden Door Leaf (3D Foreshortening)
+      const angle = openFrac * (Math.PI * 0.48); // swings inward/outward smoothly
+      const leafW = Math.cos(angle) * innerW;
+      const perspectiveDrop = Math.sin(angle) * doorH * 0.06;
+      const hingeX = leftX + frameThick;
+
+      if (leafW > 1) {
+        targetCtx.fillStyle = realm.doorTint;
+        targetCtx.beginPath();
+        targetCtx.moveTo(hingeX, topY + frameThick);
+        targetCtx.lineTo(hingeX + leafW, topY + frameThick - perspectiveDrop);
+        targetCtx.lineTo(hingeX + leafW, baseY + perspectiveDrop * 0.6);
+        targetCtx.lineTo(hingeX, baseY);
+        targetCtx.closePath();
+        targetCtx.fill();
+
+        // Recessed classic Suzume wooden door panels
+        targetCtx.strokeStyle = realm.doorShadow;
+        targetCtx.lineWidth = Math.max(1, doorW * 0.016);
+        const padX = leafW * 0.14;
+        const padY = innerH * 0.08;
+        const panelW = leafW - padX * 2;
+        if (panelW > 2) {
+          // Upper glazed/recessed panel
+          targetCtx.fillStyle = "rgba(180, 210, 235, 0.25)";
+          targetCtx.fillRect(hingeX + padX, topY + frameThick + padY, panelW, innerH * 0.36);
+          targetCtx.strokeRect(hingeX + padX, topY + frameThick + padY, panelW, innerH * 0.36);
+
+          // Lower wooden panel
+          targetCtx.strokeRect(hingeX + padX, topY + frameThick + innerH * 0.54, panelW, innerH * 0.34);
+        }
+
+        // Brass doorknob
+        targetCtx.fillStyle = "#e2ba64";
+        targetCtx.beginPath();
+        targetCtx.arc(
+          hingeX + leafW * 0.86,
+          topY + frameThick + innerH * 0.5,
+          Math.max(1.5, doorW * 0.028),
+          0,
+          Math.PI * 2
+        );
+        targetCtx.fill();
+      }
+
+      // 5. Outer Wooden Door Frame (Always crisp white with subtle depth shadow)
+      targetCtx.fillStyle = realm.doorShadow;
+      targetCtx.fillRect(leftX - 2, topY - 2, doorW + 4, frameThick + 3);
+      targetCtx.fillStyle = realm.doorTint;
+      // Top lintel
+      targetCtx.fillRect(leftX - frameThick * 0.35, topY, doorW + frameThick * 0.7, frameThick);
+      // Left jamb
+      targetCtx.fillRect(leftX, topY, frameThick, doorH);
+      // Right jamb
+      targetCtx.fillRect(leftX + doorW - frameThick, topY, frameThick, doorH);
+
+      targetCtx.restore();
+    }
+
+    /* =========================================================================
+       6. MAIN 60FPS ENDLESS AUTOMATED ANIMATION LOOP
+       ========================================================================= */
+    let lastTime = performance.now();
+
+    function render(now) {
+      requestAnimationFrame(render);
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      const t = now * 0.001;
+
+      // Smooth pointer parallax
+      smoothPX += (pointerX - smoothPX) * Math.min(1, dt * 3.2);
+      smoothPY += (pointerY - smoothPY) * Math.min(1, dt * 3.2);
+
+      // Decay manual "Next Door" boost smoothly
+      speedBoost += (1.0 - speedBoost) * Math.min(1, dt * 1.8);
+
+      // Advance automated endless cycle
+      cycleProgress += (dt / CYCLE_DURATION_SEC) * speedBoost;
+
+      // Trigger ethereal chime when the door swings wide
+      if (cycleProgress > 0.56 && !doorChimePlayed) {
+        audio.playDoorChime();
+        doorChimePlayed = true;
+      }
+
+      // Crossed the threshold -> Transition seamlessly to the next realm!
+      if (cycleProgress >= 1.0) {
+        cycleProgress = 0.0;
+        realmIdx = (realmIdx + 1) % REALMS.length;
+        doorChimePlayed = false;
+        updateRealmHUD();
+      }
+
+      progressFillEl.style.width = `${Math.round(cycleProgress * 100)}%`;
+
+      const realm = REALMS[realmIdx];
+      const nextRealm = REALMS[(realmIdx + 1) % REALMS.length];
+      const horizonY = H * 0.64 - smoothPY * 14;
+
+      // Occasional slow anime shooting star
+      if (Math.random() < 0.008 && shootingStars.length < 2) {
+        shootingStars.push({
+          x: 0.25 + Math.random() * 0.65,
+          y: 0.08 + Math.random() * 0.32,
+          vx: 0.16 + Math.random() * 0.1,
+          vy: 0.07 + Math.random() * 0.04,
+          len: 95 + Math.random() * 75,
+          life: 1.0
+        });
+      }
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
+        s.life -= dt * 0.9;
+        if (s.life <= 0) shootingStars.splice(i, 1);
+      }
+
+      // Automatic gentle water ripples
+      if (Math.random() < 0.025 && ripples.length < 10) {
+        spawnRipple(0.15 + Math.random() * 0.7, 0.66 + Math.random() * 0.28);
+      }
+
+      // Compute Door Perspective Scale & Swing Opening
+      // Exponential approach mimics real camera dolly speed
+      const easeApproach = Math.pow(cycleProgress, 2.35);
+      const minDoorH = Math.min(W, H) * 0.11;
+      const maxDoorH = Math.max(W, H) * 1.95;
+      const doorH = minDoorH + easeApproach * (maxDoorH - minDoorH);
+      const doorW = doorH * 0.54;
+      const doorX = W * 0.5 - smoothPX * (26 + easeApproach * 40);
+      const doorBaseY = horizonY + (H * 0.025) + easeApproach * (H * 0.42);
+      const openFrac = Math.max(0, Math.min(1, (cycleProgress - 0.52) / 0.28));
+
+      /* --- PASS 1: DRAW UPPER SKY WORLD --- */
+      drawSkyBackdrop(ctx, W, H, horizonY, realm, t, smoothPX, smoothPY);
+
+      /* --- PASS 2: DRAW MIRRORED SHALLOW WATER REFLECTION --- */
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, horizonY, W, H - horizonY);
+      ctx.clip();
+
+      // Reflect sky upside-down
+      ctx.save();
+      ctx.translate(0, horizonY * 2);
+      ctx.scale(1, -1);
+      drawSkyBackdrop(ctx, W, H, horizonY, realm, t, smoothPX, smoothPY);
+      // Reflected Door in the water
+      if (cycleProgress < 0.92) {
+        ctx.globalAlpha = 0.62;
+        drawSuzumeDoor(ctx, doorX, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, t, true);
+      }
+      ctx.restore();
+
+      // Cool water depth tint
+      ctx.fillStyle = realm.waterTint;
+      ctx.fillRect(0, horizonY, W, H - horizonY);
+
+      // Shimmering horizontal water wave glints
+      const sunCenterX = W * 0.5 - smoothPX * 22;
+      for (let i = 0; i < 38; i++) {
+        const depth = i / 38;
+        const wy = horizonY + Math.pow(depth, 1.65) * (H - horizonY);
+        const shimmerW = (18 + depth * 145) * (0.7 + 0.3 * Math.sin(t * 2.2 + i * 1.4));
+        const shift = Math.sin(t * 1.8 + i * 0.9) * (6 + depth * 18);
+        ctx.fillStyle = `rgba(255, 245, 238, ${0.06 + (1 - depth) * 0.16})`;
+        ctx.fillRect(sunCenterX - shimmerW / 2 + shift, wy, shimmerW, 1 + depth * 1.8);
+      }
+
+      // Expanding Elliptical Water Ripples
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.radius += dt * 42;
+        rp.alpha -= dt * 0.36;
+        if (rp.alpha <= 0 || rp.radius > rp.maxRadius) {
+          ripples.splice(i, 1);
+          continue;
+        }
+        ctx.strokeStyle = `rgba(255, 248, 255, ${rp.alpha * 0.55})`;
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.ellipse(rp.x * W, rp.y * H, rp.radius, rp.radius * 0.24, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      /* --- PASS 3: GLIDING RUIN POSTS ALONG THE WATER CORRIDOR --- */
+      for (const post of ruinPosts) {
+        post.z -= dt * 0.095 * speedBoost;
+        if (post.z < 0.04) post.z += 0.96;
+
+        const persp = 0.1 / post.z;
+        const px = W * 0.5 + post.side * (W * 0.19 * persp) - smoothPX * (25 * persp);
+        const py = horizonY + (H * 0.08 * persp);
+        const pw = Math.max(2, 6 * persp);
+        const ph = 38 * post.heightFactor * persp;
+        const alpha = Math.min(0.82, (1 - post.z) * 1.4);
+
+        if (px > -80 && px < W + 80 && py < H + 120) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.translate(px, py);
+          ctx.rotate(post.tilt);
+          // Weathered dark ruin post
+          ctx.fillStyle = realm.mountainNear;
+          ctx.fillRect(-pw / 2, -ph, pw, ph);
+          // Soft water reflection of post
+          ctx.globalAlpha = alpha * 0.35;
+          ctx.fillRect(-pw / 2, 0, pw, ph * 0.65);
+          ctx.restore();
+        }
+      }
+
+      /* --- PASS 4: THE ICONIC STANDING WHITE SUZUME DOOR --- */
+      drawSuzumeDoor(ctx, doorX, doorBaseY, doorW, doorH, openFrac, realm, nextRealm, t, false);
+
+      // Subtle glowing ripple right around the door base in the water
+      if (cycleProgress < 0.85) {
+        ctx.strokeStyle = "rgba(255, 248, 240, 0.32)";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.ellipse(
+          doorX,
+          doorBaseY + 2,
+          doorW * (0.72 + Math.sin(t * 2) * 0.05),
+          Math.max(2, doorW * 0.1),
+          0,
+          0,
+          Math.PI * 2
+        );
+        ctx.stroke();
+      }
+
+      /* --- PASS 5: FLOATING EVER-AFTER SPIRIT MOTES / EMBERS --- */
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      for (const e of embers) {
+        e.y += e.vy * dt * (0.7 + speedBoost * 0.3);
+        e.x += (e.vx + Math.sin(t * 1.5 + e.phase) * 0.008) * dt;
+        if (e.y < 0.05) { e.y = 0.98; e.x = Math.random(); }
+        if (e.x < 0) e.x = 1;
+        if (e.x > 1) e.x = 0;
+
+        const ex = e.x * W - smoothPX * 45;
+        const ey = e.y * H - smoothPY * 20;
+        const pulse = 0.4 + 0.6 * Math.abs(Math.sin(t * 2.4 + e.phase));
+
+        ctx.fillStyle = realm.emberColor;
+        ctx.globalAlpha = pulse * 0.85;
+        ctx.beginPath();
+        ctx.arc(ex, ey, e.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      /* --- PASS 6: SWAYING FOREGROUND REEDS IN BOTTOM CORNERS --- */
+      ctx.save();
+      ctx.strokeStyle = "rgba(10, 10, 24, 0.78)";
+      ctx.lineCap = "round";
+      for (let side of [-1, 1]) {
+        for (let b = 0; b < 9; b++) {
+          const bx = side < 0 ? (b * 16 - 10) : (W - b * 16 + 10);
+          const bh = 55 + (b % 4) * 26;
+          const sway = Math.sin(t * 1.6 + b * 0.7) * 14 + smoothPX * 10;
+          ctx.lineWidth = 2.2 - (b % 3) * 0.4;
+          ctx.beginPath();
+          ctx.moveTo(bx, H + 6);
+          ctx.quadraticCurveTo(bx + sway * 0.5, H - bh * 0.55, bx + sway, H - bh);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      /* --- PASS 7: DREAMY LIGHT BLOOM WHEN PASSING THROUGH THE DOOR --- */
+      if (cycleProgress > 0.86) {
+        const flash = (cycleProgress - 0.86) / 0.14;
+        ctx.fillStyle = `rgba(255, 246, 242, ${Math.pow(flash, 1.6) * 0.88})`;
+        ctx.fillRect(0, 0, W, H);
+      } else if (cycleProgress < 0.08) {
+        const fadeOut = 1 - (cycleProgress / 0.08);
+        ctx.fillStyle = `rgba(255, 246, 242, ${Math.pow(fadeOut, 1.5) * 0.88})`;
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    requestAnimationFrame(render);
+
+    /* =========================================================================
+       7. INTERACTIVE CONTROLS
+       ========================================================================= */
+    window.addEventListener("mousemove", (e) => {
+      pointerX = (e.clientX / W - 0.5) * 2;
+      pointerY = (e.clientY / H - 0.5) * 2;
+    });
+
+    window.addEventListener("touchmove", (e) => {
+      if (e.touches[0]) {
+        pointerX = (e.touches[0].clientX / W - 0.5) * 2;
+        pointerY = (e.touches[0].clientY / H - 0.5) * 2;
+      }
+    }, { passive: true });
+
+    canvas.addEventListener("pointerdown", (e) => {
+      spawnRipple(e.clientX / W, e.clientY / H);
+    });
+
+    document.getElementById("next-door-btn").addEventListener("click", () => {
+      speedBoost = 4.6;
+      if (cycleProgress < 0.52) cycleProgress = 0.52;
+    });
+
+    document.getElementById("audio-btn").addEventListener("click", (e) => {
+      const on = audio.toggle();
+      e.target.textContent = on ? "Sound: On" : "Sound: Off";
+      e.target.classList.toggle("active", on);
+    });
+
+    document.getElementById("zen-btn").addEventListener("click", (e) => {
+      const zen = document.body.classList.toggle("zen-mode");
+      e.target.textContent = zen ? "Show Title" : "Hide Title";
+      e.target.classList.toggle("active", zen);
+    });
+  </script>
+</body>
+</html>
